@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* .nav-tiem .badge-show-true{
+    display: flex;
+} */
+
+.extended-true{
+    display: flex;
+}
+
+.extended-false{
+    display: none;
+}
+
+.padding-extended{
+    @apply py-4 pl-4 pr-6
+}
+
+.padding-collapsed{
+    @apply p-4
+}
+
+.extended-gap-true{
+    @apply gap-4;
+}
+
+.extended-gap-false{
+    @apply gap-4;
+}
+
+.selected-true{
+    @apply bg-[--md-sys-color-secondary-container] text-[--md-sys-color-on-secondary-container];
+}
+
+.selected-true:hover .state-layer{
+    @apply bg-[rgba(0,0,0,0.08)];
+}
+
+.selected-false{
+    @apply text-[--md-sys-color-on-surface];
+}
+
+.selected-false:hover{
+    @apply bg-[--md-sys-color-surface-container] text-[--md-sys-color-on-surface];
+}
+
+.nav-item .badge-show-false{
+    display: none;
+}
+
+.nav-rail, .nav-item{
+    transition: width 0.3s ease, height .3s ease-in-out, max-width .3s ease-in-out;
+}
+
+.nav-rail{
+    height: calc(100vh - 76px);
+}
+
+.nav-rail.extended {
+    width: 352px;
+    max-width: 352px;
+}
+
+.nav-rail.collapsed {
+    width: 80px;
+}
+
+.nav-rail--padding-extended{
+    padding: 16px;
+}
+
+.nav-rail--padding-collapsed{
+    padding: 12px;
+}
+
+.divider--true{
+    border: 0;
+    border-top: 1px solid;
+    border-color: var(--md-sys-color-outline);
+}
+
+.divider--false{
+    border: 0;
+}
