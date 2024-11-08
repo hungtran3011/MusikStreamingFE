@@ -1,8 +1,10 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MusikStreaming
+
+Repo này là phần front-end của app, viết bằng Next và TailwindCSS
 
 ## Getting Started
 
-First, run the development server:
+Chạy trên môi trường phát triển
 
 ```bash
 npm run dev
@@ -14,11 +16,13 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Sau đó, có thể mở trên [localhost](http://localhost:3000) để bắt đầu. Bất kỳ thay đổi nào trên mã nguồn có thể được xem trực tiếp sau khi lưu file.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Bắt đầu chỉnh sửa từ:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `page.tsx`: Trang chính của ứng dụng
+- `layout.tsx`: Cấu trúc và bố cục chung của ứng dụng
+
 
 ## Các components tuỳ chỉnh cho Material Design 3
 
