@@ -1,4 +1,5 @@
 # MusikStreaming
+
 Repo này là phần front-end của app, viết bằng Next và TailwindCSS
 
 ## Getting Started
