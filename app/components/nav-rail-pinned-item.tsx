@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import '@material/web/ripple/ripple';
 
 export default function NavRailPinnedItem(
     props: {
@@ -28,7 +29,8 @@ export default function NavRailPinnedItem(
     }
     return (
         <div className={`nav-item-common flex items-center rounded-full cursor-pointer font-medium selected-${props.selected}`} role='link' onClick={props.onClick}>
-            <Link className={`state-layer flex extended-gap-${props.extended} items-center justify-between rounded-full ${!props.extended ? 'max-w-6' : ""} padding-${props.extended ? "extended" : "collapsed"}`} href={props.href!}>
+            <Link className={`state-layer relative flex extended-gap-${props.extended} items-center justify-between rounded-full ${!props.extended ? 'max-w-6' : ""} padding-${props.extended ? "extended" : "collapsed"}`} href={props.href!}>
+                <md-ripple />
                 <div className={`nav-item-content flex extended-gap-${props.extended} items-center`}>
                     <div className="cover flex items-center">
                         <Image src={props.imgSrc} alt={props.text} width={props.width} height={props.width} />

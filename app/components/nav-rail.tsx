@@ -23,7 +23,7 @@ export default function NavRail(
             <div className={`button selected-false rounded-full`} role="button" onClick={() => {
                 setExtended(!extended);
             }}>
-                <div className={`state-layer rounded-full flex gap-4 relative padding-${extended ? "extended" : "collapsed"}`}>
+                <div className={`state-layer rounded-full flex gap-4 relative padding-${extended ? "extended" : "collapsed "} className="fixed-nav-rail"`}>
                     <md-ripple/>
                     <span className="material-symbols-outlined">menu</span>
                     <p>{extended ? "Menu" : ""}</p>

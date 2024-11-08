@@ -1,44 +1,28 @@
-import React from 'react';
-import Image from 'next/image';
-import { ButtonBase } from '@mui/material';
+import '@material/web/ripple/ripple';
 
-// export default function Button({
-//     onClick,
-//     children,
-//     disabled,
-//     icon=false,
-//     iconSrc="",
-//     state="filled",
-//     }) {
-//     let fontColor = "text-[--md-sys-color-on-primary]";
-//     let bgColor = "bg-[--md-sys-color-primary]";
-//     let borderStyle = "border-none";
-//     let hoverStyle = "hover:drop-shadow-[0_1px_6px_5px_rgba(0,0,0)]";
-//     switch (state) {
-//         case "filled":
-//             break;
-//         case "outlined":
-//             fontColor = "text-[--md-sys-color-on-primary-container]";
-//             bgColor = "bg-[--md-sys-color-primary-container]";
-//             borderStyle = "border-2 border-[--md-sys-color-primary]";
-//             break;
-//         case "text":
-//             fontColor = "text-[--md-sys-color-primary]";
-//             bgColor = "bg-transparent";
-//             break;
-//     }
-//     return (
-//     <div className={`h-10 ${bgColor} rounded-full flex-col justify-center items-center gap-2 inline-flex ${borderStyle
-//     } ${hoverStyle}`} role='button' onClick={onClick} disabled={disabled}>
-//         <div className="self-stretch grow shrink basis-0 px-6 py-2.5 justify-center items-center gap-2 inline-flex">
-//             {(icon && iconSrc!=="") ? <div className="w-4 h-4 justify-center items-center flex">
-//                 <Image className="w-4 h-4" src={iconSrc} alt={children}></Image>
-//             </div>
-//             : null}
-//             <div className={`text-center ${fontColor} text-md font-medium font-['Inter'] leading-tight tracking-tight`}>
-//                 {children}
-//             </div>
-//         </div>
-//     </div>
-//     );  
-// }
+export default function FilledButton(
+    props: {
+        className?: string,
+        onClick?: () => void,
+        icon?: string,
+        showIcon?: boolean,
+        children?: string,
+    }
+) {
+    let showIcon = props.showIcon;
+    if (props.icon === undefined || props.icon === '') {
+        showIcon = false;
+    }
+    else if (props.showIcon === undefined) {
+        showIcon = false;
+    }
+    return(
+        <div className="text-btn flex items-center" role='button'>
+            <div className={`state-layer relative p-4 ${showIcon?"":"pr-6"} gap-3 rounded-full flex items-center bg-[--md-sys-color-primary] text-[--md-sys-color-on-primary]`}>
+                <md-ripple className="ripple"></md-ripple>
+                <span className={`material-symbols-outlined ${showIcon ? "block" : "none"}`}>{props.icon}</span>
+                <p className='text-center font-medium'>{props.children}</p>
+            </div>
+        </div>
+    )
+}

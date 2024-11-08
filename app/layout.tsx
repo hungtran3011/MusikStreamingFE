@@ -10,7 +10,7 @@ import "./components/theme"
 // });
 
 const inter = Inter({
-  weight: "variable",
+  weight: "400",
 });
 
 export const metadata: Metadata = {

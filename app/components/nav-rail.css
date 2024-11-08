@@ -52,16 +52,17 @@
 }
 
 .nav-rail, .nav-item{
-    transition: width 0.3s ease, height .3s ease-in-out, max-width .3s ease-in-out;
+    transition: width 0.3s ease-in-out, max-width .3s ease-in-out;
 }
 
 .nav-rail{
-    height: calc(100vh - 76px);
+    /* height: calc(100vh - 76px); */
+    position: sticky;
 }
 
 .nav-rail.extended {
-    width: 352px;
-    max-width: 352px;
+    width: 360px;
+    max-width: 720px;
 }
 
 .nav-rail.collapsed {
