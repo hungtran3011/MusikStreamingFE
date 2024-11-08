@@ -18,7 +18,9 @@ bun dev
 
 Sau đó, có thể mở trên [localhost](http://localhost:3000) để bắt đầu. Bất kỳ thay đổi nào trên mã nguồn có thể được xem trực tiếp sau khi lưu file.
 
-Bắt đầu chỉnh sửa code từ file `page.tsx` và `layout.tsx`
+Bắt đầu chỉnh sửa từ:
+- `page.tsx`: Trang chính của ứng dụng
+- `layout.tsx`: Cấu trúc và bố cục chung của ứng dụng
 
 ## Các components tuỳ chỉnh cho Material Design 3
 
