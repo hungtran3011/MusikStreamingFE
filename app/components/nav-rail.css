@@ -16,11 +16,12 @@
 }
 
 .padding-extended{
+    /* width: 100%; */
     @apply py-4 pl-4 pr-6
 }
 
 .padding-collapsed{
-    @apply p-4
+    @apply p-4;
 }
 
 .extended-gap-true{
@@ -56,25 +57,44 @@
 }
 
 .nav-rail{
-    /* height: calc(100vh - 76px); */
-    position: sticky;
+    /* max-height: calc(100vh - 200px); */
+    /* overflow: hidden; */
+    /* position: fixed; */
+    /* top: 100px; */
 }
 
-.nav-rail.extended {
-    width: 360px;
+.nav-rail-inner{
+    overflow: hidden;
+}
+
+.nav-rail-inner:hover{
+    overflow-y: auto;
+}
+
+.nav-rail-extended {
+    min-width: 360px;
     max-width: 720px;
 }
 
-.nav-rail.collapsed {
+.nav-rail-collapsed {
     width: 80px;
+    /* overflow-x: visible;
+    overflow-y: scroll; */
+}
+
+.nav-rail::-webkit-scrollbar{
+    /*hidden*/
+    width: 0;
+    height: 0;
+    display: none;
 }
 
 .nav-rail--padding-extended{
-    padding: 16px;
+    padding: 1rem;
 }
 
 .nav-rail--padding-collapsed{
-    padding: 12px;
+    padding: .75rem;
 }
 
 .divider--true{
@@ -85,4 +105,10 @@
 
 .divider--false{
     border: 0;
+}
+
+@media screen and (max-width: 768px) {
+    .nav-rail{
+        display: none;
+    }
 }

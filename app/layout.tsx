@@ -1,13 +1,91 @@
+// 'use client'
+
 import type { Metadata } from "next";
 import {Inter} from "next/font/google";
 import "./globals.css";
 import "./components/theme"
+import TextButton from "./components/text-button";
+import FilledButton from "./components/button";
+import SearchBox from "./components/search-box";
+import NavRail from "./components/nav-rail";
+import Image from "next/image";
+import { NavItemData } from "./model/nav-item-data";
+
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
 //   variable: "--font-geist-sans",
 //   weight: "100 900",
 // });
+
+
+const items: { [key: string]: NavItemData } = {
+  'home': {
+      text: 'Home',
+      badgevalue: 0,
+      // onClick: () => {
+      //     // setSelected(0);
+      //     console.log('Home')
+      // },
+      href: '/',
+      type: 0
+  },
+  'library_music': {
+      text: 'Your library',
+      badgevalue: 0,
+      // onClick: () => {
+      //     // setSelected(1);
+      //     console.log('Your library')
+      // },
+      href: '/library',
+      type: 0
+  },
+  'favorite': {
+      text: 'Favorites',
+      badgevalue: 0,
+      href: '#',
+      type: 0
+  },
+  'settings': {
+      text: 'Settings',
+      badgevalue: 0,
+      href: '#',
+      type: 0
+  },
+  'music_note': {
+      text: 'Song',
+      badgevalue: 0,
+      href: '#',
+      type: 0
+  },
+  'album': {
+      text: 'Album',
+      badgevalue: 0,
+      href: '#',
+      type: 0
+  },
+  'artist': {
+      text: 'Artist',
+      badgevalue: 0,
+      href: '#',
+      type: 0
+  },
+  'list': {
+      text: 'Playlist',
+      badgevalue: 0,
+      href: '#',
+      type: 0
+  },
+  'song1':{
+    text: "Did you know",
+    href: "#",
+    img: {
+      src: "./favicon.ico",
+      width: 24,
+    },
+    type: 1
+  }
+};
 
 const inter = Inter({
   weight: "400",
@@ -28,7 +106,77 @@ export default function RootLayout({
       <body
         className={`${inter} ${inter} antialiased`}
       >
-        {children}
+        <div className="nav-bar flex flex-grow-0 pl-4 md:pl-0 pt-3 items-center justify-between w-full top-0 max-h-24 sticky bg-inherit z-[1000]">
+        <div className="nav-bar-button-container hidden md:flex md:p-3 md:gap-3 md:items-center">
+          <TextButton className="app-bar-button">
+            <span className="material-symbols-outlined">
+              arrow_back
+            </span>
+          </TextButton>
+          <TextButton>
+            <span className="material-symbols-outlined">
+              arrow_forward
+            </span>
+          </TextButton>
+        </div>
+        <div className="search-and-browse-container flex justify-center gap-4 flex-grow">
+          <div className="search-and-browse-inner flex-grow flex items-center justify-center">
+            {/* <ToggleIconButton>
+              <span className="material-symbols-outlined">
+                browse
+              </span>
+            </ToggleIconButton> */}
+            <a href="./search" className="flex-grow flex items-center justify-center">
+              <SearchBox placeholder="Search" className="flex-grow" />
+            </a>
+          </div>
+        </div>
+        <div className="nav-bar-button-container flex p-3 gap-3 items-center">
+          <FilledButton showIcon={false}>
+            Đăng nhập/Đăng ký
+          </FilledButton>
+        </div>
+      </div>
+      <div className="content flex p-4 pr-1 gap-4 flex-grow flex-1 justify-stretch">
+        <NavRail className={""} items={items} />
+        <div className="center-scroll pr-4 flex-grow">
+          <div className="center-scroll-inner flex items-center h-full">
+            {children}
+          </div>
+        </div>
+      </div>
+      <div className="song-playing z-[1000] bg-[--md-sys-color-inverse-on-surface] p-4 gap-4 flex flex-grow-0 items-center justify-center">
+        <div className="song-title flex items-center gap-2 w-1/6">
+          <Image src={"/favicon.ico"} alt="song-playing" width={64} height={64}/>
+          <div className="song-title-info">
+            <p className="song-title-text">Song title</p>
+            <p className="song-artist">Artist</p>
+          </div>
+          <span className="material-symbols-outlined">favorite</span>
+        </div>
+        <div className="song-controls-container flex-col flex-grow">
+          <div className="song-controls flex items-center justify-center gap-4">
+            <TextButton>
+              <span className="material-symbols-outlined">skip_previous</span>
+            </TextButton>
+            <TextButton>
+              <span className="material-symbols-outlined">play_arrow</span>
+            </TextButton>
+            <TextButton>
+              <span className="material-symbols-outlined">skip_next</span>
+            </TextButton>
+          </div>
+          <div className="song-progress flex items-center gap-4">
+            <p>0:00</p>
+            <div className="song-progress-bar flex-grow bg-[--md-sys-color-on-surface] h-1 rounded-full overflow-clip">
+              <div className="song-progress-bar-inner bg-[--md-sys-color-primary] h-full rounded-full"></div>
+            </div>
+            <p>3:00</p>
+          </div>
+        </div>
+        <div className="right-controls w-1/6"></div>
+      </div>
+        {/* {children} */}
       </body>
     </html>
   );

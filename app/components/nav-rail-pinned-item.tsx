@@ -28,17 +28,26 @@ export default function NavRailPinnedItem(
         props.href = '#';
     }
     return (
-        <div className={`nav-item-common flex items-center rounded-full cursor-pointer font-medium selected-${props.selected}`} role='link' onClick={props.onClick}>
-            <Link className={`state-layer relative flex extended-gap-${props.extended} items-center justify-between rounded-full ${!props.extended ? 'max-w-6' : ""} padding-${props.extended ? "extended" : "collapsed"}`} href={props.href!}>
-                <md-ripple />
-                <div className={`nav-item-content flex extended-gap-${props.extended} items-center`}>
-                    <div className="cover flex items-center">
-                        <Image src={props.imgSrc} alt={props.text} width={props.width} height={props.width} />
-                    </div>
-                    <div className={`label-container text-ellipsis items-center extended-${props.extended}`}>
-                        <p className={`label text-center text-ellipsis extended-${props.extended}`}>{props.text}</p>
-                    </div>
-                </div>
+        <div className={`nav-item rounded-full cursor-pointer font-medium selected-${props.selected}`} role='link' onClick={props.onClick}>
+            <Link className={`state-layer relative flex extended-gap-${props.extended} items-center justify-between rounded-full padding-${props.extended ? "extended" : "collapsed"}`} href={props.href!}>
+                <md-ripple></md-ripple>
+                <span className={`nav-item-content flex extended-gap-${props.extended} items-center`}>
+                    <span className="image flex items-center">
+                    <Image 
+                        src={props.imgSrc} 
+                        alt={props.text} 
+                        width={props.width} 
+                        height={props.width} 
+                        unoptimized={true}
+                        />
+                    </span>
+                    <span className={`label-container flex items-center extended-${props.extended}`}>
+                        <p className={`label text-center inline extended-${props.extended}`}>{props.text}</p>
+                    </span>
+                </span>
+                {/* <div className={`badge extended-${props.extended} rounded-full text-center flex items-center justify-center`}>
+                    <p>{props.badgevalue}</p>
+                </div> */}
             </Link>
         </div>
     );

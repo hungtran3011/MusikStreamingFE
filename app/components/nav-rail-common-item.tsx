@@ -39,10 +39,10 @@ export default function NavRailCommonItem(
         props.href = '#';
     }
     return (
-        <div className={`nav-item rounded-full cursor-pointer font-medium selected-${props.selected}`} role='link' onClick={props.onClick}>
-            <Link className={`state-layer relative flex extended-gap-${props.extended} items-center justify-between rounded-full padding-${props.extended ? "extended" : "collapsed"}`} href={props.href!}>
+        <div className={`nav-item w-full rounded-full cursor-pointer font-medium selected-${props.selected}`} role='link' onClick={props.onClick}>
+            <Link className={`state-layer w-full relative flex extended-gap-${props.extended} items-center justify-between rounded-full padding-${props.extended ? "extended" : "collapsed"}`} href={props.href!}>
                 <md-ripple></md-ripple>
-                <div className={`nav-item-content flex extended-gap-${props.extended} items-center`}>
+                <div className={`nav-item-content flex  w-full extended-gap-${props.extended} items-center`}>
                     <div className="icon flex items-center">
                         <span className='material-symbols-outlined'>{props.icon}</span>
                     </div>

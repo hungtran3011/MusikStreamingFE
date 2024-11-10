@@ -138,10 +138,17 @@
   }
 }
 
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   color: var(--md-sys-color-on-surface);
   background: var(--md-sys-color-surface);
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
+  @apply sm:overflow-auto md:overflow-auto lg:overflow-y-hidden;
   /* transition: all .5s ease-in-out; */
   /* font-family: 'Inter', 'Times New Roman', Arial, Helvetica, sans-serif; */
 }
@@ -155,7 +162,12 @@ body {
 }
 
 .center-scroll{
-  max-height: calc(100vh - 120px);
+  max-height: calc(100vh - 200px);
+  overflow-y: hidden;
+}
+
+.center-scroll:hover{
+  overflow-y: auto;
 }
 
 ::-webkit-scrollbar {
