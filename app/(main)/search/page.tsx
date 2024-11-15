@@ -1,6 +1,6 @@
 import SearchBox from '../components/search-box';
-import TextButton from '../components/text-button';
-import FilledButton from '../components/button';
+import TextButton from '../components/buttons/text-button';
+import FilledButton from '../components/buttons/button';
 
 export default function SearchPage() {
     return (

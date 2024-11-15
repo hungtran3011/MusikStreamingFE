@@ -1,8 +1,8 @@
-import { ImageData } from "./image-data";
+import { ImageProps } from "./image-props";
 export type BottomNavItemData = {
     text: string;
     badgevalue?: number;
     onClick?: () => void;
     href: string;
-    img?: ImageData,
+    img?: ImageProps,
 };

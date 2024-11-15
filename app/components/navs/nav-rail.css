@@ -57,7 +57,7 @@
 }
 
 .nav-rail{
-    /* max-height: calc(100vh - 200px); */
+    max-height: calc(100vh - 228px);
     /* overflow: hidden; */
     /* position: fixed; */
     /* top: 100px; */

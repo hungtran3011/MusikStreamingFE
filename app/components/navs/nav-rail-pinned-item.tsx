@@ -30,7 +30,7 @@ export default function NavRailPinnedItem(
     return (
         <div className={`nav-item rounded-full cursor-pointer font-medium selected-${props.selected}`} role='link' onClick={props.onClick}>
             <Link className={`state-layer relative flex extended-gap-${props.extended} items-center justify-between rounded-full padding-${props.extended ? "extended" : "collapsed"}`} href={props.href!}>
-                <md-ripple></md-ripple>
+                <md-ripple/>
                 <span className={`nav-item-content flex extended-gap-${props.extended} items-center`}>
                     <span className="image flex items-center">
                     <Image 

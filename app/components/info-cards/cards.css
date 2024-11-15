@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.play-button{
+    visibility: hidden;
+}
+
+.song-card:hover .play-button{
+    visibility: visible;
+}

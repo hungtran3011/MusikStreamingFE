@@ -4,8 +4,10 @@ import '@material/web/ripple/ripple';
 import NavRailCommonItem from './nav-rail-common-item';
 import NavRailPinnedItem from './nav-rail-pinned-item';
 import { useState } from 'react';
-import { NavItemData } from '../model/nav-item-data';
+import { NavItemData } from '../../model/nav-item-props';
+import { usePathname } from 'next/navigation';
 import "./nav-rail.css";
+// import path from 'path';
 
 export default function NavRail(
     props: {
@@ -16,12 +18,12 @@ export default function NavRail(
         pinned?: {
             [key: string]: NavItemData
         },
-        selected: number
+        selected?: number
     }
 ) {
-    let sum_ = Array.from(Object.keys(props.items)).length + (props.pinned === undefined ? 0 : Array.from(Object.keys(props.pinned!)).length);
-    const [selected, setSelected] = useState(0);
+    // const [selected, setSelected] = useState(0);
     const [extended, setExtended] = useState(true);
+    const pathname = usePathname();
     return (
         <div className={`${props.className} nav-rail relative flex-col bg-[--md-sys-color-surface-container-low] overflow-clip rounded-2xl nav-rail-${extended ? 'extended' : 'collapsed'}`}>
             <div className={`nav-rail-inner h-full overflow-y-scroll nav-rail--padding-${extended?'extended':'collapsed'}`}>
@@ -47,7 +49,7 @@ export default function NavRail(
                                     text={props.items[key]['text']}
                                     showBadge={props.items[key]['badgevalue']! > 0}
                                     badgevalue={props.items[key]['badgevalue']!}
-                                    selected={selected === index}
+                                    selected={pathname === props.items[key]['href']}
                                     href={props.items[key]['href']}
                                     onClick={() => { setSelected(index) }}
                                     extended={extended}
@@ -58,19 +60,7 @@ export default function NavRail(
                                     imgSrc={props.items[key]['img']!['src']}
                                     text={props.items[key]['text']}
                                     width={props.items[key]['img']!['width']}
-                                    selected={selected === index}
-                                    href={props.items[key]['href']}
-                                    onClick={() => { setSelected(index) }}
-                                    extended={extended}
-                                />
-                            else
-                                return <NavRailCommonItem
-                                    key={key}
-                                    icon={key}
-                                    text={props.items[key]['text']}
-                                    showBadge={props.items[key]['badgevalue']! > 0}
-                                    badgevalue={props.items[key]['badgevalue']!}
-                                    selected={selected === index}
+                                    selected={pathname === props.items[key]['href']}
                                     href={props.items[key]['href']}
                                     onClick={() => { setSelected(index) }}
                                     extended={extended}
@@ -78,7 +68,9 @@ export default function NavRail(
                         })
                     }
                 </div>
-                <hr />
+                <div className="px-4">
+                    <hr className='border-[--md-sys-color-outline-variant]'/>
+                </div>
                 <div className="nav-rail-pinned flex-col">
                     {
                         props.pinned !== undefined
@@ -91,10 +83,11 @@ export default function NavRail(
                                 imgSrc={props.pinned![key]['img']!['src']}
                                 text={props.pinned![key]['text']}
                                 width={props.pinned![key]['img']!['width']}
-                                selected={selected === sum_ - 1 - index}
+                                // selected={selected === sum_ - 1 - index}
                                 href={props.pinned![key]['href']}
                                 onClick={() => { setSelected(index) }}
                                 extended={extended}
+                                selected={pathname === props.pinned![key]['href']}
                             />
                         })
                         : <></>
