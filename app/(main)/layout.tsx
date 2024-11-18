@@ -48,6 +48,7 @@ const items: { [key: string]: NavItemData } = {
 
 const inter = Inter({
   weight: "400",
+  subsets: ["latin", "vietnamese"],
 });
 
 /**
