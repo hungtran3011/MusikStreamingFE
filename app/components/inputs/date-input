@@ -1,5 +1,0 @@
-export default DateInput(){
-  return (
-    <input type="date" />
-  );
-}

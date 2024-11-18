@@ -8,6 +8,11 @@ module.exports = {
         protocol: 'https',
         hostname: 'upload.wikimedia.org',
         port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        port: '',
       }
     ],
     localPatterns: [

@@ -47,7 +47,7 @@ export default function NavRailCommonItem(
                         <span className='material-symbols-outlined'>{props.icon}</span>
                     </div>
                     <div className={`label-container flex items-center extended-${props.extended}`}>
-                        <p className={`label text-center inline extended-${props.extended}`}>{props.text}</p>
+                        <p className={`label text-center extended-${props.extended}`}>{props.text}</p>
                     </div>
                 </div>
                 <div className={`badge badge-show-${props.showBadge} extended-${props.extended} rounded-full text-center flex items-center justify-center`}>

@@ -4,51 +4,68 @@ import Image from 'next/image';
 import TextButton from '../buttons/text-button';
 import './cards.css'
 import 'material-symbols'
+import { CardProps } from '@/app/model/card-props';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
-export default function VerticalCard() {
+/**
+ * VerticalCard component displays content in a vertical card layout with an image, title, and subtitle.
+ * It includes a play button overlay and navigation capabilities.
+ * 
+ * @component
+ * @param {Object} props - The component props
+ * @param {Object} props.img - The image object containing src and width properties
+ * @param {string} props.img.src - The source URL of the image
+ * @param {number} props.img.width - The width of the image in pixels
+ * @param {string} props.title - The main title text to display
+ * @param {string} props.subtitle - The secondary text to display
+ * @param {string} props.href - The navigation link for the card
+ * @param {function} [props.onClick] - Optional click handler for the play button
+ * 
+ * @returns {JSX.Element} A vertical card component with image, title, subtitle, and play button
+ */
+export default function VerticalCard({
+  img,
+  title,
+  subtitle,
+  href,
+  onClick = () => { }
+}: CardProps) {
+  const router = useRouter();
   return (
-    // <div className="p-3 pb-3 bg-[#46483c] rounded-lg justify-start items-start gap-3 inline-flex">
-    //   <div className="grow shrink basis-0 flex-col justify-start items-center gap-3 inline-flex">
-    //     <div className="self-stretch h-[140px] justify-center items-center inline-flex">
-    //       <div className="h-[140px] justify-center items-center flex">
-    //         <div className="min-w-[140px] w-fit h-[140px] justify-center items-center inline-flex">
-    //           <Image className="w-[140px] h-[140px]" src="/favicon.ico" alt="Placeholder image" width={140} height={140} />
-    //         </div>
-    //       </div>
-    //     </div>
-    //     <div className="self-stretch h-[52px] px-1 flex-col justify-start items-start gap-1 flex">
-    //       <div className="self-stretch text-[--md-sys-color-on-background] text-sm font-semibold  leading-none tracking-wide">Lorem ipsum</div>
-    //       <div className="self-stretch text-[--md-sys-color-outline] text-xs font-normal  leading-none tracking-wide">Lorem ipsum dolor sit amet</div>
-    //     </div>
-    //     <div className="play-button-container">
-    //       <div className="play-button w-12 ">
-    //         <TextButton className="">
-    //           <span className="material-symbols-outlined icon-filled">play_arrow</span>
-    //         </TextButton>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
-    <div className="vertical-card song-card rounded-lg bg-[--md-sys-color-outline-variant] flex flex-col w-[200px]">
-      <div className="cover-img self-stretch flex justify-stretch h-full w-[200px]">
-        <Image
-          className="self-stretch rounded-t-lg"
-          src={"https://upload.wikimedia.org/wikipedia/en/4/4f/Lana_Del_Rey_-_Did_You_Know_That_There%27s_a_Tunnel_Under_Ocean_Blvd.png"}
-          alt={"BLVD"}
-          width={200}
-          height={200}
-        >
-        </Image>
+    <div className={`vertical-card song-card rounded-lg bg-[--md-sys-color-outline-variant] flex flex-col items-center justify-center w-[${img.width}px] gap-3`} onClick={
+      () => {
+        router.push(href);
+      }
+    }>
+      <div className={`cover-img self-stretch flex flex-col justify-start h-full w-[${img.width}px]`}>
+        <Link href={href}>
+          <Image
+            className="self-stretch rounded-t-lg h-auto"
+            src={img.src}
+            alt={title}
+            width={img.width}
+            height="0"
+          >
+          </Image>
+        </Link>
+        <div className="play-button-container w-full flex items-end justify-end mt-[-52px] pr-1">
+          <div className="play-button w-12 bg-[--md-sys-color-primary] rounded-full">
+            <TextButton className="" onClick={onClick}>
+              <span className="material-symbols-outlined icon-filled text-[--md-sys-color-on-primary]">play_arrow</span>
+            </TextButton>
+          </div>
+        </div>
       </div>
       <div className="title text-ellipsis flex">
-        <p className="line-clamp-2">{"Did you know that there's a tunnel under Ocean Blvd"}</p>
+        <p className="line-clamp-2 text-md">
+          <Link href={href} className='hover:underline'>
+            {title}
+          </Link>
+        </p>
       </div>
-      <div className="play-button-container w-full flex items-end justify-end">
-        <div className="play-button w-12 ">
-          <TextButton className="">
-            <span className="material-symbols-outlined icon-filled">play_arrow</span>
-          </TextButton>
-        </div>
+      <div className="subtitle text-ellipsis flex">
+        <p className="line-clamp-1">{subtitle}</p>
       </div>
     </div>
   )

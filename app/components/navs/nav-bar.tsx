@@ -12,12 +12,18 @@ export default function NavBar() {
     return (
         <div className="nav-bar flex flex-grow-0 pl-4 md:pl-0 pt-3 items-center justify-between w-full top-0 max-h-24 sticky bg-inherit z-[1000]" autoFocus={true}>
         <div className="nav-bar-button-container hidden md:flex md:p-3 md:gap-3 md:items-center">
-          <TextButton className="app-bar-button">
+          <TextButton className="app-bar-button" onClick={()=>{
+            route.back();
+          }}>
             <span className="material-symbols-outlined">
               arrow_back
             </span>
           </TextButton>
-          <TextButton>
+          <TextButton onClick={
+            () => {
+              route.forward();
+            }
+          }>
             <span className="material-symbols-outlined">
               arrow_forward
             </span>

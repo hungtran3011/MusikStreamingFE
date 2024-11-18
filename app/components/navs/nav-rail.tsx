@@ -21,16 +21,18 @@ export default function NavRail(
         selected?: number
     }
 ) {
-    // const [selected, setSelected] = useState(0);
+    const [selected, setSelected] = useState(0);
     const [extended, setExtended] = useState(true);
     const pathname = usePathname();
     return (
         <div className={`${props.className} nav-rail relative flex-col bg-[--md-sys-color-surface-container-low] overflow-clip rounded-2xl nav-rail-${extended ? 'extended' : 'collapsed'}`}>
             <div className={`nav-rail-inner h-full overflow-y-scroll nav-rail--padding-${extended?'extended':'collapsed'}`}>
-                <div className={`button selected-false rounded-full`} role="button" onClick={() => {
+                <div className={`button selected-false rounded-full`} role="button" onClick={() => { 
+                    localStorage.setItem('nav-rail-extended', JSON.stringify(!extended));
+                    console.log(!extended);
                     setExtended(!extended);
                 }}>
-                    <div className={`state-layer rounded-full flex gap-4 relative padding-${extended ? "extended" : "collapsed "}`}>
+                    <div className={`state-layer rounded-full flex gap-4 relative padding-${extended ? "extended" : "collapsed"}`}>
                         <md-ripple/>
                         <span className="material-symbols-outlined">menu</span>
                         <p>{extended ? "Menu" : ""}</p>

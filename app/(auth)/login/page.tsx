@@ -68,7 +68,7 @@ export default function LoginPage() {
                             {/* <span className='material-symbols-outlined'>password</span> */}
                             <md-icon slot="leading-icon">password</md-icon>
                         </md-outlined-text-field>
-                        <Link className='text-right font-medium w-full block text-[--md-sys-color-primary]' href={"/forgot-password"}>Quên mật khẩu? Lấy lại mật khẩu tại đây</Link>
+                        <Link className='text-center font-medium w-full block text-[--md-sys-color-primary]' href={"/forgot-password"}>Quên mật khẩu? Lấy lại mật khẩu tại đây</Link>
                     </div>
                     <div className="max-w-[560px] w-[80vw] flex flex-col gap-4 items-center justify-stretch">
                         <FilledButton onClick={() => { }} className='max-w-[560px] w-[80vw]'>

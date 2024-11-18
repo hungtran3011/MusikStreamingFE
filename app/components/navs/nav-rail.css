@@ -57,7 +57,7 @@
 }
 
 .nav-rail{
-    max-height: calc(100vh - 228px);
+    max-height: calc(100vh - 196px);
     /* overflow: hidden; */
     /* position: fixed; */
     /* top: 100px; */
@@ -72,7 +72,7 @@
 }
 
 .nav-rail-extended {
-    min-width: 360px;
+    min-width: 200px;
     max-width: 720px;
 }
 

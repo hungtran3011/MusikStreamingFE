@@ -22,7 +22,7 @@ export default function OutlinedButton(
         showIcon = false;
     }
     return(
-        <div className={`text-btn flex border-2 rounded-full border-[--md-sys-color-outline] items-center justify-stretch focus:ring ${props.className}`} role='button' onClick={props.onClick}>
+        <button className={`text-btn flex border-2 rounded-full border-[--md-sys-color-outline] items-center justify-stretch focus:ring ${props.className}`} role='button' onClick={props.onClick}>
             <div className={`state-layer p-4 relative ${showIcon?"":"pr-6"} gap-3 rounded-full flex items-center justify-center text-[--md-sys-color-primary] flex-grow`}>
                 <md-ripple className="ripple"/>
                 {
@@ -38,6 +38,6 @@ export default function OutlinedButton(
                 <span className={`material-symbols-outlined ${showIcon ? "block" : "none"} block`}>{props.icon}</span>
                 <span className='text-center font-medium block'>{props.children}</span>
             </div>
-        </div>
+        </button>
     )
 }

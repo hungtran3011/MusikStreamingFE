@@ -10,7 +10,9 @@ import "@material/web/iconbutton/filled-tonal-icon-button";
 // import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "material-symbols";
 import FilledButton from "@/app/components/buttons/button";
+import TextButton from "@/app/components/buttons/text-button";
 import OutlinedButton from "@/app/components/buttons/outline-button";
+import DateInput from "@/app/components/inputs/date-input";
 import Link from "next/link";
 
 // const lightTheme = createTheme({
@@ -37,6 +39,10 @@ import Link from "next/link";
 export default function SignUp() {
     return (
         <div className="flex-col flex items-center justify-center max-w-[560px] w-[80vw] gap-6">
+            <Link href="login" className="w-full flex gap-2 text-[--md-sys-color-primary] font-medium">
+                <span className="material-symbols-outlined">arrow_back</span>
+                Quay về trang đăng nhập
+            </Link>
             <div className="self-stretch h-11 flex-col justify-center items-center gap-2.5 flex">
                 <div className="text-[--md-sys-color-on-background] text-4xl font-bold">Đăng ký</div>
             </div>
@@ -63,27 +69,10 @@ export default function SignUp() {
                         >
                             <md-icon slot="leading-icon">person</md-icon>
                         </md-outlined-text-field>
-                        {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <ThemeProvider theme={theme}>
-                                <DatePicker className="max-w-[560px] w-[80vw]"
-                                label="Ngày tháng năm sinh"/>
-                            </ThemeProvider>
-                        </LocalizationProvider> */}
-                        <label htmlFor=""> Ngày tháng năm sinh
-                        <input aria-label="Ngày tháng năm sinh" type="date" className="max-w-[560px] w-[80vw] bg-transparent"/>
-                        </label>
-                        {/* <md-outlined-text-field
-                            className='max-w-[560px] w-[80vw]'
-                            label="Ngày tháng năm sinh"
-                            placeholder='Nhập ngày tháng năm sinh của bạn'
-                            type='date'
-                        >
-                            <md-icon slot="leading-icon">calendar_month</md-icon>
-                            <md-icon-button slot="trailing-icon" onClick={() => { console.log }}>
-                                <md-icon>event</md-icon>
-                            </md-icon-button>
-
-                        </md-outlined-text-field> */}
+                        {/* <label htmlFor="" className="border-2 pt-2 border-[--md-sys-color-outline] rounded-[4px] max-w-[560px] w-[80vw] flex flex-col px-4 focus:outline-1"> Ngày tháng năm sinh
+                            <input aria-label="Ngày tháng năm sinh" type="date" className=" bg-transparent pb-2 text-[--md-sys-color-on-surface] focus:outline-none" />
+                        </label> */}
+                        <DateInput label="Ngày tháng năm sinh" />
                         <md-outlined-text-field label="Mật khẩu" placeholder="Nhập mật khẩu" type="password" className="max-w-[560px] w-[80vw]">
                             {/* <span className='material-symbols-outlined'>password</span> */}
                             <md-icon slot="leading-icon">password</md-icon>
@@ -98,6 +87,7 @@ export default function SignUp() {
                             Đăng ký
                         </FilledButton>
                     </div>
+
                 </form>
                 <div className="self-stretch h-[68px] flex-col justify-start items-center gap-3 flex">
                     <div className="h-4 text-center text-[--md-sys-color-on-background] text-sm font-medium leading-tight tracking-tight">hoặc</div>
@@ -120,7 +110,11 @@ export default function SignUp() {
                         Đã có tài khoản? Đăng nhập tài khoản
                     </span>
                     <span className="text-black text-sm font-medium leading-tight tracking-tight"> </span>
-                    <Link href={"/sign-up"} className="text-[--md-sys-color-primary] text-sm font-medium leading-tight tracking-tight">tại đây</Link></div>
+                    <Link href={"/login"} className="text-[--md-sys-color-primary] text-sm font-medium leading-tight tracking-tight">tại đây</Link>
+                </div>
+                <p className="font-medium text-center">
+                    Bằng việc đăng ký tài khoản, bạn đồng ý với <Link href={"/ToS"}>Chính sách và điều khoản sử dụng</Link> của chúng tôi
+                </p>
             </div>
         </div>
     )
