@@ -9,15 +9,10 @@
 import {Inter} from "next/font/google";
 import "../globals.css";
 import "material-symbols/outlined.css";
-// import "../components/theme"
-import TextButton from "../components/buttons/text-button";
 import NavBar from "../components/navs/nav-bar";
 import NavRail from "../components/navs/nav-rail";
-import Image from "next/image";
-import Link from "next/link";
 import { NavItemData } from "../model/nav-item-props";
 import SongControl from "../components/audio/song-control";
-import { Suspense } from "react";
 
 const items: { [key: string]: NavItemData } = {
   'home': {
