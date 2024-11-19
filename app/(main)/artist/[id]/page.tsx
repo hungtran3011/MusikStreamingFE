@@ -20,40 +20,49 @@ import ErrorComponent from '@/app/components/api-fetch-container/fetch-error';
  * @param {string} props.params.id - The artist ID.
  * @returns {JSX.Element} The rendered component.
  */
-export default function ArtistPage({ params }: { params: { id: string } }) {
-    // fetch artist data
+export default function ArtistPage({ params }: { params: Promise<{ id: string }> }) {
     const [artists, setArtists] = useState<Artist[]>([]);
     const [error, setError] = useState<string | null>(null);
-    // const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        // setLoading(true);
-        fetchArtistById(params.id)
-            .then(setArtists)
-            .catch((err) => setError(err.message))
-            // .finally(() => setLoading(false));
-    }, [params.id]);
+        fetchData();
+    }, []);
 
-    // if (loading) {
-    //     return <Loading />;
-    // }
-
-    if (error) {
-        return <ErrorComponent onReloadClick={() => { fetchArtistById(params.id).then(setArtists).catch((err) => setError(err.message)); }} />;
+    async function fetchData() {
+        try {
+            const data = await params;
+            const artists = await fetchArtistById(data.id);
+            setArtists(artists);
+        } catch (e) {
+            console.error(e);
+            if (e instanceof Error) {
+                setError(e.message);
+            } else {
+                setError(String(e));
+            }
+        }
     }
 
-    return (
-        <Suspense fallback={<Loading />}>
-            <div className='flex w-full'>
-                {
-                    artists.map((artist) => (
-                        <div key={artist.id} className='flex flex-col'>
-                            <h1>{artist.name}</h1>
-                            <Image src={artist.avatarurl} alt={artist.name} width={200} height={200} />
-                            <p>{artist.description}</p>
-                        </div>
-                    ))
-                }
-            </div>
-        </Suspense>);
+
+
+    try {
+        return (
+            <Suspense fallback={<Loading/>}>
+                <div className='flex w-full'>
+                    {
+                        artists.map((artist) => (
+                            <div key={artist.id} className='flex flex-col'>
+                                <h1>{artist.name}</h1>
+                                <Image src={artist.avatarurl} alt={artist.name} width={200} height={200} />
+                                <p>{artist.description}</p>
+                            </div>
+                        ))
+                    }
+                </div>
+            </Suspense>
+        );
+    } catch (e) {
+        console.error(e);
+        return <ErrorComponent onReloadClick={fetchData} />;
+    }
 }

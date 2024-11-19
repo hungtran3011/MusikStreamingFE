@@ -2,7 +2,7 @@
 
 import React from 'react';
 import TextButton from '../buttons/text-button';
-import FilledButton from '../buttons/button';
+import FilledButton from '../buttons/filled-button';
 import SearchBox from '../inputs/search-box';
 import { useRouter } from 'next/navigation';
 // import ToggleIconButton from './toggle-icon-button';

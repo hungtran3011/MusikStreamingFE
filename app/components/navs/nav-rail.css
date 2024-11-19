@@ -53,7 +53,7 @@
 }
 
 .nav-rail, .nav-item{
-    transition: width 0.3s ease-in-out, max-width .3s ease-in-out;
+    transition: all 0.3s ease, min-width 0.3s ease-in-out;
 }
 
 .nav-rail{
@@ -63,16 +63,17 @@
     /* top: 100px; */
 }
 
-.nav-rail-inner{
+/* .nav-rail-inner{
     overflow: hidden;
 }
 
 .nav-rail-inner:hover{
     overflow-y: auto;
-}
+} */
 
 .nav-rail-extended {
-    min-width: 200px;
+    width: 20vw;
+    min-width: 280px;
     max-width: 720px;
 }
 

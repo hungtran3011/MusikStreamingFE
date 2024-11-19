@@ -1,4 +1,5 @@
 import { Artist } from "../model/artist";
+import axios, {Axios} from "axios";
 
 /**
  * Fetches artist information from the API by their ID
@@ -16,15 +17,11 @@ import { Artist } from "../model/artist";
  * - Error responses are caught and logged to console
  */
 export default async function fetchArtistById(id: string) {
+    console.log(`Fetching artist with ID: ${id}`);
+
     try {
-        console.log(id);
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/artist/${id}`);
-        // if (!res.ok) {
-        //     throw new Error(`Error fetching artist: ${res.statusText}`);
-        // }
-        const data = await res.json();
-        const artists = data["data"] as Artist[];
-        return artists;
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/artist/${id}`);
+        return response.data as Artist[];
     } catch (error) {
         console.error(error);
         return [];

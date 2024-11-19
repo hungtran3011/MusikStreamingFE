@@ -1,19 +1,24 @@
 'use client'
-import { ImageProps } from '@/app/model/image-props';
 import '@material/web/ripple/ripple';
 import Image from 'next/image';
 
-export default function OutlinedButton(
-    props: {
-        className?: string,
-        onClick: () => void,
-        icon?: string,
-        showIcon?: boolean,
-        leadingImg?: ImageProps,
-        showLeadingImg?: boolean,
-        children?: string,
-    }
-) {
+/**
+ * OutlinedButton component renders a button with optional icon and leading image.
+ * 
+ * @param {Object} props - The properties object.
+ * @param {string} [props.className] - Additional class names for the button.
+ * @param {function} props.onClick - Click event handler for the button.
+ * @param {string} [props.icon] - Icon name to be displayed.
+ * @param {boolean} [props.showIcon] - Flag to show or hide the icon.
+ * @param {Object} [props.leadingImg] - Leading image properties.
+ * @param {string} props.leadingImg.src - Source URL of the leading image.
+ * @param {string} props.leadingImg.alt - Alt text for the leading image.
+ * @param {boolean} [props.showLeadingImg] - Flag to show or hide the leading image.
+ * @param {string} [props.children] - Button text.
+ * 
+ * @returns {JSX.Element} The rendered button component.
+ */
+export default function OutlinedButton(props) {
     let showIcon = props.showIcon;
     if (props.icon === undefined || props.icon === '') {
         showIcon = false;
@@ -28,8 +33,8 @@ export default function OutlinedButton(
                 {
                     props.showLeadingImg
                     ? <Image
-                    src={props.leadingImg!.src}
-                    alt={props.leadingImg!.alt}
+                    src={props.leadingImg.src}
+                    alt={props.leadingImg.alt}
                     width={18}
                     height={18}
                     ></Image>

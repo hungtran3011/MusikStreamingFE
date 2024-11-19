@@ -1,18 +1,18 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import '@material/web/ripple/ripple';
 
-export default function NavRailPinnedItem(
-    props: {
-        imgSrc: string,
-        width: number,
-        text: string,
-        selected: boolean,
-        onClick?: () => void,
-        href?: string,
-        extended?: boolean
-    }
-) {
+/**
+ * NavRailPinnedItem component
+ * @param {Object} props - Component properties
+ * @param {string} props.imgSrc - Source URL for the image
+ * @param {number} props.width - Width of the image
+ * @param {string} props.text - Text to display
+ * @param {boolean} props.selected - Whether the item is selected
+ * @param {function} [props.onClick] - Click handler function
+ * @param {string} [props.href] - Link URL
+ * @param {boolean} [props.extended] - Whether the item is extended
+ */
+export default function NavRailPinnedItem(props) {
     if (props.extended === undefined) {
         props.extended = false;
     }
@@ -29,7 +29,7 @@ export default function NavRailPinnedItem(
     }
     return (
         <div className={`nav-item rounded-full cursor-pointer font-medium selected-${props.selected}`} role='link' onClick={props.onClick}>
-            <Link className={`state-layer relative flex extended-gap-${props.extended} items-center justify-between rounded-full padding-${props.extended ? "extended" : "collapsed"}`} href={props.href!}>
+            <Link className={`state-layer relative flex extended-gap-${props.extended} items-center justify-between rounded-full padding-${props.extended ? "extended" : "collapsed"}`} href={props.href}>
                 <md-ripple/>
                 <span className={`nav-item-content flex extended-gap-${props.extended} items-center`}>
                     <span className="image flex items-center">

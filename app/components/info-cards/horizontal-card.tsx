@@ -8,6 +8,21 @@ import "./cards.css"
 import { CardProps } from "@/app/model/card-props";
 import Link from "next/link";
 
+/**
+ * HorizontalCard Component
+ * 
+ * A horizontal card that displays an image, title, and a play button. The card is clickable and navigates to the provided href.
+ * 
+ * @param {Object} props - Component props
+ * @param {Object} props.img - Image object containing src, width, and height
+ * @param {string} props.img.src - Source URL of the image
+ * @param {number} props.img.width - Width of the image
+ * @param {number} props.img.height - Height of the image
+ * @param {string} props.title - Title text to display
+ * @param {string} props.subtitle - Subtitle text to display
+ * @param {string} props.href - URL to navigate to when the card is clicked
+ * @param {Function} [props.onClick] - Optional click handler for the play button
+ */
 export default function HorizontalCard({
     img,
     title,
@@ -25,7 +40,6 @@ export default function HorizontalCard({
             <div className="image-frame flex justify-start">
                 <Image
                     className="rounded-l-lg"
-                    // src={"https://upload.wikimedia.org/wikipedia/en/4/4f/Lana_Del_Rey_-_Did_You_Know_That_There%27s_a_Tunnel_Under_Ocean_Blvd.png"}
                     src={img.src}
                     alt={title}
                     width={img.width}
