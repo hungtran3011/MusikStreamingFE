@@ -3,7 +3,7 @@ import '@material/web/textfield/outlined-text-field'
 import '@material/web/icon/icon'
 import FilledButton from '@/app/components/buttons/filled-button';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useReducer } from 'react';
 import { signUp } from '@/app/services/auth.service';
 import { useRouter } from 'next/navigation';
 
@@ -12,24 +12,57 @@ import { useRouter } from 'next/navigation';
  * It includes form validation and submission logic.
  */
 export default function SignUpPage() {
-    const router = useRouter();
-    const [formData, setFormData] = useState({
-        email: "",
-        password: "",
-        confirmPassword: "",
-        name: ""
-    });
+    // const router = useRouter();
+    // const [formData, setFormData] = useState({
+    //     email: "",
+    //     password: "",
+    //     confirmPassword: "",
+    //     name: ""
+    // });
 
-    const [errors, setErrors] = useState({
-        email: false,
-        password: false,
-        confirmPassword: false,
-        name: false,
-        general: false
-    });
+    // const [errors, setErrors] = useState({
+    //     email: false,
+    //     password: false,
+    //     confirmPassword: false,
+    //     name: false,
+    //     general: false
+    // });
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [errorMessage, setErrorMessage] = useState(null);
+    // const [isLoading, setIsLoading] = useState(false);
+    // const [errorMessage, setErrorMessage] = useState(null);
+
+    const formReducer = (state, action) => {
+        switch (action.type) {
+            case 'setFormData':
+                return { ...state, formData: action.payload };
+            case 'setErrors':
+                return { ...state, errors: action.payload };
+            case 'setLoading':
+                return { ...state, isLoading: action.payload };
+            case 'setError':
+                return { ...state, errorMessage: action.payload };
+            default:
+                return state;
+        }
+    }
+
+    const [state, dispatch] = useReducer(formReducer, {
+        formData: {
+            email: "",
+            password: "",
+            confirmPassword: "",
+            name: ""
+        },
+        errors: {
+            email: false,
+            password: false,
+            confirmPassword: false,
+            name: false,
+            general: false
+        },
+        isLoading: false,
+        errorMessage: null
+    });
 
     /**
      * Handles input change and updates form data and errors state.
@@ -37,29 +70,28 @@ export default function SignUpPage() {
      * @returns {function} - Event handler function.
      */
     const handleInputChange = (field) => (event) => {
-        setErrors(prev => ({ ...prev, [field]: validateField(field), general: false }));
-        setFormData(prev => ({ ...prev, [field]: event.target.value }));
+        dispatch({
+            type: 'setErrors',
+            payload: { ...state.errors, [field]: validateField(field)(event) }
+        });
+        dispatch({
+            type: 'setFormData',
+            payload: { ...state.formData, [field]: event.target.value }
+        });
+    
     };
 
-    const validateField = (field) => (event) => {
-        if (field === 'email') {
-            if (!event.target.value.match(/^\S+@\S+\.\S+$/)) {
-                // setErrors(prev => ({ ...prev, email: true }));
-                return false;
-            } else {
-                // setErrors(prev => ({ ...prev, email: false }));
-                return true;
-            }
-        } else if (field === 'password') {
-            if (event.target.value.length < 8) {
-                // setErrors(prev => ({ ...prev, password: true }));
-                return false
-            } else {
-                // setErrors(prev => ({ ...prev, password: false }));
-                return true
-            }
+    const validateField = (field) => {
+        switch (field) {
+            case "email":
+                return (event) => !event.target.value.match(/^\S+@\S+\.\S+$/);
+            case "password":
+                return (event) => event.target.value.length < 8;
+            case "confirmPassword":
+                return (event) => event.target.value !== state.formData.password;
+            case "name":
+                return (event) => !event.target.value.trim();
         }
-
     }
 
     /**
@@ -67,27 +99,27 @@ export default function SignUpPage() {
      * @returns {boolean} - Returns true if the form is valid, otherwise false.
      */
     const validateForm = () => {
-        const newErrors = { ...errors };
+        const newErrors = { ...state.errors };
         let isValid = true;
 
-        if (!formData.email.match(/^\S+@\S+\.\S+$/)) {
+        if (!state.formData.email.match(/^\S+@\S+\.\S+$/)) {
             newErrors.email = true;
             isValid = false;
         }
-        if (formData.password.length < 8) {
+        if (state.formData.password.length < 8) {
             newErrors.password = true;
             isValid = false;
         }
-        if (formData.password !== formData.confirmPassword) {
+        if (state.formData.password !== state.formData.confirmPassword) {
             newErrors.confirmPassword = true;
             isValid = false;
         }
-        if (!formData.name.trim()) {
+        if (!state.formData.name.trim()) {
             newErrors.name = true;
             isValid = false;
         }
 
-        setErrors(newErrors);
+        dispatch({ type: 'setErrors', payload: newErrors });
         return isValid;
     };
 
@@ -97,23 +129,23 @@ export default function SignUpPage() {
      */
     const handleSubmit = async (event) => {
         event.preventDefault();
-        setIsLoading(true);
-        setErrorMessage(null);
+        dispatch({ type: 'setLoading', payload: true });
+        dispatch({ type: 'setError', payload: null });
 
         if (!validateForm()) {
-            setIsLoading(false);
+            dispatch({ type: 'setLoading', payload: false });
             return;
         }
 
         try {
-            await signUp(formData);
+            await signUp(state.formData);
             router.push('/home');
         } catch (error) {
             console.log(error)
-            setErrorMessage(error.message || 'Sign up failed');
-            setErrors(prev => ({ ...prev, general: true }));
+            dispatch({ type: 'setError', payload: error.message || 'Sign up failed' });
+            dispatch({ type: 'setErrors', payload: { ...state.errors, general: true } });
         } finally {
-            setIsLoading(false);
+            dispatch({ type: 'setLoading', payload: false });
         }
     };
 
@@ -125,63 +157,64 @@ export default function SignUpPage() {
             <form onSubmit={handleSubmit} className="flex-col justify-start items-center gap-6 flex self-stretch">
                 <div className="flex-col justify-stretch items-start gap-3 flex w-full">
                     <md-outlined-text-field
-                        error={errors.name}
+                        error={state.errors.name}
+                        required={true}
                         className='max-w-[560px] w-[80vw]'
                         label="Tên của bạn"
-                        value={formData.name}
+                        value={state.formData.name}
                         onInput={handleInputChange('name')}
                     >
                         <md-icon slot="leading-icon">person</md-icon>
                     </md-outlined-text-field>
                     
                     <md-outlined-text-field
-                        error={errors.email}
+                        error={state.errors.email}
                         className='max-w-[560px] w-[80vw]'
                         label="Email"
                         type="email"
-                        value={formData.email}
+                        value={state.formData.email}
                         onInput={handleInputChange('email')}
                     >
                         <md-icon slot="leading-icon">email</md-icon>
                     </md-outlined-text-field>
 
                     <md-outlined-text-field
-                        error={errors.password}
+                        error={state.errors.password}
                         className='max-w-[560px] w-[80vw]'
                         label="Mật khẩu"
                         type="password"
-                        value={formData.password}
+                        value={state.formData.password}
                         onInput={handleInputChange('password')}
-                        supportingText={(errors.password ? "Mật khẩu phải dài hơn 8 ký tự" : "")}
+                        supportingText={(state.errors.password ? "Mật khẩu phải dài hơn 8 ký tự" : "")}
                     >
                         <md-icon slot="leading-icon">password</md-icon>
                     </md-outlined-text-field>
 
                     <md-outlined-text-field
-                        error={errors.confirmPassword}
+                        error={state.errors.confirmPassword}
                         className='max-w-[560px] w-[80vw]'
                         label="Xác nhận mật khẩu"
                         type="password"
-                        value={formData.confirmPassword}
+                        value={state.formData.confirmPassword}
                         onInput={handleInputChange('confirmPassword')}
-                        supportingText={(errors.confirmPassword && !errors.password) ? "Mật khẩu nhập lại không trùng với mật khẩu ban đầu" : ""}
+                        supportingText={(state.errors.confirmPassword && !state.errors.password) ? "Mật khẩu nhập lại không trùng với mật khẩu ban đầu" : ""}
                     >
                         <md-icon slot="leading-icon">password</md-icon>
                     </md-outlined-text-field>
                 </div>
 
-                {errorMessage && (
+                {state.errorMessage && (
                     <div className="text-[--md-sys-color-error] text-sm">
-                        {errorMessage}
+                        {state.errorMessage}
                     </div>
                 )}
 
                 <FilledButton
                     type="submit"
-                    disabled={isLoading}
+                    disabled={state.isLoading}
                     className='max-w-[560px] w-[80vw]'
                 >
-                    {isLoading ? 'Đang đăng ký...' : 'Đăng ký'}
+                    {state.isLoading ? 'Đang đăng ký...' : 'Đăng ký'}
                 </FilledButton>
 
                 <div className="text-center">

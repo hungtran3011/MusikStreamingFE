@@ -23,61 +23,14 @@ export default function Home() {
           <Artists/>
         </Suspense>
       </div>
-      <div className="card-scroll flex flex-col overflow-x-hidden gap-4">
-        <h1 className="text-lg font-bold">Nghệ sĩ nổi bật</h1>
-        <Suspense fallback={<Loading/>}>
-          <Artists/>
-        </Suspense>
-      </div>
-      <div className="card-scroll flex flex-col overflow-x-hidden gap-4">
-        <h1 className="text-lg font-bold">Nghệ sĩ nổi bật</h1>
-        <Suspense fallback={<Loading/>}>
-          <Artists/>
-        </Suspense>
-      </div>
-      <div className="card-scroll flex flex-col overflow-x-hidden gap-4">
-        <h1 className="text-lg font-bold">Nghệ sĩ nổi bật</h1>
-        <Suspense fallback={<Loading/>}>
-          <Artists/>
-        </Suspense>
-      </div>
-      <div className="card-scroll flex flex-col overflow-x-hidden gap-4">
-        <h1 className="text-lg font-bold">Nghệ sĩ nổi bật</h1>
-        <Suspense fallback={<Loading/>}>
-          <Artists/>
-        </Suspense>
-      </div>
-      <div className="card-scroll flex flex-col overflow-x-hidden gap-4">
-        <h1 className="text-lg font-bold">Nghệ sĩ nổi bật</h1>
-        <Suspense fallback={<Loading/>}>
-          <Artists/>
-        </Suspense>
-      </div>
-      <div className="card-scroll flex flex-col overflow-x-hidden gap-4">
-        <h1 className="text-lg font-bold">Nghệ sĩ nổi bật</h1>
-        <Suspense fallback={<Loading/>}>
-          <Artists/>
-        </Suspense>
-      </div>
-      <div className="card-scroll flex flex-col overflow-x-hidden gap-4">
-        <h1 className="text-lg font-bold">Nghệ sĩ nổi bật</h1>
-        <Suspense fallback={<Loading/>}>
-          <Artists/>
-        </Suspense>
-      </div>
-      <div className="card-scroll flex flex-col overflow-x-hidden gap-4">
-        <h1 className="text-lg font-bold">Nghệ sĩ nổi bật</h1>
-        <Suspense fallback={<Loading/>}>
-          <Artists/>
-        </Suspense>
-      </div>
       
-      {/* <div className="card-scroll flex flex-col overflow-x-hidden gap-4">
+      
+      <div className="card-scroll flex flex-col overflow-x-hidden gap-4">
         <h1 className="text-lg font-bold">Nghệ sĩ nổi bật</h1>
         <Suspense fallback={<Loading/>}>
           <Songs/>
         </Suspense>
-      </div> */}
+      </div>
     </div>
   );
 }

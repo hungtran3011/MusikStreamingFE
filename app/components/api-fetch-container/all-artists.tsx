@@ -1,25 +1,49 @@
 'use client'
 
-import fetchArtists from "@/app/api-fetch/all-artists";
-import { CardProps } from "@/app/model/card-props";
-import { use, useEffect } from "react";
-import { processCloudinaryUrl } from "@/app/api-fetch/cloudinary-url-processing";
+import { useState, useEffect } from "react";
+
 import VerticalCard from "../info-cards/vertical-card";
 import TextButton from "../buttons/text-button";
 import ErrorComponent from "./fetch-error";
+
+import { CardProps } from "@/app/model/card-props";
+
+import fetchArtists from "@/app/api-fetch/all-artists";
+import { processCloudinaryUrl } from "@/app/api-fetch/cloudinary-url-processing";
+
 import "material-symbols"
+import { Artist } from "@/app/model/artist";
 
 export default function Artists() {
   // useEffect to fetch data
-  const data = use(fetchArtists());
+  const [data, setData] = useState<Artist[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<unknown>(null);
+
+  const loadArtists = async () => {
+    try{
+      setIsLoading(true);
+      const artists = await fetchArtists();
+      setData(artists!);
+    }
+    catch (e) {
+      console.error('Error fetching artists:', e);
+      setError(e);
+    }
+    finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    fetchArtists();
-  }, [data]);
+    loadArtists();
+  });
   
   try {
     console.log(data);
     const cards: CardProps[] = [];
-    data!.forEach((artist) => {
+    if (!data) return null;
+    data.forEach((artist) => {
       const url = processCloudinaryUrl(artist.avatarurl, 140, 140, "artists");
       console.log(url);
       cards.push({
@@ -42,10 +66,13 @@ export default function Artists() {
     );
   }
   catch (e) {
-    console.log(e);
+    console.error('Error fetching artists:', e);
     return (
       <ErrorComponent onReloadClick={() => {
-        fetchArtists();
+        // fetchArtists();
+        setError(null);
+        setIsLoading(true);
+        loadArtists();
       }}/>
     )
   }

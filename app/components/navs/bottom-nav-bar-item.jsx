@@ -3,6 +3,17 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 // import './bottom-nav-bar.css';
 
+/**
+ * BottomNavBarItem component renders a navigation item for the bottom navigation bar.
+ * It highlights the item if the current pathname matches the href prop.
+ *
+ * @param {Object} props - The properties object.
+ * @param {Object} props.key
+ * @param {string} props.href - The URL path that the navigation item links to.
+ * @param {string} props.icon - The icon name to be displayed in the navigation item.
+ * @param {string} props.text - The text label to be displayed under the icon.
+ * @returns {JSX.Element} The rendered BottomNavBarItem component.
+ */
 export default function BottomNavBarItem(
     props
 ) {
@@ -16,7 +27,7 @@ export default function BottomNavBarItem(
                         <span className="material-symbols-outlined">{props.icon}</span>
                     </div>
                 </div>
-                <div className="label">
+                <div className={`label ${pathname == props.href ? "font-bold text-[--md-sys-color-primary]" : ""}`}>
                     <p>{props.text}</p>
                 </div>
             </Link>

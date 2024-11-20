@@ -1,12 +1,29 @@
 // fetch api for all artists
 import type { Artist } from '@/app/model/artist';
-import axios, { Axios } from 'axios';
+import axios from 'axios';
+import z from 'zod';
+
+const ArtistSchema = z.object({
+    data: z.array(z.object({
+        id: z.string(),
+        name: z.string(),
+        description: z.string().optional(),
+        avatarurl: z.string(),
+        createdAt: z.string().optional(),
+        updatedAt: z.string().optional(),
+        country: z.string().optional(),
+        managerid: z.string().optional(),
+    })),
+});
 
 export default async function fetchArtists() {
+    if (!process.env.NEXT_PUBLIC_API_URL) {
+        throw new Error('API URL not set');
+    }
     try {
         const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/artist`);
         // parse to json
-        const data = res.data;
+        const data = ArtistSchema.parse(res.data);
         return data["data"] as Artist[];
     }
     catch {

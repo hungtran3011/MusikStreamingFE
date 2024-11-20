@@ -23,18 +23,24 @@ const items = {
     href: '/',
     type: NavItemType.DEFAULT
   },
+  'explore': {
+    text: "Khám phá",
+    badgevalue: 0,
+    href: "/search",
+    type: NavItemType.DEFAULT
+  },
   'library_music': {
     text: 'Thư viện của bạn',
     badgevalue: 0,
     href: '/library',
     type: NavItemType.DEFAULT
   },
-  'favorite': {
-    text: 'Yêu thích',
-    badgevalue: 0,
-    href: '/favorites',
-    type: NavItemType.DEFAULT
-  },
+  // 'favorite': {
+  //   text: 'Yêu thích',
+  //   badgevalue: 0,
+  //   href: '/favorites',
+  //   type: NavItemType.DEFAULT
+  // },
   'settings': {
     text: 'Cài đặt',
     badgevalue: 0,
