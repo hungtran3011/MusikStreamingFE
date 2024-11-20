@@ -37,9 +37,30 @@ export default function SignUpPage() {
      * @returns {function} - Event handler function.
      */
     const handleInputChange = (field) => (event) => {
-        setErrors(prev => ({ ...prev, [field]: false, general: false }));
+        setErrors(prev => ({ ...prev, [field]: validateField(field), general: false }));
         setFormData(prev => ({ ...prev, [field]: event.target.value }));
     };
+
+    const validateField = (field) => (event) => {
+        if (field === 'email') {
+            if (!event.target.value.match(/^\S+@\S+\.\S+$/)) {
+                // setErrors(prev => ({ ...prev, email: true }));
+                return false;
+            } else {
+                // setErrors(prev => ({ ...prev, email: false }));
+                return true;
+            }
+        } else if (field === 'password') {
+            if (event.target.value.length < 8) {
+                // setErrors(prev => ({ ...prev, password: true }));
+                return false
+            } else {
+                // setErrors(prev => ({ ...prev, password: false }));
+                return true
+            }
+        }
+
+    }
 
     /**
      * Validates the form data.
@@ -53,7 +74,7 @@ export default function SignUpPage() {
             newErrors.email = true;
             isValid = false;
         }
-        if (formData.password.length < 6) {
+        if (formData.password.length < 8) {
             newErrors.password = true;
             isValid = false;
         }
@@ -86,7 +107,7 @@ export default function SignUpPage() {
 
         try {
             await signUp(formData);
-            router.push('/login?signupSuccess=true');
+            router.push('/home');
         } catch (error) {
             console.log(error)
             setErrorMessage(error.message || 'Sign up failed');
@@ -131,6 +152,7 @@ export default function SignUpPage() {
                         type="password"
                         value={formData.password}
                         onInput={handleInputChange('password')}
+                        supportingText={(errors.password ? "Mật khẩu phải dài hơn 8 ký tự" : "")}
                     >
                         <md-icon slot="leading-icon">password</md-icon>
                     </md-outlined-text-field>
@@ -142,6 +164,7 @@ export default function SignUpPage() {
                         type="password"
                         value={formData.confirmPassword}
                         onInput={handleInputChange('confirmPassword')}
+                        supportingText={(errors.confirmPassword && !errors.password) ? "Mật khẩu nhập lại không trùng với mật khẩu ban đầu" : ""}
                     >
                         <md-icon slot="leading-icon">password</md-icon>
                     </md-outlined-text-field>

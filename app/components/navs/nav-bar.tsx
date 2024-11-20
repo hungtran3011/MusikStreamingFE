@@ -30,13 +30,13 @@ export default function NavBar() {
           </TextButton>
         </div>
         <div className="search-and-browse-container flex justify-center gap-4 flex-grow">
-          <div className="search-and-browse-inner flex-grow flex items-center justify-center">
+          <div className="search-and-browse-inner flex-grow flex items-center sm:justify-center">
             {/* <ToggleIconButton>
               <span className="material-symbols-outlined">
                 browse
               </span>
             </ToggleIconButton> */}
-            <SearchBox placeholder="Search" className="flex-grow"/>
+            <SearchBox placeholder="Search"/>
           </div>
         </div>
         <div className="nav-bar-button-container flex p-3 gap-3 items-center">

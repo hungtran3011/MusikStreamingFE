@@ -33,6 +33,7 @@ export default function BottomNavBar(
                 return (
                     BottomNavBarItem(
                         {
+                            key: index,
                             icon: key,
                             text: props.items[key]['text'],
                             href: props.items[key]['href']

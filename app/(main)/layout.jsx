@@ -18,26 +18,54 @@ import BottomNavBar from "../components/navs/bottom-nav-bar";
  */
 const items = {
   'home': {
-    text: 'Home',
+    text: 'Trang chủ',
     badgevalue: 0,
     href: '/',
     type: NavItemType.DEFAULT
   },
   'library_music': {
-    text: 'Your library',
+    text: 'Thư viện của bạn',
     badgevalue: 0,
     href: '/library',
     type: NavItemType.DEFAULT
   },
   'favorite': {
-    text: 'Favorites',
+    text: 'Yêu thích',
     badgevalue: 0,
     href: '/favorites',
     type: NavItemType.DEFAULT
   },
   'settings': {
-    text: 'Settings',
+    text: 'Cài đặt',
     badgevalue: 0,
+    href: '/settings',
+    type: NavItemType.DEFAULT
+  },
+};
+
+const bottomItems = {
+  'home': {
+    text: 'Trang chủ',
+    icon: 'home',
+    href: '/',
+    type: NavItemType.DEFAULT
+  },
+  
+  'explore': {
+    text: 'Khám phá',
+    icon: 'search',
+    href: '/search',
+    type: NavItemType.DEFAULT
+  },
+  'library_music': {
+    text: 'Thư viện',
+    icon: 'library_music',
+    href: '/library',
+    type: NavItemType.DEFAULT
+  },
+  'settings': {
+    text: 'Cài đặt',
+    icon: 'settings',
     href: '/settings',
     type: NavItemType.DEFAULT
   },
@@ -61,14 +89,14 @@ export default function RootLayout({ children }) {
         <NavBar />
         <div className="content flex p-4 pr-1 gap-4 flex-grow flex-1 justify-stretch">
           <NavRail items={items} />
-          <div className="center-scroll overflow-hidden flex-grow">
-            <div className="center-scroll-inner flex items-start h-full bg-[--md-sys-color-surface-container-low] rounded-xl px-4 py-6">
+          <div className="center-scroll flex-grow self-stretch overflow-hidden rounded-xl">
+            <div className="center-scroll-inner min-h-[100vh] flex items-start h-full bg-[--md-sys-color-surface-container-low] rounded-l-xl px-4 py-6">
               {children}
             </div>
           </div>
         </div>
         <SongControl />
-        <BottomNavBar items={items} />
+        <BottomNavBar items={bottomItems} />
       </body>
     </html>
   );

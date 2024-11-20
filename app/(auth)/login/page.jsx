@@ -80,7 +80,7 @@ export default function LoginPage() {
                     isLoading: false,
                     errorMessage: null
                 }));
-                router.push('/dashboard'); // Redirect to dashboard after successful login
+                router.push('/home'); // Redirect to dashboard after successful login
             } else {
                 throw new Error(response.message || 'Login failed');
             }

@@ -20,7 +20,7 @@ export default function Artists() {
     console.log(data);
     const cards: CardProps[] = [];
     data!.forEach((artist) => {
-      const url = processCloudinaryUrl(artist.avatarurl, 140, 140);
+      const url = processCloudinaryUrl(artist.avatarurl, 140, 140, "artists");
       console.log(url);
       cards.push({
         img: {

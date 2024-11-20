@@ -1,7 +1,7 @@
 export type Song = {
     id: string;
     title: string;
-    thumnailurl: string;
+    thumbnailurl: string;
     duration: number;
     releasedate: string;
     genre: string;

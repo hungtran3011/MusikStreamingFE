@@ -1,5 +1,4 @@
 // fetch api for all artists
-
 import type { Artist } from '@/app/model/artist';
 import axios, { Axios } from 'axios';
 
