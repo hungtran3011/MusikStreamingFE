@@ -5,7 +5,7 @@
  */
 "use client";
 import type { Artist } from '@/app/model/artist';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import fetchArtistById from '@/app/api-fetch/artist-by-id';
 import Image from 'next/image';
 import { Suspense } from 'react';
@@ -23,10 +23,11 @@ import ErrorComponent from '@/app/components/api-fetch-container/fetch-error';
 export default function ArtistPage({ params }: { params: Promise<{ id: string }> }) {
     const [artists, setArtists] = useState<Artist[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const data = use(fetchData());
 
     useEffect(() => {
         fetchData();
-    }, []);
+    });
 
     async function fetchData() {
         try {
