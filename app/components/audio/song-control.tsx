@@ -17,13 +17,13 @@ export default function SongControl() {
         <div className="song-controls-container flex-col w-1/3">
           <div className="song-controls flex items-center justify-end md:justify-center gap-4">
             <TextButton>
-              <span className="material-symbols-outlined icon-filled">skip_previous</span>
+              <span className="material-symbols-outlined-filled">skip_previous</span>
             </TextButton>
             <TextButton>
-              <span className="material-symbols-outlined icon-filled">play_arrow</span>
+              <span className="material-symbols-outlined-filled">play_arrow</span>
             </TextButton>
             <TextButton>
-              <span className="material-symbols-outlined icon-filled">skip_next</span>
+              <span className="material-symbols-outlined-filled">skip_next</span>
             </TextButton>
           </div>
           <div className="song-progress md:flex items-center gap-4 hidden">

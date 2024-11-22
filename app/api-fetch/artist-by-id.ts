@@ -1,5 +1,21 @@
 import { Artist } from "../model/artist";
 import axios, {Axios} from "axios";
+import z from 'zod';
+
+const ArtistSchema = z.object({
+    data: z.array(
+        z.object({
+            id: z.string(),
+            name: z.string(),
+            description: z.string().optional(),
+            avatarurl: z.string(),
+            createdAt: z.string().optional(),
+            updatedAt: z.string().optional(),
+            country: z.string().optional(),
+            managerid: z.string().optional(),
+        })
+    ),
+});
 
 /**
  * Fetches artist information from the API by their ID
@@ -21,9 +37,10 @@ export default async function fetchArtistById(id: string) {
 
     try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/artist/${id}`);
-        return response.data as Artist[];
+        const data = ArtistSchema.parse(response.data);
+        return data["data"][0] as Artist;
     } catch (error) {
         console.error(error);
-        return [];
+        return null;
     }
 }

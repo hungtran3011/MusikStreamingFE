@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 
 import VerticalCard from "../info-cards/vertical-card";
-import TextButton from "../buttons/text-button";
 import ErrorComponent from "./fetch-error";
 
 import { CardProps } from "@/app/model/card-props";
@@ -11,7 +10,7 @@ import { CardProps } from "@/app/model/card-props";
 import fetchArtists from "@/app/api-fetch/all-artists";
 import { processCloudinaryUrl } from "@/app/api-fetch/cloudinary-url-processing";
 
-import "material-symbols"
+// import "material-symbols/outlined.css"
 import { Artist } from "@/app/model/artist";
 
 export default function Artists() {
@@ -37,7 +36,7 @@ export default function Artists() {
 
   useEffect(() => {
     loadArtists();
-  });
+  }, []);
   
   try {
     console.log(data);

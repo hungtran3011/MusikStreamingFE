@@ -21,7 +21,7 @@ import ErrorComponent from '@/app/components/api-fetch-container/fetch-error';
  * @returns {JSX.Element} The rendered component.
  */
 export default function ArtistPage({ params }: { params: Promise<{ id: string }> }) {
-    const [artists, setArtists] = useState<Artist[]>([]);
+    const [artist, setArtist] = useState<Artist>();
     const [error, setError] = useState<string | null>(null);
     const data = use(fetchData());
 
@@ -32,8 +32,9 @@ export default function ArtistPage({ params }: { params: Promise<{ id: string }>
     async function fetchData() {
         try {
             const data = await params;
-            const artists = await fetchArtistById(data.id);
-            setArtists(artists);
+            const artist = await fetchArtistById(data.id);
+            if (!artist) return;
+            setArtist(artist);
         } catch (e) {
             console.error(e);
             if (e instanceof Error) {
@@ -51,13 +52,13 @@ export default function ArtistPage({ params }: { params: Promise<{ id: string }>
             <Suspense fallback={<Loading/>}>
                 <div className='flex w-full'>
                     {
-                        artists.map((artist) => (
-                            <div key={artist.id} className='flex flex-col'>
-                                <h1>{artist.name}</h1>
+                        artist ? (
+                            <div className='flex flex-col items-center w-full'>
                                 <Image src={artist.avatarurl} alt={artist.name} width={200} height={200} />
+                                <h1>{artist.name}</h1>
                                 <p>{artist.description}</p>
                             </div>
-                        ))
+                        ) : null
                     }
                 </div>
             </Suspense>

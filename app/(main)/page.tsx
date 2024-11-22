@@ -1,4 +1,4 @@
-import "material-symbols";
+// import "material-symbols";
 import { Suspense } from 'react';
 import { Metadata } from "next";
 import Artists from "../components/api-fetch-container/all-artists";

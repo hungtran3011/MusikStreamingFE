@@ -3,7 +3,7 @@ import '@material/web/textfield/outlined-text-field'
 import '@material/web/icon/icon'
 import FilledButton from '@/app/components/buttons/filled-button';
 import Link from 'next/link';
-import { useState, useReducer } from 'react';
+import { useReducer } from 'react';
 import { signUp } from '@/app/services/auth.service';
 import { useRouter } from 'next/navigation';
 
@@ -12,24 +12,7 @@ import { useRouter } from 'next/navigation';
  * It includes form validation and submission logic.
  */
 export default function SignUpPage() {
-    // const router = useRouter();
-    // const [formData, setFormData] = useState({
-    //     email: "",
-    //     password: "",
-    //     confirmPassword: "",
-    //     name: ""
-    // });
-
-    // const [errors, setErrors] = useState({
-    //     email: false,
-    //     password: false,
-    //     confirmPassword: false,
-    //     name: false,
-    //     general: false
-    // });
-
-    // const [isLoading, setIsLoading] = useState(false);
-    // const [errorMessage, setErrorMessage] = useState(null);
+    const router = useRouter();
 
     const formReducer = (state, action) => {
         switch (action.type) {
@@ -70,27 +53,30 @@ export default function SignUpPage() {
      * @returns {function} - Event handler function.
      */
     const handleInputChange = (field) => (event) => {
-        dispatch({
-            type: 'setErrors',
-            payload: { ...state.errors, [field]: validateField(field)(event) }
-        });
+        const newFormData = { ...state.formData, [field]: event.target.value };
         dispatch({
             type: 'setFormData',
             payload: { ...state.formData, [field]: event.target.value }
         });
-    
-    };
+        dispatch({
+            type: 'setErrors',
+            payload: { ...state.errors, [field]: validateField(field, newFormData) }
+        });
+    }
 
-    const validateField = (field) => {
+    const validateField = (field, formData) => {
         switch (field) {
             case "email":
-                return (event) => !event.target.value.match(/^\S+@\S+\.\S+$/);
+                // return (event) => !event.target.value.match(/^\S+@\S+\.\S+$/);
+                return !formData.email.match(/^\S+@\S+\.\S+$/)
             case "password":
-                return (event) => event.target.value.length < 8;
+                return formData.password.length < 8;
             case "confirmPassword":
-                return (event) => event.target.value !== state.formData.password;
+                return formData.confirmPassword !== state.formData.password;
             case "name":
-                return (event) => !event.target.value.trim();
+                return !formData.name.trim();
+            default:
+                return true;
         }
     }
 
@@ -163,10 +149,11 @@ export default function SignUpPage() {
                         label="Tên của bạn"
                         value={state.formData.name}
                         onInput={handleInputChange('name')}
+                        autoFocus={true}
                     >
                         <md-icon slot="leading-icon">person</md-icon>
                     </md-outlined-text-field>
-                    
+
                     <md-outlined-text-field
                         error={state.errors.email}
                         className='max-w-[560px] w-[80vw]'
@@ -213,13 +200,14 @@ export default function SignUpPage() {
                     type="submit"
                     disabled={state.isLoading}
                     className='max-w-[560px] w-[80vw]'
+
                 >
                     {state.isLoading ? 'Đang đăng ký...' : 'Đăng ký'}
                 </FilledButton>
 
                 <div className="text-center">
                     <span className="text-[--md-sys-color-on-background] text-sm">
-                        Đã có tài khoản? 
+                        Đã có tài khoản?
                     </span>
                     <Link href="/login" className="text-[--md-sys-color-primary] text-sm ml-1">
                         Đăng nhập

@@ -36,7 +36,8 @@ export async function signUp(data: SignUpData): Promise<AuthResponse> {
             }
         );
         return response.data;
-    } catch (error: unknown) {
+    } catch (error) {
+        console.error(error);
         throw new Error('Sign up failed');
     }
 }

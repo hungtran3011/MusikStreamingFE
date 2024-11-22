@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import TextButton from '../buttons/text-button';
 import './cards.css'
-import 'material-symbols'
+
 import { CardProps } from '@/app/model/card-props';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -58,14 +58,14 @@ export default function VerticalCard({
         </div>
       </div>
       <div className="title text-ellipsis flex">
-        <p className="line-clamp-2 text-md">
+        <p className="line-clamp-2 text-md font-medium">
           <Link href={href} className='hover:underline'>
             {title}
           </Link>
         </p>
       </div>
       <div className="subtitle text-ellipsis flex">
-        <p className="line-clamp-1">{subtitle}</p>
+        <p className="line-clamp-1 text-sm">{subtitle}</p>
       </div>
     </div>
   )

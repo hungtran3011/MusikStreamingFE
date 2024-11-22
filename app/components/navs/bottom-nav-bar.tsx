@@ -1,7 +1,5 @@
 'use client';
 
-import 'material-symbols';
-import Link from 'next/link';
 import BottomNavBarItem from './bottom-nav-bar-item';
 import { NavItemData } from '@/app/model/nav-item-props';
 
@@ -27,7 +25,7 @@ export default function BottomNavBar(
 ) {
     return (
         // Container with responsive hiding on md breakpoint
-        <div className={`${props.className} bottom-nav-bar p-3 flex items-center justify-around md:hidden`}>
+        <nav className={`${props.className} bottom-nav-bar p-3 flex items-center justify-around md:hidden`}>
             {/* Map through items object to render navigation items */}
             {Object.keys(props.items).map((key: string, index: number) => {
                 return (
@@ -41,6 +39,6 @@ export default function BottomNavBar(
                     )
                 );
             })}
-        </div>
+        </nav>
     );
 }

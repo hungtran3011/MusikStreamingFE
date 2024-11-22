@@ -6,7 +6,7 @@
 
 import { Inter } from "next/font/google";
 import "../globals.css";
-import "material-symbols/outlined.css";
+// import "material-symbols/outlined.css";
 import NavBar from "../components/navs/nav-bar";
 import NavRail from "@/app/components/navs/nav-rail";
 import { NavItemType } from "../model/nav-item-type";
@@ -35,12 +35,6 @@ const items = {
     href: '/library',
     type: NavItemType.DEFAULT
   },
-  // 'favorite': {
-  //   text: 'Yêu thích',
-  //   badgevalue: 0,
-  //   href: '/favorites',
-  //   type: NavItemType.DEFAULT
-  // },
   'settings': {
     text: 'Cài đặt',
     badgevalue: 0,
@@ -78,8 +72,10 @@ const bottomItems = {
 };
 
 const inter = Inter({
-  weight: "400",
+  weight: ["400", "500", "600", "700"],
   subsets: ["latin", "vietnamese"],
+  style: ['normal', 'italic'],
+  display: 'swap'
 });
 
 /**
@@ -91,7 +87,10 @@ const inter = Inter({
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${inter} ${inter} antialiased`}>
+      <head>  
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+      </head>
+      <body className={`${inter} antialiased`}>
         <NavBar />
         <div className="content flex p-4 pr-1 gap-4 flex-grow flex-1 justify-stretch">
           <NavRail items={items} />

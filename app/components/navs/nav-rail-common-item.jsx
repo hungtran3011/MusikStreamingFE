@@ -1,6 +1,6 @@
 'use client';
 
-import 'material-symbols';
+;
 import './nav-rail.css';
 import '@material/material-color-utilities';
 import Link from 'next/link';

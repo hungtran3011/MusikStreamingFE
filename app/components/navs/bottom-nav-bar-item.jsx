@@ -1,4 +1,4 @@
-import 'material-symbols';
+;
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 // import './bottom-nav-bar.css';

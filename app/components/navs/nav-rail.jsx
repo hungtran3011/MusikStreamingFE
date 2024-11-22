@@ -1,8 +1,9 @@
 'use client';
-import 'material-symbols';
+;
 import NavRailCommonItem from './nav-rail-common-item';
 import NavRailPinnedItem from './nav-rail-pinned-item';
 import { useState, useEffect } from 'react';
+// import {useHistory}
 import { usePathname } from 'next/navigation';
 import "./nav-rail.css";
 

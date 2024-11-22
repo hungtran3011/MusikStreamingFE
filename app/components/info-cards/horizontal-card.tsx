@@ -1,7 +1,7 @@
 'use client'
 
 import TextButton from "../buttons/text-button";
-import 'material-symbols';
+;
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import "./cards.css"
@@ -53,7 +53,8 @@ export default function HorizontalCard({
             <div className="play-button-container">
                 <div className="play-button w-12 ">
                     <TextButton className="" onClick={onClick}>
-                        <span className="material-symbols-outlined icon-filled">play_arrow</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M320-200v-560l440 280-440 280Z"/></svg>
+                        {/* <span className="material-symbols-outlined icon-filled">play_arrow</span> */}
                     </TextButton>
                 </div>
             </div>

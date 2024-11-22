@@ -2,69 +2,131 @@
 import '@material/web/textfield/outlined-text-field'
 import '@material/web/icon/icon'
 import '@material/web/iconbutton/icon-button'
-import 'material-symbols'
 import FilledButton from '@/app/components/buttons/filled-button';
 import OutlinedButton from '@/app/components/buttons/outlined-button';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useReducer } from 'react';
 import { useRouter } from 'next/navigation';
 import { login } from '@/app/services/auth.service';
+// import {useTranslation} from 'next/translation';
 
 /**
  * LoginPage component handles the login functionality.
  * It manages form state, validation, and submission.
+ * 
+ * @return {JSX.Element} The rendered login page component.
+ * 
+ * @example
+ * // To use the LoginPage component, simply import and include it in your JSX:
+ * import LoginPage from '@/app/(auth)/login/page';
+ * 
+ * function App() {
+ *   return (
+ *     <div>
+ *       <LoginPage />
+ *     </div>
+ *   );
+ * }
  */
 export default function LoginPage() {
-    // Form data state
-    const [formData, setFormData] = useState({
-        email: "",
-        password: ""
-    });
+    const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const formReducer = (state, action) => {
+        switch (action.type) {
+            case "setFormData":
+                return { ...state, formData: action.payload };
+            case "setErrors":
+                return {...state, errors: action.payload};
+            case "setStatus":
+                return {...state, status: action.payload};
+        }
+    }
 
-    // Form error states
-    const [errors, setErrors] = useState({
-        email: false,
-        password: false,
-        general: false
-    });
+    const initialValue = {
+        formData: {
+            email: "",
+            password: ""
+        },
+        errors: {
+            email: false,
+            password: false,
+            general: false
+        },
+        status: {
+            isLoading: false,
+            errorMessage: null
+        }
+    }
 
-    // Form status state
-    const [status, setStatus] = useState({
-        isLoading: false,
-        errorMessage: null
-    });
+    const [state, dispatch] = useReducer(formReducer, initialValue);
 
     const router = useRouter();
 
     /**
      * Handles changes to the email input field.
      * @param {Object} event - The input change event.
+     * @return {void}
+     * 
+     * @example
+     * <input type="email" onChange={handleEmailChange} />
      */
-    function handleEmailChange(event) {
-        setErrors(prev => ({ ...prev, email: false, general: false }));
-        setFormData(prev => ({ ...prev, email: event.target.value }));
+    function handleEmailChange() {
+        dispatch({
+            type: "setFormData",
+            payload: { ...state.formData, email: event.target.value }
+        })
+        dispatch({
+            type: "setErrors",
+            payload: {...state.errors, email: event.target.value.match(EMAIL_REGEX), general: false}
+        })
     }
 
     /**
      * Handles changes to the password input field.
      * @param {Object} event - The input change event.
+     * @return {void}
+     * 
+     * @example
+     * <input type="password" onChange={handlePasswordChange} />
      */
     function handlePasswordChange(event) {
-        setErrors(prev => ({ ...prev, password: false, general: false }));
-        setFormData(prev => ({ ...prev, password: event.target.value }));
+        dispatch({
+            type: "setErrors",
+            payload: { ...state.errors, password: length(event.target.value.toString()) >= 8, general: false }
+        })
+        dispatch({
+            type: "setFormData",
+            payload: { ...state.formData, password: event.target.value }
+        })
     }
 
     /**
      * Handles form submission.
      * @param {Object} event - The form submission event.
+     * @return {Promise<void>} A promise that resolves when the form submission is complete.
+     * 
+     * @example
+     * <form onSubmit={handleSubmit}>
+     *   <input type="email" value={formData.email} onChange={handleEmailChange} />
+     *   <input type="password" value={formData.password} onChange={handlePasswordChange} />
+     *   <button type="submit">Login</button>
+     * </form>
      */
     async function handleSubmit(event) {
         event.preventDefault();
-        setStatus(prev => ({ ...prev, isLoading: true }));
+        dispatch({
+            type: "setStatus",
+            payload: { ...state.status, isLoading: true }
+        })
 
-        if (!formData.email.match(/^\S+@\S+\.\S+$/)) {
-            setErrors(prev => ({ ...prev, email: true }));
-            setStatus(prev => ({ ...prev, isLoading: false }));
+        if (!state.formData.email.match(EMAIL_REGEX)) {
+            dispatch({
+                type: "setErrors",
+                payload: { ...state.errors, email: true }
+            })
+            dispatch({
+                type: "setStatus",
+                payload: { ...state.status, isLoading: false }
+            })
             return;
         }
 
@@ -75,22 +137,23 @@ export default function LoginPage() {
             });
 
             if (response.success) {
-                setStatus(prev => ({
-                    ...prev,
-                    isLoading: false,
-                    errorMessage: null
-                }));
+                dispatch({
+                    type: "setErrors",
+                    payload: { ...state.errors, general: false }
+                })
                 router.push('/home'); // Redirect to dashboard after successful login
             } else {
                 throw new Error(response.message || 'Login failed');
             }
         } catch (error) {
-            setErrors(prev => ({ ...prev, general: true }));
-            setStatus(prev => ({
-                ...prev,
-                isLoading: false,
-                errorMessage: error.message || "Login failed. Please try again."
-            }));
+            dispatch({
+                type: "setErrors",
+                payload: { ...state.errors, general: true }
+            })
+            dispatch({
+                type: "setStatus",
+                payload: { ...state.status, errorMessage: error.message || "Login failed. Please try again." }
+            })
         }
     }
 
@@ -103,10 +166,10 @@ export default function LoginPage() {
                 <form onSubmit={handleSubmit} className="flex-col justify-start items-center gap-6 flex self-stretch">
                     <div className="flex-col justify-stretch items-start gap-3 flex">
                         <md-outlined-text-field
-                            error={errors.email || errors.general}
+                            error={state.errors.email || state.errors.general}
                             className='max-w-[560px] w-[80vw]'
                             label="Email của bạn"
-                            value={formData.email}
+                            value={state.formData.email}
                             placeholder='youremail@example.com'
                             type='email'
                             onInput={handleEmailChange}
@@ -115,10 +178,10 @@ export default function LoginPage() {
                             <md-icon slot="leading-icon">email</md-icon>
                         </md-outlined-text-field>
                         <md-outlined-text-field 
-                            error={errors.password || errors.general} 
+                            error={state.errors.password || state.errors.general} 
                             label="Mật khẩu" 
                             placeholder="Nhập mật khẩu" 
-                            value={formData.password} 
+                            value={state.formData.password} 
                             type="password" 
                             className="max-w-[560px] w-[80vw]"
                             onInput={handlePasswordChange}
@@ -129,17 +192,17 @@ export default function LoginPage() {
                     </div>
                     <div className="max-w-[560px] w-[80vw] flex flex-col gap-4 items-center justify-stretch">
                         <FilledButton 
-                            disabled={status.isLoading}
+                            disabled={state.status.isLoading}
                             className='max-w-[560px] w-[80vw]'
                             onClick={(event) => {
                                 handleSubmit(event);
                             }}
                         >
-                            {status.isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+                            {state.status.isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
                         </FilledButton>
-                        {status.errorMessage && (
+                        {state.status.errorMessage && (
                             <div className="text-[--md-sys-color-error] text-sm">
-                                {status.errorMessage}
+                                {state.status.errorMessage}
                             </div>
                         )}
                     </div>
