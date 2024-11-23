@@ -1,9 +1,38 @@
-import SearchBox from '@/app/components/inputs/search-box';
-import TextButton from '@/app/components/buttons/text-button';
-import FilledButton from '@/app/components/buttons/filled-button';
+'use client';
+import BrowseCard from '@/app/components/browse/browse-card';
+import ScalableSearchBox from '@/app/components/inputs/scalable-search-box';
+import { useRef, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function SearchPage() {
+    // categories
+    const pathname = usePathname();
+    const searchFocus = useRef<HTMLInputElement>(null);
+    useEffect(() => {
+        if (pathname == "/search" && searchFocus.current) {
+        searchFocus.current.focus();
+        searchFocus.current.click();
+        }
+    }, [pathname]);
     return (
-       <></>
+       <div className='flex flex-col w-full'>
+        <ScalableSearchBox 
+            className='md:hidden bg-[--md-sys-color-surface] text-[--md-sys-color-on-surface]'
+            placeholder="Search"
+            autoFocus={true} 
+            ref={searchFocus}
+        />
+        <BrowseCard 
+            title="Pop" 
+            image={{
+                src: "/assets/libs.png",
+                width: 160,
+                alt: "Browse"
+            }
+            }
+            bgColour='#FC94AF'
+            textColour='#000000'
+            url="/"/>
+       </div>
     );
 }

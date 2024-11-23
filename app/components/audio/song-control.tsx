@@ -1,6 +1,8 @@
 import Image from 'next/image';
-import TextButton from '../buttons/text-button';
-import PassiveProgress from './passive-progress';
+// import TextButton from '../buttons/text-button';
+import IconSmallButton from '@/app/components/buttons/icon-small-button';
+import PassiveProgress from '@/app/components/audio/passive-progress';
+import PlayButton from '@/app/components/buttons/play-button-main';
 
 export default function SongControl() {
   return (
@@ -16,15 +18,15 @@ export default function SongControl() {
         </div>
         <div className="song-controls-container flex-col w-1/3">
           <div className="song-controls flex items-center justify-end md:justify-center gap-4">
-            <TextButton>
+            <IconSmallButton>
               <span className="material-symbols-outlined-filled">skip_previous</span>
-            </TextButton>
-            <TextButton>
+            </IconSmallButton>
+            <PlayButton>
               <span className="material-symbols-outlined-filled">play_arrow</span>
-            </TextButton>
-            <TextButton>
+            </PlayButton>
+            <IconSmallButton>
               <span className="material-symbols-outlined-filled">skip_next</span>
-            </TextButton>
+            </IconSmallButton>
           </div>
           <div className="song-progress md:flex items-center gap-4 hidden">
             {/* <p>{time}</p> */}
@@ -36,18 +38,18 @@ export default function SongControl() {
           </div>
         </div>
         <div className="right-controls w-1/6 items-end justify-end hidden md:flex">
-          <TextButton>
+          <IconSmallButton>
             <span className={`material-symbols-outlined {lyricsToggled ? "icon-filled" : "icon"}`}>
               lyrics
             </span>
-          </TextButton>
-          <TextButton>
+          </IconSmallButton>
+          <IconSmallButton>
             <span className={`material-symbols-outlined`}>queue_music</span>
-          </TextButton>
+          </IconSmallButton>
           <div className="volume flex items-center">
-            <TextButton>
+            <IconSmallButton>
               <span className="material-symbols-outlined">volume_up</span>
-            </TextButton>
+            </IconSmallButton>
             {/* <div className="volume-slider"> */}
             <input className="max-w-28 w-full" aria-label="input" type="range" value={0} min={0} max={300}/>
             {/* </div> */}

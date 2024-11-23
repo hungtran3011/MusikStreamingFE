@@ -6,6 +6,10 @@
     visibility: hidden;
 }
 
-.song-card:hover .play-button{
+.song-card:hover .play-button, .song-card:hover .play-button-container{
+    visibility: visible;
+}
+
+.cover-img-link:hover .play-button, .cover-img-link:hover .play-button-container{
     visibility: visible;
 }

@@ -16,7 +16,7 @@ import "./nav-rail.css";
  * @param {number} [props.selected] - Index of the selected item.
  */
 export default function NavRail(props) {
-    const [selected, setSelected] = useState(0);
+    // const [selected, setSelected] = useState(0);
     const [extended, setExtended] = useState(true);
     const pathname = usePathname();
 
@@ -37,8 +37,8 @@ export default function NavRail(props) {
     }, []);
 
     return (
-        <div className={`${props.className} nav-rail relative flex-col bg-[--md-sys-color-surface-container-low] overflow-clip rounded-2xl nav-rail-${extended ? 'extended' : 'collapsed'}`}>
-            <div className={`nav-rail-inner h-full hover:overflow-y-auto nav-rail--padding-${extended ? 'extended' : 'collapsed'}`}>
+        <div className={`${props.className} nav-rail relative flex-col bg-[--md-sys-color-surface-container-low]  rounded-2xl nav-rail-${extended ? 'extended' : 'collapsed'}`}>
+            <div className={`nav-rail-inner h-full nav-rail--padding-${extended ? 'extended' : 'collapsed'}`}>
                 <div className={`button selected-false rounded-full`} role="button" onClick={() => { 
                     localStorage.setItem('nav-rail-extended', JSON.stringify(!extended));
                     setExtended(!extended);
@@ -51,7 +51,7 @@ export default function NavRail(props) {
                 </div>
                 <div className="nav-rail-common flex-col">
                     {
-                        Object.keys(props.items).map((key, index) => {
+                        Object.keys(props.items).map((key) => {
                             if (props.items[key].type === 1 && !props.items[key].img.src) {
                                 props.items[key].img.src = "/favicon.ico";
                             }
@@ -64,7 +64,7 @@ export default function NavRail(props) {
                                     badgevalue={props.items[key].badgevalue}
                                     selected={pathname === props.items[key].href}
                                     href={props.items[key].href}
-                                    onClick={() => { setSelected(index) }}
+                                    // onClick={() => { setSelected(index) }}
                                     extended={extended}
                                 />
                             else if (props.items[key].type === 1)
@@ -75,7 +75,7 @@ export default function NavRail(props) {
                                     width={props.items[key].img.width}
                                     selected={pathname === props.items[key].href}
                                     href={props.items[key].href}
-                                    onClick={() => { setSelected(index) }}
+                                    // onClick={() => { setSelected(index) }}
                                     extended={extended}
                                 />
                         })
@@ -87,7 +87,7 @@ export default function NavRail(props) {
                 <div className="nav-rail-pinned flex-col">
                     {
                         props.pinned !== undefined
-                        ? Object.keys(props.pinned).map((key, index) => {
+                        ? Object.keys(props.pinned).map((key) => {
                             if (!props.pinned[key].img.src) {
                                 props.pinned[key].img.src = "/favicon.ico";
                             }
@@ -97,7 +97,7 @@ export default function NavRail(props) {
                                 text={props.pinned[key].text}
                                 width={props.pinned[key].img.width}
                                 href={props.pinned[key].href}
-                                onClick={() => { setSelected(index) }}
+                                // onClick={() => { setSelected(index) }}
                                 extended={extended}
                                 selected={pathname === props.pinned[key].href}
                             />

@@ -5,7 +5,7 @@
  */
 "use client";
 import type { Artist } from '@/app/model/artist';
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect, use, useCallback } from 'react';
 import fetchArtistById from '@/app/api-fetch/artist-by-id';
 import Image from 'next/image';
 import { Suspense } from 'react';
@@ -23,13 +23,8 @@ import ErrorComponent from '@/app/components/api-fetch-container/fetch-error';
 export default function ArtistPage({ params }: { params: Promise<{ id: string }> }) {
     const [artist, setArtist] = useState<Artist>();
     const [error, setError] = useState<string | null>(null);
-    const data = use(fetchData());
 
-    useEffect(() => {
-        fetchData();
-    });
-
-    async function fetchData() {
+    const fetchData = useCallback(async () => {
         try {
             const data = await params;
             const artist = await fetchArtistById(data.id);
@@ -43,9 +38,13 @@ export default function ArtistPage({ params }: { params: Promise<{ id: string }>
                 setError(String(e));
             }
         }
-    }
+    }, [params]);
 
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
 
+    // const data = use(fetchData());
 
     try {
         return (

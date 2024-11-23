@@ -25,7 +25,7 @@ export default function BottomNavBar(
 ) {
     return (
         // Container with responsive hiding on md breakpoint
-        <nav className={`${props.className} bottom-nav-bar p-3 flex items-center justify-around md:hidden`}>
+        <nav className={`${props.className} bottom-nav-bar bg-[--md-sys-color-surface] p-3 flex items-center justify-around md:hidden`}>
             {/* Map through items object to render navigation items */}
             {Object.keys(props.items).map((key: string, index: number) => {
                 return (

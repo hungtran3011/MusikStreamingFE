@@ -7,7 +7,13 @@ import Songs from "../components/api-fetch-container/all-songs";
 
 export const metadata: Metadata = {
   title: "MusikStreaming | Home",
+  keywords: "music, streaming, material design, songs, artists",
   description: "New music streaming app, using Material Design",
+  openGraph: {
+    title: "MusikStreaming | Home",
+    description: "New music streaming app, using Material Design",
+    type: "website"
+  }
 };
 
 /**
@@ -19,16 +25,14 @@ export default function Home() {
     <div className="home w-full">
       <div className="card-scroll flex flex-col overflow-x-hidden gap-4">
         <h1 className="text-lg font-bold">Nghệ sĩ nổi bật</h1>
-        <Suspense fallback={<Loading/>}>
-          <Artists/>
+        <Suspense fallback={<Loading />}>
+          <Artists />
         </Suspense>
       </div>
-      
-      
       <div className="card-scroll flex flex-col overflow-x-hidden gap-4">
         <h1 className="text-lg font-bold">Nghệ sĩ nổi bật</h1>
-        <Suspense fallback={<Loading/>}>
-          <Songs/>
+        <Suspense fallback={<Loading />}>
+          <Songs />
         </Suspense>
       </div>
     </div>

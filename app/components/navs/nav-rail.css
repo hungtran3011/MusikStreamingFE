@@ -58,7 +58,7 @@
 .nav-rail{
     max-height: calc(100vh - 196px);
     transition: all 0.3s ease-in-out, width .3s ease-in-out, min-width 0.3s ease-in-out, max-width .3s ease-in-out;
-    /* overflow: hidden; */
+    overflow-y: auto;
     /* position: fixed; */
     /* top: 100px; */
 }
@@ -85,12 +85,11 @@
     overflow-y: scroll; */
 }
 
-.nav-rail::-webkit-scrollbar{
-    /*hidden*/
+/* .nav-rail::-webkit-scrollbar{
     width: 0;
     height: 0;
     display: none;
-}
+} */
 
 .nav-rail--padding-extended{
     padding: 1rem;

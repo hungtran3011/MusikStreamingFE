@@ -57,7 +57,7 @@ export default function Artists() {
       });
     });
     return (
-      <div className="card-scroll-inner flex gap-4 overflow-x-scroll">
+      <div className="card-scroll-inner flex gap-4 overflow-x-scroll flex-wrap">
         {cards.map((card, index) => {
           return <VerticalCard key={index} {...card} />;
         })}

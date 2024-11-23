@@ -33,13 +33,13 @@ export default function VerticalCard({
 }: CardProps) {
   const router = useRouter();
   return (
-    <div className={`vertical-card song-card rounded-lg bg-[--md-sys-color-outline-variant] flex flex-col items-center justify-center w-[${img.width}px] gap-3`} onClick={
+    <div className={`vertical-card song-card rounded-lg bg-[--md-sys-color-outline-variant] flex flex-col items-center justify-center overflow-hidden w-fit gap-3 pb-3`} onClick={
       () => {
         router.push(href);
       }
     }>
-      <div className={`cover-img self-stretch flex flex-col justify-start h-full w-[${img.width}px]`}>
-        <Link href={href}>
+      <div className={`cover-img self-stretch flex flex-col h-full overflow-hidden transition-transform`}>
+        <Link href={href} className='self-stretch w-full'>
           <Image
             className="self-stretch rounded-t-lg h-auto"
             src={img.src}
@@ -49,17 +49,17 @@ export default function VerticalCard({
           >
           </Image>
         </Link>
-        <div className="play-button-container w-full flex items-end justify-end mt-[-52px] pr-1">
+        <div className="play-button w-full pr-1 pb-1 flex items-end justify-end mt-[-52px]">
           <div className="play-button w-12 bg-[--md-sys-color-primary] rounded-full">
-            <TextButton className="" onClick={onClick}>
-              <span className="material-symbols-outlined icon-filled text-[--md-sys-color-on-primary]">play_arrow</span>
+            <TextButton className="play-button bg-[--md-sys-color-primary]" onClick={onClick}>
+              <span className="material-symbols-outlined-filled text-[--md-sys-color-on-primary]">play_arrow</span>
             </TextButton>
           </div>
         </div>
       </div>
-      <div className="title text-ellipsis flex">
-        <p className="line-clamp-2 text-md font-medium">
-          <Link href={href} className='hover:underline'>
+      <div className="title text-ellipsis flex items-start justify-start flex-wrap">
+        <p className="line-clamp-2 text-md font-medium text-wrap inline-block">
+          <Link href={href} className='hover:underline text-wrapz'>
             {title}
           </Link>
         </p>

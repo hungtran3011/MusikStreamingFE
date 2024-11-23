@@ -7,11 +7,11 @@
 import { Inter } from "next/font/google";
 import "../globals.css";
 // import "material-symbols/outlined.css";
-import NavBar from "../components/navs/nav-bar";
+import NavBar from "@/app/components/navs/nav-bar";
 import NavRail from "@/app/components/navs/nav-rail";
-import { NavItemType } from "../model/nav-item-type";
-import SongControl from "../components/audio/song-control";
-import BottomNavBar from "../components/navs/bottom-nav-bar";
+import { NavItemType } from "@/app/model/nav-item-type";
+import SongControl from "@/app/components/audio/song-control";
+import BottomNavBar from "@/app/components/navs/bottom-nav-bar";
 
 /**
  * Navigation items configuration.
@@ -94,14 +94,16 @@ export default function RootLayout({ children }) {
         <NavBar />
         <div className="content flex p-4 pr-1 gap-4 flex-grow flex-1 justify-stretch">
           <NavRail items={items} />
-          <div className="center-scroll flex-grow self-stretch overflow-hidden rounded-xl">
-            <div className="center-scroll-inner min-h-[100vh] flex items-start h-full bg-[--md-sys-color-surface-container-low] rounded-l-xl px-4 py-6">
+          <div className="center-scroll flex flex-grow self-stretch rounded-xl justify-stretch">
+            <div className="center-scroll-inner min-h-[100vh] flex items-start h-full self-stretch w-full bg-[--md-sys-color-surface-container-low] rounded-l-xl px-4 py-6">
               {children}
             </div>
           </div>
         </div>
-        <SongControl />
-        <BottomNavBar items={bottomItems} />
+        <div className="sticky bottom-0">
+          <SongControl />
+          <BottomNavBar items={bottomItems} />
+        </div>
       </body>
     </html>
   );

@@ -71,8 +71,9 @@
 }
 
 :root {
-  --mobile-content-offset: 320px;
+  --mobile-content-offset: 328px;
   --desktop-content-offset: 228px;
+  /* --mobile-web-offset: 392px; */
   --md-ref-typeface-brand: 'Inter';
   --md-ref-typeface-plain: system-ui;
   --md-sys-color-primary: rgb(87 100 33);
@@ -203,20 +204,16 @@ body {
   height: 200vh;
 }
 
-.center-scroll{
-  max-height: calc(100vh - var(--mobile-content-offset));
-  overflow-y: hidden;
-}
-
 @media (min-width: 768px){
   .center-scroll{
+    overflow-y: scroll;
     max-height: calc(100vh - var(--desktop-content-offset));
   }
 }
 
-.center-scroll:hover{
+/* .center-scroll:hover{
   overflow-y: auto;
-}
+} */
 
 ::-webkit-scrollbar {
   width: 8px;

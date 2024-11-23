@@ -60,7 +60,6 @@ import Link from 'next/link';
  * @property {boolean} [selected=false] - Whether the item is currently selected
  * @property {boolean} [showBadge=false] - Whether to show the badge
  * @property {number} [badgevalue=0] - The numeric value to show in the badge
- * @property {Function} [onClick=() => {}] - Click handler function
  * @property {string} [href='#'] - URL to navigate to when clicked
  * 
  * @param {NavRailCommonItemProps} props - The component props
@@ -81,16 +80,16 @@ export default function NavRailCommonItem(
     if (props.badgevalue === undefined) {
         props.badgevalue = 0;
     }
-    if (props.onClick === undefined) {
-        props.onClick = () => {
-            console.log('No onClick handler defined');
-        }
-    }
+    // if (props.onClick === undefined) {
+    //     props.onClick = () => {
+    //         console.log('No onClick handler defined');
+    //     }
+    // }
     if (props.href === undefined) {
         props.href = '#';
     }
     return (
-        <div className={`nav-item w-full rounded-full cursor-pointer font-medium selected-${props.selected}`} role='link' onClick={props.onClick}>
+        <div className={`nav-item w-full rounded-full cursor-pointer font-medium selected-${props.selected}`} role='link'>
             <Link className={`state-layer w-full relative flex extended-gap-${props.extended} items-center justify-between rounded-full padding-${props.extended ? "extended" : "collapsed"}`} href={props.href}>
                 <md-ripple></md-ripple>
                 <div className={`nav-item-content flex  w-full extended-gap-${props.extended} items-center`}>

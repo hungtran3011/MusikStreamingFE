@@ -1,5 +1,5 @@
 import { Artist } from "../model/artist";
-import axios, {Axios} from "axios";
+import axios from "axios";
 import z from 'zod';
 
 const ArtistSchema = z.object({
@@ -7,12 +7,10 @@ const ArtistSchema = z.object({
         z.object({
             id: z.string(),
             name: z.string(),
-            description: z.string().optional(),
+            description: z.string().optional().nullable(),
             avatarurl: z.string(),
-            createdAt: z.string().optional(),
-            updatedAt: z.string().optional(),
-            country: z.string().optional(),
-            managerid: z.string().optional(),
+            country: z.string().optional().nullable(),
+            managerid: z.string().optional().nullable(),
         })
     ),
 });

@@ -45,7 +45,7 @@ export default function NavBar() {
                 browse
               </span>
             </ToggleIconButton> */}
-          <SearchBox placeholder="Search" ref={searchFocus}/>
+          <SearchBox className='hidden md:flex' placeholder="Search" ref={searchFocus}/>
         </div>
       </div>
       <div className="nav-bar-button-container flex p-3 gap-3 items-center">
