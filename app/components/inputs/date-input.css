@@ -1,0 +1,21 @@
+ /* .date-input:focus {
+    outline: none;
+}
+
+.date-input-wrapper:focus-within {
+    border-color: var(--md-sys-color-primary);
+    outline: 1px solid var(--md-sys-color-primary);
+} */
+label {
+    width: 100%;
+}
+
+.date-input-wrapper:focus-within label {
+    margin-top: -20px;
+    font-size: 12px;
+    padding: 0px 4px;
+}
+
+.date-input-wrapper:focus-within input{
+    padding: 16px 0;
+}

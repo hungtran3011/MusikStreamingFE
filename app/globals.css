@@ -2,37 +2,80 @@
 @tailwind components;
 @tailwind utilities;
 
-/* @font-face {
+@font-face {
   font-family: 'Inter Regular';
-  src: url('/fonts/Inter_18pt-Regular.ttf');
+  src: url('/app/fonts/Inter_18pt-Regular.ttf');
 }
 
 @font-face {
   font-family: 'Inter Bold';
-  src: url('/fonts/Inter_18pt-Bold.ttf');
+  src: url('/app/fonts/Inter_18pt-Bold.ttf');
 }
 
 @font-face {
   font-family: 'Inter Medium';
-  src: url('/fonts/Inter_18pt-Medium.ttf');
+  src: url('/app/fonts/Inter_18pt-Medium.ttf');
 }
 
 @font-face {
   font-family: 'Inter SemiBold';
-  src: url('/fonts/Inter_18pt-SemiBold.ttf');
+  src: url('/app/fonts/Inter_18pt-SemiBold.ttf');
 }
 
 @font-face {
   font-family: 'Inter Light';
-  src: url('/fonts/Inter_18pt-Light.ttf');
+  src: url('/app/fonts/Inter_18pt-Light.ttf');
 }
 
 @font-face {
   font-family: 'Inter Thin';
-  src: url('/fonts/Inter_18pt-Thin.ttf');
-} */
+  src: url('/app/fonts/Inter_18pt-Thin.ttf');
+}
+
+@font-face {
+  font-family: "Material Symbols Outlined";
+  src: url("/fonts/MaterialSymbolsOutlined-Regular.woff2");
+}
+
+@font-face {
+  font-family: "Material Symbols Outlined Filled";
+  src: url("/fonts/MaterialSymbolsOutlined_Filled-Regular.woff2");
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+}
+
+.material-symbols-outlined-filled{
+  font-family: 'Material Symbols Outlined Filled';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+}
 
 :root {
+  --mobile-content-offset: 328px;
+  --desktop-content-offset: 228px;
+  /* --mobile-web-offset: 392px; */
+  --md-ref-typeface-brand: 'Inter';
+  --md-ref-typeface-plain: system-ui;
   --md-sys-color-primary: rgb(87 100 33);
   --md-sys-color-surface-tint: rgb(87 100 33);
   --md-sys-color-on-primary: rgb(255 255 255);
@@ -138,10 +181,17 @@
   }
 }
 
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   color: var(--md-sys-color-on-surface);
   background: var(--md-sys-color-surface);
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
+  @apply sm:overflow-auto md:overflow-auto lg:overflow-y-auto;
   /* transition: all .5s ease-in-out; */
   /* font-family: 'Inter', 'Times New Roman', Arial, Helvetica, sans-serif; */
 }
@@ -154,9 +204,16 @@ body {
   height: 200vh;
 }
 
-.center-scroll{
-  max-height: calc(100vh - 120px);
+@media (min-width: 768px){
+  .center-scroll{
+    overflow-y: scroll;
+    max-height: calc(100vh - var(--desktop-content-offset));
+  }
 }
+
+/* .center-scroll:hover{
+  overflow-y: auto;
+} */
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -174,12 +231,123 @@ body {
 /* Handle */
 ::-webkit-scrollbar-thumb {
   /* width: 4px; */
-  background: #888;
+  background: var(--md-sys-color-outline-variant);
   border-radius: 9999px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   width: 8px;
-  background: #555;
+  background: var(--md-sys-color-outline);
+}
+
+h1{
+  font-size: 2.5rem;
+  font-weight: 900;
+}
+
+md-outlined-text-field {
+  resize: vertical;
+}
+
+input[type="range"] {
+  accent-color: var(--md-sys-color-primary);
+  width: 100%;
+  height: 4px;
+  background: var(--md-sys-color-outline);
+  border:0px;
+  outline: none;
+  opacity: .7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+  border-radius: 9999px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--md-sys-color-primary);
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--md-sys-color-primary);
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  opacity: 1;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+  opacity: 1;
+}
+
+input[type="range"]::-webkit-slider-thumb:active {
+  opacity: 1;
+}
+
+input[type="range"]::-moz-range-thumb:active {
+  opacity: 1;
+}
+
+input[type="range"]::-webkit-slider-thumb:focus {
+  opacity: 1;
+}
+
+input[type="range"]::-moz-range-thumb:focus {
+  opacity: 1;
+}
+
+.icon-filled{
+  font-family: 'Material Symbols Outlined Filled';
+  /* font-variation-settings: 'FILL' 1; */
+}
+
+/* input[type="date"]{
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: 4px;
+  padding: 12px;
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-ref-typeface-plain);
+  font-size: 1rem;
+  outline: none;
+}
+
+input[type="date"]:focus{
+  background: var(--md-sys-color-surface-container-low);
+}
+
+input[type="date"]::placeholder{
+  color: var(--md-sys-color-on-surface-variant);
+} */
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+a{
+  text-decoration: none;
+  color: var(--md-sys-color-primary);
+}
+
+.horizontal-cards-container{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+
+h2{
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.card-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
 }

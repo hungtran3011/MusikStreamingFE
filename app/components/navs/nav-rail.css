@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* .nav-tiem .badge-show-true{
+    display: flex;
+} */
+
+.extended-true{
+    display: flex;
+}
+
+.extended-false{
+    display: none;
+}
+
+.padding-extended{
+    /* width: 100%; */
+    @apply py-4 pl-4 pr-6
+}
+
+.padding-collapsed{
+    @apply p-4;
+}
+
+.extended-gap-true{
+    @apply gap-4;
+}
+
+.extended-gap-false{
+    @apply gap-4;
+}
+
+.selected-true{
+    @apply bg-[--md-sys-color-secondary-container] text-[--md-sys-color-on-secondary-container];
+}
+
+.selected-true:hover .state-layer{
+    @apply bg-[rgba(0,0,0,0.08)];
+}
+
+.selected-false{
+    @apply text-[--md-sys-color-on-surface];
+}
+
+.selected-false:hover{
+    @apply bg-[--md-sys-color-surface-container] text-[--md-sys-color-on-surface];
+}
+
+.nav-item .badge-show-false{
+    display: none;
+}
+
+.nav-rail, .nav-item{
+    transition: all 0.3s ease-in-out, width .3s ease-in-out, min-width 0.3s ease-in-out, max-width .3s ease-in-out;
+}
+
+.nav-rail{
+    max-height: calc(100vh - 196px);
+    transition: all 0.3s ease-in-out, width .3s ease-in-out, min-width 0.3s ease-in-out, max-width .3s ease-in-out;
+    overflow-y: auto;
+    /* position: fixed; */
+    /* top: 100px; */
+}
+
+/* .nav-rail-inner{
+    overflow: hidden;
+}
+
+.nav-rail-inner:hover{
+    overflow-y: auto;
+} */
+
+.nav-rail-extended {
+    transition: all 0.3s ease-in-out, width .3s ease-in-out, min-width 0.3s ease-in-out, max-width .3s ease-in-out;
+    width: 20vw;
+    min-width: 280px;
+    max-width: 720px;
+}
+
+.nav-rail-collapsed {
+    width: 80px;
+    transition: all 0.3s ease-in-out, width .3s ease-in-out, min-width 0.3s ease-in-out, max-width .3s ease-in-out;
+    /* overflow-x: visible;
+    overflow-y: scroll; */
+}
+
+/* .nav-rail::-webkit-scrollbar{
+    width: 0;
+    height: 0;
+    display: none;
+} */
+
+.nav-rail--padding-extended{
+    padding: 1rem;
+}
+
+.nav-rail--padding-collapsed{
+    padding: .75rem;
+}
+
+.divider--true{
+    border: 0;
+    border-top: 1px solid;
+    border-color: var(--md-sys-color-outline);
+}
+
+.divider--false{
+    border: 0;
+}
+
+@media screen and (max-width: 768px) {
+    .nav-rail{
+        display: none;
+    }
+}

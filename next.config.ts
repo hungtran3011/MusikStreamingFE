@@ -1,18 +1,24 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
-};
+/** @type {import('next').NextConfig} **/
 
 module.exports = {
   images: {
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '*.wikipedia.org',
+        hostname: 'upload.wikimedia.org',
+        port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        port: '',
+      }
     ],
-  },
-}
-
-export default nextConfig;
+    localPatterns: [
+      {
+        pathname: '/**'
+      }
+    ]
+  }
+};
