@@ -1,4 +1,5 @@
 // fetch api for all artists
+'use client'
 import type { Artist } from '@/app/model/artist';
 import axios from 'axios';
 import z from 'zod';
@@ -21,10 +22,20 @@ export default async function fetchArtists() {
         throw new Error('API URL not set');
     }
     try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/artist`);
-        // parse to json
-        const data = ArtistSchema.parse(res.data);
-        return data["data"] as Artist[];
+        if (localStorage.getItem("artists") !== null || Date.now() - parseInt(localStorage.getItem("artistsTime")!) < 60000) {
+            const data = ArtistSchema.parse(JSON.parse(localStorage.getItem("artists")!));
+            return data["data"] as Artist[];
+        }
+        else {
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/artist`);
+            // parse to json
+            res.headers = {
+                "Cache-Control": "s-maxage=60, stale-while-revalidate"
+            }
+            localStorage.setItem("artists", JSON.stringify(res.data));
+            const data = ArtistSchema.parse(res.data);
+            return data["data"] as Artist[];
+        }
     }
     catch {
         return;

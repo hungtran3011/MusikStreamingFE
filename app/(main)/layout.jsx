@@ -7,11 +7,11 @@
 import { Inter } from "next/font/google";
 import "../globals.css";
 // import "material-symbols/outlined.css";
-import NavBar from "@/app/components/navs/nav-bar";
-import NavRail from "@/app/components/navs/nav-rail";
+import NavBar from "@/app/app-components/navs/nav-bar";
+import NavRail from "@/app/app-components/navs/nav-rail";
 import { NavItemType } from "@/app/model/nav-item-type";
-import SongControl from "@/app/components/audio/song-control";
-import BottomNavBar from "@/app/components/navs/bottom-nav-bar";
+import SongControl from "@/app/app-components/audio/song-control";
+import BottomNavBar from "@/app/app-components/navs/bottom-nav-bar";
 
 /**
  * Navigation items configuration.

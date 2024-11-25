@@ -1,9 +1,9 @@
 // import "material-symbols";
 import { Suspense } from 'react';
 import { Metadata } from "next";
-import Artists from "../components/api-fetch-container/all-artists";
-import Loading from "../components/loading/loading";
-import Songs from "../components/api-fetch-container/all-songs";
+import Artists from "@/app/app-components/api-fetch-container/all-artists";
+import Loading from "./loading";
+import Songs from "@/app/app-components/api-fetch-container/all-songs";
 
 export const metadata: Metadata = {
   title: "MusikStreaming | Home",
@@ -22,8 +22,8 @@ export const metadata: Metadata = {
  */
 export default function Home() {
   return (
-    <div className="home w-full">
-      <div className="card-scroll flex flex-col overflow-x-hidden gap-4">
+    <div className="home w-full flex flex-col gap-8">
+      <div className="card-scroll flex flex-col overflow-hidden gap-4">
         <h1 className="text-lg font-bold">Nghệ sĩ nổi bật</h1>
         <Suspense fallback={<Loading />}>
           <Artists />
@@ -36,5 +36,6 @@ export default function Home() {
         </Suspense>
       </div>
     </div>
+    
   );
 }

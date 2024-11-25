@@ -2,25 +2,35 @@ import axios from "axios";
 import { Song } from "../model/song";
 import z from "zod";
 
-const SongSchema = z.object({
-    data: z.array(z.object({
-        id: z.string(),
-        title: z.string(),
-        genre: z.string(),
-        thumbnailurl: z.string(),
-        createdAt: z.string().optional(),
-        updatedAt: z.string().optional(),
-        artistid: z.string().optional(),
-        albumid: z.string().optional(),
-        songurl: z.string().optional(),
-    })),
-});
+const SongListSchema = z.array(z.object({
+    id: z.string(),
+    title: z.string(),
+    thumbnailurl: z.string(),
+    duration: z.number(),
+    releasedate: z.string(),
+    genre: z.string(),
+    views: z.number()
+}));
 
 export default async function fetchAllSongs() {
     try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/song?page=1&limit=10`);
-        const data = SongSchema.parse(res.data);
-        return data["data"] as Song[];
+        localStorage.getItem("songs");
+        if (localStorage.getItem("songs") !== null || Date.now() - parseInt(localStorage.getItem("songsTime")!) < 60000) {
+            const data = SongListSchema.parse(JSON.parse(localStorage.getItem("songs")!));
+            return data as Song[];
+        }
+        else {
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/song?page=1&limit=30`);
+            res.headers = {
+                "Cache-Control": "s-maxage=60, stale-while-revalidate"
+            }
+            localStorage.setItem("songs", JSON.stringify(res.data));
+            localStorage.setItem("songsTime", Date.now().toString());
+            console.log(res.data);
+            const data = SongListSchema.parse(res.data);
+            return data as Song[];
+        }
+        
     } catch {
         return;
     }
