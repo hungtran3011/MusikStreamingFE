@@ -44,13 +44,14 @@ export default function VerticalCard({
       <div className={`cover-img self-stretch flex flex-col h-full overflow-hidden transition-transform`}>
         <Suspense fallback={<Skeleton className='h-full w-full rounded-t-lg'/>}>
           <div className='max-h-[140px] overflow-clip'>
-            <Link href={href} className='self-stretch h-auto w-full'>
+            <Link href={href} className='self-stretch h-auto'>
               <Image
-                className="self-stretch rounded-t-lg h-full w-full"
+                className="self-stretch rounded-t-lg"
                 src={img.src}
                 alt={title}
                 width={img.width}
                 height={img.width}
+                priority={true}
               >
               </Image>
             </Link>
@@ -65,7 +66,7 @@ export default function VerticalCard({
         </div>
       </div>
       <div className="title text-ellipsis flex items-center justify-center flex-wrap">
-        <p className="line-clamp-1 text-md font-medium text-wrap max-w-[140px] mx-2">
+        <p className="line-clamp-1 text-md font-medium text-wrap max-w-[140px]">
           <Link href={href} className='hover:underline text-wrap text-center'>
             {title}
           </Link>

@@ -15,6 +15,13 @@ const SongListSchema = z.array(z.object({
 export default async function fetchAllSongs() {
     try {
         localStorage.getItem("songs");
+        if (localStorage.getItem("songs") !== null && localStorage.getItem("songsTime") === null) {
+            localStorage.removeItem("songs");
+        }
+        // xoá cache nếu đã quá 1 phút
+        if (Date.now() - parseInt(localStorage.getItem("songsTime")!) > 60000) {
+            localStorage.removeItem("songs");
+        }
         if (localStorage.getItem("songs") !== null || Date.now() - parseInt(localStorage.getItem("songsTime")!) < 60000) {
             const data = SongListSchema.parse(JSON.parse(localStorage.getItem("songs")!));
             return data as Song[];
@@ -32,6 +39,8 @@ export default async function fetchAllSongs() {
         }
         
     } catch {
+        localStorage.removeItem("songs");
+        localStorage.removeItem("songsTime");
         return;
     }
 }

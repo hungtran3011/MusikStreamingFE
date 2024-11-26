@@ -49,6 +49,8 @@ export default async function fetchArtistById(id: string) {
             return data[0] as Artist;
         }
     } catch (error) {
+        localStorage.removeItem("artist-" + id);
+        localStorage.removeItem("artistTime-" + id);
         console.error(error);
         return null;
     }

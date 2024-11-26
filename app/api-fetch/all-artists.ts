@@ -38,6 +38,8 @@ export default async function fetchArtists() {
         }
     }
     catch {
+        localStorage.removeItem("artists");
+        localStorage.removeItem("artistsTime");
         return;
     }
 }

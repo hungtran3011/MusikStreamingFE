@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 export default function SearchPage() {
     // categories
     const pathname = usePathname();
+    // Mỗi khi chuyển sang trang search, focus vào ô search
     const searchFocus = useRef<HTMLInputElement>(null);
     useEffect(() => {
         if (pathname == "/search" && searchFocus.current) {

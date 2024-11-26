@@ -20,7 +20,7 @@ function processDatetime(ISODate: string): string {
   return date.toLocaleDateString();
 }
 
-export default function SongContent(params: { id: string } ) {
+export default function SongContent(params: { id: string }) {
   const [song, setSong] = useState<Song>();
   const [error, setError] = useState<string | null>(null);
 
@@ -49,26 +49,26 @@ export default function SongContent(params: { id: string } ) {
   try {
     return (
       <div className='flex w-full'>
-            <div className="flex flex-col items-center w-full gap-12">
-              <div className='flex items-center w-full gap-4'>
-                <Suspense fallback={<Skeleton className="w-[200px] h-[200px]"/>}>
-                {
-                  song ? <Image 
-                  src={song.thumbnailurl} 
-                  alt={song.title} 
-                  width={200} 
-                  height={200} 
+        <div className="flex flex-col items-center w-full gap-12">
+          <div className='flex items-center w-full gap-4'>
+            <Suspense fallback={<Skeleton className="w-[200px] h-[200px]" />}>
+              {
+                song ? <Image
+                  src={song.thumbnailurl}
+                  alt={song.title}
+                  width={200}
+                  height={200}
                   priority={true}
-                  /> : <Skeleton className="w-[200px] h-[200px]"/>
-                }
-                </Suspense>
-                <div className="flex flex-col">
-                  {song ? <h1>{song.title}</h1> : <Skeleton className='h-4 w-full'/>}
-                  {song ? <p>Genre: {song.genre}</p> : <Skeleton className='h-4 w-full'/>}
-                  <PlayButton />
-                </div>
-              </div>
-              {/* <div className='flex items-center'>
+                /> : <Skeleton className="w-[200px] h-[200px]" />
+              }
+            </Suspense>
+            <div className="flex flex-col">
+              {song ? <h1>{song.title}</h1> : <Skeleton className='h-4 w-full' />}
+              {song ? <p>Genre: {song.genre}</p> : <Skeleton className='h-4 w-full' />}
+              <PlayButton />
+            </div>
+          </div>
+          {/* <div className='flex items-center'>
                                     <div className="flex w-full">
                                         <p>{song.title}</p>
                                     </div>
@@ -76,49 +76,53 @@ export default function SongContent(params: { id: string } ) {
                                         <p>{processTime(song.duration)}</p>
                                     </div>
                                 </div> */}
-              <div className="w-full">
-                <table className="w-full">
-                  <tr>
-                    <th className="text-left">#</th>
-                    <th className="text-left">Title</th>
-                    <th className="text-left">Durations</th>
-                    <th className="text-left">Play</th>
-                  </tr>
-                  <tr className="p-3">
-                    <td>1</td>
-                    <td className="py-3">
+          <div className="w-full">
+            <table className="w-full">
+              <thead>
+                <tr>
+                  <th className="text-left">#</th>
+                  <th className="text-left">Title</th>
+                  <th className="text-left">Durations</th>
+                  <th className="text-left">Play</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="p-3">
+                  <td>1</td>
+                  <td className="py-3">
                     {
-                     song 
-                     ? <p>{song.title}</p> 
-                     : <Skeleton className='h-4 w-full'/>
+                      song
+                        ? <p>{song.title}</p>
+                        : <Skeleton className='h-4 w-full' />
                     }
-                    </td>
-                    <td className="py-3">
+                  </td>
+                  <td className="py-3">
                     {
-                      song 
-                      ? <p>{processTime(song ? song.duration : 0)}</p>
-                      : <Skeleton className='h-4 w-full'/>
+                      song
+                        ? <p>{processTime(song ? song.duration : 0)}</p>
+                        : <Skeleton className='h-4 w-full' />
                     }
-                    </td>
-                    <td className="py-3">
+                  </td>
+                  <td className="py-3">
                     {
-                      song 
-                      ?  <p>{song.views}</p>
-                      : <Skeleton className='h-4 w-full'/>
+                      song
+                        ? <p>{song.views}</p>
+                        : <Skeleton className='h-4 w-full' />
                     }
-                    </td> 
-                  </tr>
-                </table>
-              </div>
-              <div className="flex flex-col items-start w-full">
-                {
-                  song 
-                  ? <p>Release Date: {processDatetime(song.releasedate)}</p> 
-                  : <Skeleton className='h-4 w-full'/>
-                }
-                <p>Views: {song ? song.views: "0"}</p>
-              </div>
-            </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="flex flex-col items-start w-full">
+            {
+              song
+                ? <p>Release Date: {processDatetime(song.releasedate)}</p>
+                : <Skeleton className='h-4 w-full' />
+            }
+            <p>Views: {song ? song.views : "0"}</p>
+          </div>
+        </div>
 
       </div>
     );

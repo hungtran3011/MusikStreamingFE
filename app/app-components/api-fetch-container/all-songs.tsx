@@ -5,7 +5,7 @@ import fetchAllSongs from "@/app/api-fetch/all-songs"
 import { CardProps } from "@/app/model/card-props"
 import { processCloudinaryUrl } from "@/app/api-fetch/cloudinary-url-processing"
 import VerticalCard from "@/app/app-components/info-cards/vertical-card"
-import Loading from "@/app/app-components/loading/loading"
+import Skeleton from "../loading/skeleton"
 import ErrorComponent from "./fetch-error"
 // import ErrorComponent from "./fetch-error"
 
@@ -45,7 +45,30 @@ export default function Songs() {
     }, []);
 
     if (loading) {
-        return <div><Loading/></div>;
+        return (
+            <div className="card-grid grid grid-flow-row">
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+            </div>
+        );
     }
 
     if (error || !cards) {

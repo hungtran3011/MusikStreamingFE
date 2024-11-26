@@ -44,7 +44,12 @@ export default function Artists() {
   }, []);
 
   if (isLoading) {
-    return <Loading />;
+    <div className="card-scroll-inner flex gap-4 flex-wrap">
+      <Skeleton className="w-[140px] h-[200px]"/>
+      <Skeleton className="w-[140px] h-[200px]"/>
+      <Skeleton className="w-[140px] h-[200px]"/>
+      <Skeleton className="w-[140px] h-[200px]"/>
+    </div>
   }
 
   try {
@@ -78,9 +83,9 @@ export default function Artists() {
       <div className="card-scroll-inner flex gap-4 flex-wrap">
         {cards.map((card, index) => {
           return (
-          <Suspense key={index} fallback={<Skeleton className="w-[140px] h-[200px]"/>}>
+          // <Suspense key={index} fallback={<Skeleton className="w-[140px] h-[200px]"/>}>
             <VerticalCard key={index} {...card} />
-          </Suspense>
+          // </Suspense>
           );
         })}
       </div>

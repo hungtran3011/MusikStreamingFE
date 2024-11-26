@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import Artists from "@/app/app-components/api-fetch-container/all-artists";
 import Loading from "./loading";
 import Songs from "@/app/app-components/api-fetch-container/all-songs";
+import Skeleton from "@/app/app-components/loading/skeleton";
 
 export const metadata: Metadata = {
   title: "MusikStreaming | Home",
@@ -25,7 +26,14 @@ export default function Home() {
     <div className="home w-full flex flex-col gap-8">
       <div className="card-scroll flex flex-col overflow-hidden gap-4">
         <h1 className="text-lg font-bold">Nghệ sĩ nổi bật</h1>
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={
+          <div className="card-scroll-inner flex gap-4 flex-wrap">
+            <Skeleton className="w-[140px] h-[200px]" />
+            <Skeleton className="w-[140px] h-[200px]" />
+            <Skeleton className="w-[140px] h-[200px]" />
+            <Skeleton className="w-[140px] h-[200px]" />
+          </div>
+        }>
           <Artists />
         </Suspense>
       </div>
@@ -36,6 +44,6 @@ export default function Home() {
         </Suspense>
       </div>
     </div>
-    
+
   );
 }
