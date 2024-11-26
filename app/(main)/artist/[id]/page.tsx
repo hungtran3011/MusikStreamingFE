@@ -13,7 +13,6 @@ import { useState, useEffect, useCallback } from 'react';
 import fetchArtistById from '@/app/api-fetch/artist-by-id';
 import Image from 'next/image';
 import { Suspense } from 'react';
-import Loading from '@/app/app-components/loading/loading';
 import ErrorComponent from '@/app/app-components/api-fetch-container/fetch-error';
 import Skeleton from '@/app/app-components/loading/skeleton';
 
@@ -51,9 +50,6 @@ export default function ArtistPage({ params }: { params: Promise<{ id: string }>
     }, [fetchData]);
 
     // const data = use(fetchData());
-    if (error) {
-        return <ErrorComponent onReloadClick={fetchData} />;
-    }
 
     try {
         return (
@@ -87,6 +83,10 @@ export default function ArtistPage({ params }: { params: Promise<{ id: string }>
         );
     } catch (e) {
         console.error(e);
+        return <ErrorComponent onReloadClick={fetchData} />;
+    }
+
+    if (error) {
         return <ErrorComponent onReloadClick={fetchData} />;
     }
 }

@@ -34,6 +34,7 @@ export default function VerticalCard({
   onClick = () => { }
 }: CardProps) {
   const router = useRouter();
+  router.prefetch(href);
   return (
     <div className={`vertical-card song-card rounded-lg bg-[--md-sys-color-outline-variant] flex flex-col items-center justify-center overflow-hidden w-fit gap-3 pb-3`} onClick={
       () => {
