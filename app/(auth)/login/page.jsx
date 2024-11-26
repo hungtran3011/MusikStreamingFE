@@ -3,7 +3,7 @@ import '@material/web/textfield/outlined-text-field'
 import '@material/web/icon/icon'
 import '@material/web/iconbutton/icon-button'
 import FilledButton from '@/app/app-components/buttons/filled-button';
-import OutlinedButton from '@/app/components/buttons/outlined-button';
+import OutlinedButton from '@/app/app-components/buttons/outlined-button';
 import Link from 'next/link';
 import { useReducer } from 'react';
 import { useRouter } from 'next/navigation';
