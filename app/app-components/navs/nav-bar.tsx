@@ -1,14 +1,12 @@
 'use client';
 
 import React from 'react';
-import TextButton from '@/app/app-components/buttons/text-button';
 import IconSmallButton from '../buttons/icon-small-button';
 import FilledButton from '@/app/app-components/buttons/filled-button';
 import SearchBox from '@/app/app-components/inputs/search-box';
 import { useRouter, usePathname } from 'next/navigation';
 import { useRef, useEffect } from 'react';
 import Image from 'next/image';
-import { Icon } from '@material/web/icon/internal/icon';
 // import ToggleIconButton from './toggle-icon-button';
 
 export default function NavBar() {

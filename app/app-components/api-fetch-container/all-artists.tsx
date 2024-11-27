@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect } from "react";
 
 import VerticalCard from "../info-cards/vertical-card";
 import ErrorComponent from "./fetch-error";
@@ -9,7 +9,6 @@ import { CardProps } from "@/app/model/card-props";
 
 import fetchArtists from "@/app/api-fetch/all-artists";
 import { processCloudinaryUrl } from "@/app/api-fetch/cloudinary-url-processing";
-import Loading from "@/app/app-components/loading/loading";
 
 import { Artist } from "@/app/model/artist";
 import Skeleton from "../loading/skeleton";
@@ -42,6 +41,17 @@ export default function Artists() {
   useEffect(() => {
     loadArtists();
   }, []);
+
+  if (error) {
+    return (
+      <ErrorComponent onReloadClick={() => {
+        // fetchArtists();
+        setError(null);
+        setIsLoading(true);
+        loadArtists();
+      }} />
+    );
+  }
 
   if (isLoading) {
     <div className="card-scroll-inner flex gap-4 flex-wrap">

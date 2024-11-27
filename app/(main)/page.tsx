@@ -1,9 +1,7 @@
 // import "material-symbols";
-import { Suspense } from 'react';
+import { Suspense, lazy } from 'react';
 import { Metadata } from "next";
-import Artists from "@/app/app-components/api-fetch-container/all-artists";
 import Loading from "./loading";
-import Songs from "@/app/app-components/api-fetch-container/all-songs";
 import Skeleton from "@/app/app-components/loading/skeleton";
 
 export const metadata: Metadata = {
@@ -16,6 +14,9 @@ export const metadata: Metadata = {
     type: "website"
   }
 };
+
+const Artists = lazy(() => import('@/app/app-components/api-fetch-container/all-artists'));
+const Songs = lazy(() => import('@/app/app-components/api-fetch-container/all-songs'));
 
 /**
  * Home component that renders the main page of the MusikStreaming app.
@@ -38,7 +39,7 @@ export default function Home() {
         </Suspense>
       </div>
       <div className="card-scroll flex flex-col overflow-x-hidden gap-4">
-        <h1 className="text-lg font-bold">Nghệ sĩ nổi bật</h1>
+        <h1 className="text-lg font-bold">Bài hát đang thịnh hành</h1>
         <Suspense fallback={<Loading />}>
           <Songs />
         </Suspense>

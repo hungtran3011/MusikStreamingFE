@@ -6,7 +6,6 @@ import fetchSongById from '@/app/api-fetch/song-by-id';
 import ErrorComponent from '@/app/app-components/api-fetch-container/fetch-error';
 import { Song } from '@/app/model/song';
 import Skeleton from '@/app/app-components/loading/skeleton';
-import { Suspense } from 'react';
 import PlayButton from '@/app/app-components/buttons/play-button-main';
 
 function processTime(time: number): string {
@@ -53,7 +52,6 @@ export default function SongContent(params: { id: string }) {
       <div className='flex w-full'>
         <div className="flex flex-col items-center w-full gap-12">
           <div className='flex items-center w-full gap-4'>
-            <Suspense fallback={<Skeleton className="w-[200px] h-[200px]" />}>
               {
                 song ? <Image
                   src={song.thumbnailurl}
@@ -63,7 +61,6 @@ export default function SongContent(params: { id: string }) {
                   priority={true}
                 /> : <Skeleton className="w-[200px] h-[200px]" />
               }
-            </Suspense>
             <div className="flex flex-col">
               {song ? <h1>{song.title}</h1> : <Skeleton className='h-4 w-full' />}
               {song ? <p>Genre: {song.genre}</p> : <Skeleton className='h-4 w-full' />}
@@ -92,7 +89,6 @@ export default function SongContent(params: { id: string }) {
                 <tr className="p-3">
                   <td>1</td>
                   
-                  <Suspense fallback={<Skeleton className='h-4 w-full' />}>
                     <td className="py-3">
                       {
                         song
@@ -100,7 +96,6 @@ export default function SongContent(params: { id: string }) {
                           : <Skeleton className='h-4 w-full' />
                       }
                     </td>
-                  </Suspense>
                   <td className="py-3">
                     {
                       song
