@@ -43,7 +43,7 @@ export default function NavBar() {
           </IconSmallButton>
         </div>
         <div className="nav-bar-title-container flex items-center gap-3">
-          <Image width={64} height={64} src={"/assets/rounded-logo.png"} alt="logo"
+          <Image width={64} height={64} src={"/assets/rounded-logo.png"} priority alt="logo"
           />
           <h1 className="hidden lg:block nav-bar-title text-lg font-bold">
             {"MusikStreaming"}

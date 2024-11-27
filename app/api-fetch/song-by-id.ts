@@ -1,8 +1,6 @@
 import axios from "axios";
-import { Song } from "../model/song";
 import z from "zod";
 import { SongDetails } from "../model/song-details";
-import { arch } from "os";
 
 const SongSchema = z.object({
     data: z.object({
@@ -38,18 +36,16 @@ export default async function fetchSongById(id: string) {
             localStorage.removeItem("song-" + id);
         }
         // xoá cache nếu đã quá 1 phút
-        if (Date.now() - parseInt(localStorage.getItem("songTime-" + id)!) > 60000) {
-            localStorage.removeItem("song-" + id);
-        }
-        if (localStorage.getItem("song-" + id) || Date.now() - parseInt(localStorage.getItem("songTime-" + id)!) < 60000) {
+        if (localStorage.getItem("song-" + id) || Date.now() - parseInt(localStorage.getItem("songTime-" + id)!) < 300000) {
             const data = SongSchema.parse(JSON.parse(localStorage.getItem("song-" + id)!));
             return data["data"] as SongDetails;
         }
         else {
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/song/${id}`);
-            res.headers = {
-                "Cache-Control": "max-age=60, stale-while-revalidate"
-            }
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/song/${id}`, {
+                headers: {
+                    'Cache-Control': 'max-age=300000, stale-while-revalidate',
+                }
+            });
             localStorage.setItem("song-" + id, JSON.stringify(res.data));
             localStorage.setItem("songTime-" + id, Date.now().toString());
             const data = SongSchema.parse(res.data);

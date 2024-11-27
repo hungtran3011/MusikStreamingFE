@@ -34,15 +34,16 @@ export default async function fetchArtistById(id: string) {
         if (localStorage.getItem("artist-" + id) !== null && localStorage.getItem("artistTime-" + id) === null) {
             localStorage.removeItem("artist-" + id);
         }
-        if (localStorage.getItem("artist-" + id) !== null || Date.now() - parseInt(localStorage.getItem("artistTime-" + id)!) < 30000) {
+        if (localStorage.getItem("artist-" + id) !== null || Date.now() - parseInt(localStorage.getItem("artistTime-" + id)!) < 3600000) {
             const data = ArtistSchema.parse(JSON.parse(localStorage.getItem("artist-" + id)!));
             return data[0] as Artist;
         }
         else {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/artist/${id}`);
-            response.headers = {
-                "Cache-Control": "max-age=60, stale-while-revalidate"
-            }
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/v1/artist/${id}`, {
+                headers: {
+                    'Cache-Control': 'max-age=3600000, stale-while-revalidate',
+                }
+            });
             const data = ArtistSchema.parse(response.data);
             localStorage.setItem("artist-" + id, JSON.stringify(response.data));
             localStorage.setItem("artistTime-" + id, Date.now().toString());

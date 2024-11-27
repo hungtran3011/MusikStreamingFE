@@ -12,7 +12,7 @@ import PlayButton from '@/app/app-components/buttons/play-button-main';
 function processTime(time: number): string {
   const minutes = Math.floor(time / 60);
   const seconds = time % 60;
-  return `${minutes}:${seconds}`;
+  return `${minutes}:${seconds > 9 ? seconds : `0${seconds}`}`;
 }
 
 function processDatetime(ISODate: string): string {
@@ -44,7 +44,9 @@ export default function SongContent(params: { id: string }) {
     fetchData();
   }, [fetchData]);
 
-  // const data = use(fetchData());
+  if (error) {
+    return <ErrorComponent onReloadClick={fetchData} />;
+  }
 
   try {
     return (
@@ -89,13 +91,16 @@ export default function SongContent(params: { id: string }) {
               <tbody>
                 <tr className="p-3">
                   <td>1</td>
-                  <td className="py-3">
-                    {
-                      song
-                        ? <p>{song.title}</p>
-                        : <Skeleton className='h-4 w-full' />
-                    }
-                  </td>
+                  
+                  <Suspense fallback={<Skeleton className='h-4 w-full' />}>
+                    <td className="py-3">
+                      {
+                        song
+                          ? <p>{song.title}</p>
+                          : <Skeleton className='h-4 w-full' />
+                      }
+                    </td>
+                  </Suspense>
                   <td className="py-3">
                     {
                       song

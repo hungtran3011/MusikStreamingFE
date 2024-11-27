@@ -7,6 +7,8 @@ export default function Skeleton({
   return (
     <div
       className={cn("animate-pulse rounded-md bg-[--md-sys-color-surface-container-high]", className)}
+      role="status"
+      aria-label="loading"
       {...props}
     />
   )
