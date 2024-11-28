@@ -51,12 +51,15 @@ export default function ArtistPage({ params }: { params: Promise<{ id: string }>
 
     // const data = use(fetchData());
 
+    if (error) {
+        return <ErrorComponent onReloadClick={fetchData} />;
+    }
+
     try {
         return (
             // <Suspense fallback={<Loading/>}>
             <div className='flex w-full'>
                 <div className='flex flex-col items-center w-full'>
-                    <Suspense fallback={<Skeleton className="w-[200px] h-[200px]"/>}>
                     {
                         artist ?
                         <Image
@@ -67,13 +70,9 @@ export default function ArtistPage({ params }: { params: Promise<{ id: string }>
                         />
                         : <Skeleton className="w-[200px] h-[200px]"/>
                     }
-                        
-                    </Suspense>
-                    <Suspense fallback={<Skeleton className="w-[200px] h-6"/>}/>
                     {
                         artist ? <h1>{artist.name}</h1> : <Skeleton className="w-[200px] h-6"/>
                     }
-                    <Suspense fallback={<Skeleton className="w-[200px] h-6"/>}/>
                     {
                         artist ? <p>{artist.description}</p> : <Skeleton className="w-[200px] h-6"/>
                     }
@@ -83,10 +82,6 @@ export default function ArtistPage({ params }: { params: Promise<{ id: string }>
         );
     } catch (e) {
         console.error(e);
-        return <ErrorComponent onReloadClick={fetchData} />;
-    }
-
-    if (error) {
         return <ErrorComponent onReloadClick={fetchData} />;
     }
 }

@@ -6,7 +6,7 @@ const SongSchema = z.object({
     data: z.object({
         id: z.string(),
         title: z.string(),
-        thumbnailurl: z.string(),
+        thumbnailurl: z.string().optional(),
         duration: z.number(),
         releasedate: z.string(),
         genre: z.string(),
@@ -14,13 +14,13 @@ const SongSchema = z.object({
         albums: z.array(
             z.object({
                 album: z.object({
-                    id: z.string(),
-                    type: z.string(),
-                    title: z.string(),
-                    thumbnailurl: z.string(),
+                    id: z.string().optional(),
+                    type: z.string().optional(),
+                    title: z.string().optional(),
+                    thumbnailurl: z.string().optional(),
                 })
-            })
-        ),
+            }).optional()
+        ).nullable(),
         artists: z.array(z.object({
             id: z.string(),
             name: z.string(),
@@ -35,7 +35,7 @@ export default async function fetchSongById(id: string) {
         if (localStorage.getItem("song-" + id) !== null && localStorage.getItem("songTime-" + id) === null) {
             localStorage.removeItem("song-" + id);
         }
-        // xoá cache nếu đã quá 1 phút
+        // xoá cache nếu đã quá 5 phút
         if (localStorage.getItem("song-" + id) || Date.now() - parseInt(localStorage.getItem("songTime-" + id)!) < 300000) {
             const data = SongSchema.parse(JSON.parse(localStorage.getItem("song-" + id)!));
             return data["data"] as SongDetails;
@@ -52,8 +52,8 @@ export default async function fetchSongById(id: string) {
             return data["data"] as SongDetails;
         }
     } catch {
-        localStorage.removeItem("song-" + id);
-        localStorage.removeItem("songTime-" + id);
+        // localStorage.removeItem("song-" + id);
+        // localStorage.removeItem("songTime-" + id);
         return;
     }
 }

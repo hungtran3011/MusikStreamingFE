@@ -6,9 +6,8 @@ import './cards.css'
 
 import { CardProps } from '@/app/model/card-props';
 import { useRouter } from 'next/navigation';
-import { Suspense } from 'react';
 import Link from 'next/link';
-import Skeleton from '@/app/app-components/loading/skeleton';
+import Skeleton from '../loading/skeleton';
 
 /**
  * VerticalCard component displays content in a vertical card layout with an image, title, and subtitle.
@@ -38,8 +37,9 @@ export default function VerticalCard({
   return (
     <div className={`vertical-card song-card rounded-lg bg-[--md-sys-color-outline-variant] flex flex-col items-center justify-center overflow-hidden w-fit gap-3 pb-3`}>
       <div className={`cover-img self-stretch flex flex-col h-[140px] overflow-hidden transition-transform`}>
-          <div className='max-h-[140px] overflow-clip'>
-            <Link href={href} className='self-stretch h-auto'>
+        <div className='max-h-[140px] overflow-clip'>
+          <Link href={href} className='self-stretch h-auto'>
+            {img.src ?
               <Image
                 className="self-stretch rounded-t-lg"
                 src={img.src}
@@ -49,8 +49,10 @@ export default function VerticalCard({
                 priority={true}
               >
               </Image>
-            </Link>
-          </div>
+              : <Skeleton className="self-stretch rounded-t-lg h-[140px] w-140px rounded-b-none" />
+            }
+          </Link>
+        </div>
         <div className="play-button-container w-full pr-1 pb-1 flex items-end justify-end">
           <div className="play-button w-12 bg-[--md-sys-color-primary] rounded-full">
             <TextButton className="play-button bg-[--md-sys-color-primary]" onClick={onClick}>

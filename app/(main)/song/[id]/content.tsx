@@ -25,10 +25,11 @@ export default function SongContent(params: { id: string }) {
 
   const fetchData = useCallback(async () => {
     try {
-      const data = await params;
-      const artist = await fetchSongById(data.id);
-      if (!artist) return;
-      setSong(artist);
+      const {id} = params;
+      const songData = await fetchSongById(id);
+      if (songData) {
+        setSong(songData);
+      }
     } catch (e) {
       console.error(e);
       if (e instanceof Error) {
@@ -67,14 +68,6 @@ export default function SongContent(params: { id: string }) {
               <PlayButton />
             </div>
           </div>
-          {/* <div className='flex items-center'>
-                                    <div className="flex w-full">
-                                        <p>{song.title}</p>
-                                    </div>
-                                    <div className="flex w-full">
-                                        <p>{processTime(song.duration)}</p>
-                                    </div>
-                                </div> */}
           <div className="w-full">
             <table className="w-full">
               <thead>
@@ -120,7 +113,7 @@ export default function SongContent(params: { id: string }) {
                 ? <p>Release Date: {processDatetime(song.releasedate)}</p>
                 : <Skeleton className='h-4 w-full' />
             }
-            <p>Views: {song ? song.views : "0"}</p>
+            <p>Views: {song ? song.views : <Skeleton className='h-4 w-4'/>}</p>
           </div>
         </div>
 

@@ -18,8 +18,7 @@ export default function SongPage({ params }: { params: Promise<{ id: string }> }
   }
 
   return (
-    <Suspense fallback={<Loading />}>
-      <SongContent id={id}/>
-    </Suspense>
+    // <Suspense fallback={<Loading />}>
+    <SongContent id={id}/>
   )
 }

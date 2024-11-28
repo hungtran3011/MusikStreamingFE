@@ -15,19 +15,28 @@ export default function Loading() {
             <Skeleton className="w-20 h-20" />
           </div>
         </div>
-        <div className="card-scroll grid overflow-x-hidden gap-4">
-          {/* <h1 className="text-lg font-bold">Nghệ sĩ nổi bật</h1> */}
-          <Skeleton className="w-20 h-20" />
-          <Skeleton className="w-20 h-20" />
-          <Skeleton className="w-20 h-20" />
-          <Skeleton className="w-20 h-20" />
-          <Skeleton className="w-20 h-20" />
-          <Skeleton className="w-20 h-20" />
-          <Skeleton className="w-20 h-20" />
-          <Skeleton className="w-20 h-20" />
-          <Skeleton className="w-20 h-20" />
-          <Skeleton className="w-20 h-20" />
-        </div>
+        <div className="card-grid grid grid-flow-row">
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+                <Skeleton className="w-[140px] h-[200px]"/>
+            </div>
       </div>
     </div>
   )
