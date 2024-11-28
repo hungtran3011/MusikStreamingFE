@@ -1,4 +1,4 @@
-import Loading from '@/app/components/loading/loading';
+import Loading from '@/app/app-components/loading/loading';
 import { ReactNode } from 'react';
 import { Suspense } from 'react';
 
