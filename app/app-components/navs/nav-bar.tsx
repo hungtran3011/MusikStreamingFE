@@ -14,7 +14,7 @@ export default function NavBar() {
   const pathname = usePathname();
   const searchFocus = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    if (pathname == "/search" && searchFocus.current) {
+    if (pathname == "/search" && searchFocus.current && window.innerWidth > 768) {
       searchFocus.current.focus();
     }
   }, [pathname]);

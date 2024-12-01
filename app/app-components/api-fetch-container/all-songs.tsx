@@ -7,6 +7,7 @@ import { processCloudinaryUrl } from "@/app/api-fetch/cloudinary-url-processing"
 import VerticalCard from "@/app/app-components/info-cards/vertical-card"
 import Skeleton from "../loading/skeleton"
 import ErrorComponent from "./fetch-error"
+import { randomUUID } from "crypto"
 // import ErrorComponent from "./fetch-error"
 
 export default function Songs() {
@@ -81,7 +82,8 @@ export default function Songs() {
     return (
         <div className="card-grid grid grid-flow-row">
             {cards.map((card) => (
-                <VerticalCard key={card.href} {...card} />
+                card ? <VerticalCard key={card.href} {...card} />
+                : <Skeleton key={randomUUID()} className="w-[140px] h-[200px]"/>
             ))}
         </div>
     );

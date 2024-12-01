@@ -3,18 +3,19 @@ import BrowseCard from '@/app/app-components/browse/browse-card';
 import ScalableSearchBox from '@/app/app-components/inputs/scalable-search-box';
 import { useRef, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import useScreenWidth from '@/app/hooks/useScreenWidth';
 
 export default function SearchPage() {
     // categories
     const pathname = usePathname();
     // Mỗi khi chuyển sang trang search, focus vào ô search
     const searchFocus = useRef<HTMLInputElement>(null);
+    const screenWidth = useScreenWidth();
     useEffect(() => {
-        if (pathname == "/search" && searchFocus.current) {
+        if (pathname == "/search" && searchFocus.current && screenWidth > 768) {
         searchFocus.current.focus();
-        searchFocus.current.click();
         }
-    }, [pathname]);
+    }, [pathname, screenWidth]);
     return (
        <div className='flex flex-col w-full'>
         <ScalableSearchBox 
