@@ -1,11 +1,13 @@
 'use client';
 import '@material/web/textfield/outlined-text-field'
 import '@material/web/icon/icon'
-import FilledButton from '@/app/app-components/buttons/filled-button';
+import '@material/web/iconbutton/icon-button'
+import FilledButton from '@/app/components/buttons/filled-button';
 import Link from 'next/link';
 import { useReducer } from 'react';
 import { signUp } from '@/app/services/auth.service';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 /**
  * SignUpPage component handles the user registration process.
@@ -13,6 +15,8 @@ import { useRouter } from 'next/navigation';
  */
 export default function SignUpPage() {
     const router = useRouter();
+    const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{10,}$/;
+    const [revealPassword, setRevealPassword] = useState(false);
 
     const formReducer = (state, action) => {
         switch (action.type) {
@@ -46,7 +50,6 @@ export default function SignUpPage() {
         isLoading: false,
         errorMessage: null
     });
-
     /**
      * Handles input change and updates form data and errors state.
      * @param {string} field - The field name to update.
@@ -60,7 +63,7 @@ export default function SignUpPage() {
         });
         dispatch({
             type: 'setErrors',
-            payload: { ...state.errors, [field]: validateField(field, newFormData) }
+            payload: { ...state.errors, [field]: !validateField(field, newFormData) }
         });
     }
 
@@ -68,46 +71,39 @@ export default function SignUpPage() {
         switch (field) {
             case "email":
                 // return (event) => !event.target.value.match(/^\S+@\S+\.\S+$/);
-                return !formData.email.match(/^\S+@\S+\.\S+$/)
+                return formData.email.match(/^\S+@\S+\.\S+$/);
             case "password":
-                return formData.password.length < 8;
+                console.log(PASSWORD_REGEX.test(formData.password));
+                return PASSWORD_REGEX.test(formData.password);
             case "confirmPassword":
-                return formData.confirmPassword !== state.formData.password;
+                return formData.confirmPassword === state.formData.password;
             case "name":
-                return !formData.name.trim();
+                return formData.name.trim() !== "";
             default:
                 return true;
         }
     }
 
-    /**
-     * Validates the form data.
-     * @returns {boolean} - Returns true if the form is valid, otherwise false.
-     */
     const validateForm = () => {
-        const newErrors = { ...state.errors };
-        let isValid = true;
+        const { email, password, confirmPassword, name } = state.formData;
+        const emailError = !validateField('email', { email });
+        const passwordError = !validateField('password', { password });
+        const confirmPasswordError = !validateField('confirmPassword', { confirmPassword });
+        const nameError = !validateField('name', { name });
 
-        if (!state.formData.email.match(/^\S+@\S+\.\S+$/)) {
-            newErrors.email = true;
-            isValid = false;
-        }
-        if (state.formData.password.length < 8) {
-            newErrors.password = true;
-            isValid = false;
-        }
-        if (state.formData.password !== state.formData.confirmPassword) {
-            newErrors.confirmPassword = true;
-            isValid = false;
-        }
-        if (!state.formData.name.trim()) {
-            newErrors.name = true;
-            isValid = false;
-        }
+        dispatch({
+            type: 'setErrors',
+            payload: {
+                email: emailError,
+                password: passwordError,
+                confirmPassword: confirmPasswordError,
+                name: nameError,
+                general: emailError || passwordError || confirmPasswordError || nameError
+            }
+        });
 
-        dispatch({ type: 'setErrors', payload: newErrors });
-        return isValid;
-    };
+        return !(emailError || passwordError || confirmPasswordError || nameError);
+    }
 
     /**
      * Handles form submission.
@@ -169,10 +165,10 @@ export default function SignUpPage() {
                         error={state.errors.password}
                         className='max-w-[560px] w-[80vw]'
                         label="Mật khẩu"
-                        type="password"
+                        type={!revealPassword ? "password" : ""}
                         value={state.formData.password}
                         onInput={handleInputChange('password')}
-                        supportingText={(state.errors.password ? "Mật khẩu phải dài hơn 8 ký tự" : "")}
+                        supportingText={(state.errors.password ? "Mật khẩu phải dài hơn 10 ký tự và chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số" : "")}
                     >
                         <md-icon slot="leading-icon">password</md-icon>
                     </md-outlined-text-field>
@@ -181,13 +177,21 @@ export default function SignUpPage() {
                         error={state.errors.confirmPassword}
                         className='max-w-[560px] w-[80vw]'
                         label="Xác nhận mật khẩu"
-                        type="password"
+                        type={!revealPassword ? "password" : ""}
                         value={state.formData.confirmPassword}
                         onInput={handleInputChange('confirmPassword')}
                         supportingText={(state.errors.confirmPassword && !state.errors.password) ? "Mật khẩu nhập lại không trùng với mật khẩu ban đầu" : ""}
                     >
                         <md-icon slot="leading-icon">password</md-icon>
                     </md-outlined-text-field>
+                    <div className='flex gap-3'>
+                        <input type="checkbox" name="Hiện mật khẩu" id="reveal_pwd" label="Hiện mật khẩu" onClick={
+                            () => {
+                                setRevealPassword(!revealPassword)
+                            }
+                        }/>
+                        <label htmlFor="reveal_pwd">Hiện mật khẩu</label>
+                    </div>
                 </div>
 
                 {state.errorMessage && (

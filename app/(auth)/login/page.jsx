@@ -2,8 +2,8 @@
 import '@material/web/textfield/outlined-text-field'
 import '@material/web/icon/icon'
 import '@material/web/iconbutton/icon-button'
-import FilledButton from '@/app/app-components/buttons/filled-button';
-import OutlinedButton from '@/app/app-components/buttons/outlined-button';
+import FilledButton from '@/app/components/buttons/filled-button';
+import OutlinedButton from '@/app/components/buttons/outlined-button';
 import Link from 'next/link';
 import { useReducer } from 'react';
 import { useRouter } from 'next/navigation';
@@ -30,6 +30,8 @@ import { login } from '@/app/services/auth.service';
  */
 export default function LoginPage() {
     const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // password should be at least 10 characters and contain a letter
+    const PASSWORD_REGEX = /^(?=.*[A-Za-z]).{10,}$/;
     const formReducer = (state, action) => {
         switch (action.type) {
             case "setFormData":
@@ -76,7 +78,7 @@ export default function LoginPage() {
         })
         dispatch({
             type: "setErrors",
-            payload: {...state.errors, email: event.target.value.match(EMAIL_REGEX), general: false}
+            payload: {...state.errors, email: !event.target.value.match(EMAIL_REGEX), general: false}
         })
     }
 
@@ -91,7 +93,7 @@ export default function LoginPage() {
     function handlePasswordChange(event) {
         dispatch({
             type: "setErrors",
-            payload: { ...state.errors, password: length(event.target.value.toString()) >= 8, general: false }
+            payload: { ...state.errors, password: !event.target.value.match(PASSWORD_REGEX), general: false }
         })
         dispatch({
             type: "setFormData",
@@ -132,18 +134,19 @@ export default function LoginPage() {
 
         try {
             const response = await login({
-                email: formData.email,
-                password: formData.password
+                email: state.formData.email,
+                password: state.formData.password
             });
 
-            if (response.success) {
+            if (response) {
                 dispatch({
                     type: "setErrors",
                     payload: { ...state.errors, general: false }
                 })
+
                 router.push('/home'); // Redirect to dashboard after successful login
             } else {
-                throw new Error(response.message || 'Login failed');
+                throw new Error(response.message);
             }
         } catch (error) {
             dispatch({

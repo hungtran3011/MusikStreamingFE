@@ -2,7 +2,7 @@ import axios from "axios";
 import z from "zod";
 import { SongDetails } from "../model/song-details";
 
-const SongSchema = z.object({
+export const SongSchema = z.object({
     id: z.string(),
     title: z.string(),
     thumbnailurl: z.string().optional(),
@@ -29,7 +29,7 @@ const SongSchema = z.object({
 });
 
 // As the API calls are not stable yet, we need to have a schema for the alternative response
-const AlternativeSongSchema = z.object({
+export const AlternativeSongSchema = z.object({
     data: z.object({
         id: z.string(),
         title: z.string(),

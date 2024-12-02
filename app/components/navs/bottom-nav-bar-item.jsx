@@ -1,7 +1,6 @@
-;
+import usePreviousRoute from '@/app/hooks/usePrevious';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-// import './bottom-nav-bar.css';
 
 /**
  * BottomNavBarItem component renders a navigation item for the bottom navigation bar.
@@ -20,8 +19,8 @@ export default function BottomNavBarItem(
     const pathname = usePathname();
     return (
         <div className="bottom-nav-item">
-            <Link href={props.href} className="bottom-nav-item flex flex-col justify-center items-center w-full h-full">
-                <div className={`state-layer relative selected-${pathname === props.href} rounded-full`}>
+            <Link href={props.href} className="bottom-nav-item flex flex-col justify-center items-center w-full h-full" >
+                <div className={`state-layer relative selected-${pathname === props.href || prev === props.href} rounded-full`}>
                     <md-ripple></md-ripple>
                     <div className={`icon flex flex-col items-center text-center py-3 px-6 ${pathname === props.href ? "text-[--md-sys-color-primary]" : "text-[--md-sys-color-on-surface]"}`}>
                         <span className={`material-symbols-outlined${pathname === props.href ? "-filled" : ""}`}>{props.icon}</span>

@@ -204,16 +204,16 @@ body {
   height: 200vh;
 }
 
-@media (min-width: 768px){
+@media (min-width: 590px){
   .center-scroll{
     overflow-y: scroll;
     max-height: calc(100vh - var(--desktop-content-offset));
   }
 }
 
-/* .center-scroll:hover{
-  overflow-y: auto;
-} */
+.center-scroll{
+  height: max-content;
+}
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -414,5 +414,17 @@ h2{
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@media screen and (min-width: 590px) {
+  nav.bottom-nav-bar {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 589px) {
+  .nav-rail {
+    display: flex;
   }
 }

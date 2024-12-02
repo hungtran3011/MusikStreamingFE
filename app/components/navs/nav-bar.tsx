@@ -2,8 +2,8 @@
 
 import React from 'react';
 import IconSmallButton from '../buttons/icon-small-button';
-import FilledButton from '@/app/app-components/buttons/filled-button';
-import SearchBox from '@/app/app-components/inputs/search-box';
+import FilledButton from '@/app/components/buttons/filled-button';
+import SearchBox from '@/app/components/inputs/search-box';
 import { useRouter, usePathname } from 'next/navigation';
 import { useRef, useEffect } from 'react';
 import Image from 'next/image';

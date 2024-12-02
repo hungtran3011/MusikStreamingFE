@@ -3,10 +3,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import fetchSongById from '@/app/api-fetch/song-by-id';
-import ErrorComponent from '@/app/app-components/api-fetch-container/fetch-error';
+import ErrorComponent from '@/app/components/api-fetch-container/fetch-error';
 import { Song } from '@/app/model/song';
-import Skeleton from '@/app/app-components/loading/skeleton';
-import PlayButton from '@/app/app-components/buttons/play-button-main';
+import Skeleton from '@/app/components/loading/skeleton';
+import PlayButton from '@/app/components/buttons/play-button-main';
 
 function processTime(time: number): string {
   const minutes = Math.floor(time / 60);
@@ -49,6 +49,9 @@ export default function SongContent(params: { id: string }) {
   }
 
   try {
+    // console.log(song);
+    console.log(song?.artists[0]);
+    console.log(typeof song?.artists[0].artist)
     return (
       <div className='flex w-full'>
         <div className="flex flex-col items-center w-full gap-12">
@@ -63,8 +66,15 @@ export default function SongContent(params: { id: string }) {
                 /> : <Skeleton className="w-[200px] h-[200px]" />
               }
             <div className="flex flex-col">
-              {song ? <h1>{song.title}</h1> : <Skeleton className='h-4 w-full' />}
-              {song ? <p>Genre: {song.genre}</p> : <Skeleton className='h-4 w-full' />}
+              {song 
+              ? <h1 className='font-bold text-xl'>{song.title}</h1> 
+              : <Skeleton className='h-4 w-full' />}
+              {song?
+              song.artists[0]["artist"]
+              ?  <p>Artist: {song.artists[0]["artist"]["name"]}</p> 
+              : <Skeleton className='h-4 w-full' />
+              : <Skeleton className='h-4 w-full' />
+            }
               <PlayButton />
             </div>
           </div>
@@ -109,11 +119,18 @@ export default function SongContent(params: { id: string }) {
           </div>
           <div className="flex flex-col items-start w-full">
             {
+              song?.artists[0].artist ? 
+              (song.artists.map((artist, index) => (
+                <p key={index}>Artist: {artist.artist.name}</p>
+              )))
+              : <Skeleton className='h-4 w-full' />
+            }
+            {
               song
                 ? <p>Release Date: {processDatetime(song.releasedate)}</p>
                 : <Skeleton className='h-4 w-full' />
             }
-            <p>Views: {song ? song.views : <Skeleton className='h-4 w-4'/>}</p>
+            {song ? <p>Views: {song.views}</p> : <Skeleton className='h-4 w-4'/>}
           </div>
         </div>
 

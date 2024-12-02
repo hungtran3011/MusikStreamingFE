@@ -1,16 +1,16 @@
 import Image from 'next/image';
 // import TextButton from '../buttons/text-button';
-import IconSmallButton from '@/app/app-components/buttons/icon-small-button';
-import PassiveProgress from '@/app/app-components/audio/passive-progress';
-import PlayButton from '@/app/app-components/buttons/play-button-main';
-import ToggleIconButtonDotted from '@/app/app-components/buttons/toggle-icon-button-dotted';
+import IconSmallButton from '@/app/components/buttons/icon-small-button';
+import PassiveProgress from '@/app/components/audio/passive-progress';
+import PlayButton from '@/app/components/buttons/play-button-main';
+import ToggleIconButtonDotted from '@/app/components/buttons/toggle-icon-button-dotted';
 
 export default function SongControl() {
   return (
     <div className='song-playing z-[1000] bg-[--md-sys-color-inverse-on-surface] flex-col'>
       <div className="p-4 gap-4 flex flex-wrap items-center justify-between">
         <div className="song-title flex items-center gap-2 w-1/3 md:w-1/6">
-          <Image src={"/favicon.ico"} alt="song-playing" width={64} height={64} />
+          <Image src={"/assets/placeholder.jpg"} alt="song-playing" width={64} height={64} />
           <div className="song-title-info">
             <p className="song-title-text">Song title</p>
             <p className="song-artist">Artist</p>
@@ -22,8 +22,8 @@ export default function SongControl() {
             <IconSmallButton>
               <span className="material-symbols-outlined-filled">skip_previous</span>
             </IconSmallButton>
-            <PlayButton/>
-            <IconSmallButton>
+            <PlayButton disabled={true}/>
+            <IconSmallButton disabled={true}>
               <span className="material-symbols-outlined-filled">skip_next</span>
             </IconSmallButton>
           </div>

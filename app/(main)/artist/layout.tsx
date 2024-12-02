@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Suspense } from 'react';
-import Skeleton from '@/app/app-components/loading/skeleton';
+import Skeleton from '@/app/components/loading/skeleton';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (

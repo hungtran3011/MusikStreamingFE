@@ -1,12 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import fetchAllAlbums from "@/app/api-fetch/all-albums"
+import fetchAllSongs from "@/app/api-fetch/all-songs"
 import { CardProps } from "@/app/model/card-props"
 import { processCloudinaryUrl } from "@/app/api-fetch/cloudinary-url-processing"
-import VerticalCard from "@/app/app-components/info-cards/vertical-card"
+import VerticalCard from "@/app/components/info-cards/vertical-card"
 import Skeleton from "../loading/skeleton"
 import ErrorComponent from "./fetch-error"
+import { randomUUID } from "crypto"
 // import ErrorComponent from "./fetch-error"
 
 export default function Songs() {
@@ -17,10 +18,10 @@ export default function Songs() {
     useEffect(() => {
         async function loadSongs() {
             try {
-                const albums = await fetchAllAlbums();
-                console.log(albums);
-                if (!albums) return;
-                const cardData: CardProps[] = albums.map((song) => {
+                const songs = await fetchAllSongs();
+                console.log(songs);
+                if (!songs) return;
+                const cardData: CardProps[] = songs.map((song) => {
                     const url = processCloudinaryUrl(song.thumbnailurl, 200, 200, "songs");
                     return {
                         img: {
@@ -29,7 +30,7 @@ export default function Songs() {
                             width: 200
                         },
                         title: song.title,
-                        subtitle: song.type,
+                        subtitle: song.genre,
                         href: `/song/${song.id}`
                     };
                 });
@@ -81,7 +82,8 @@ export default function Songs() {
     return (
         <div className="card-grid grid grid-flow-row">
             {cards.map((card) => (
-                <VerticalCard key={card.href} {...card} />
+                card ? <VerticalCard key={card.href} {...card} />
+                : <Skeleton key={randomUUID()} className="w-[140px] h-[200px]"/>
             ))}
         </div>
     );

@@ -14,7 +14,6 @@
 
 .extended-false{
     display: none;
-    transition: all 0.3s ease-in-out, width .3s ease-in-out, min-width 0.3s ease-in-out, max-width .3s ease-in-out;
 }
 
 .padding-extended{
@@ -76,16 +75,19 @@
 } */
 
 .nav-rail-extended {
-    transition: all 0.3s ease-in-out, width .3s ease-in-out, min-width 0.3s ease-in-out, max-width .3s ease-in-out;
+    transition: all 0.3s ease-in-out, width .3s ease-in-out, min-width 0.3s ease-in-out, max-width .3s ease-in-out,
+    display 0.3s ease-in-out;
     width: 20vw;
     min-width: 280px;
-    max-width: 720px;
+    max-width: 360px;
 }
 
 .nav-rail-collapsed {
-    width: 80px;
-    transition: all 0.3s ease-in-out, width .3s ease-in-out, min-width 0.3s ease-in-out, max-width .3s ease-in-out;
-    /* overflow-x: visible;
+    max-width: 80px;
+    padding: 0px;
+    width: fit-content;
+    transition: all 0.3s ease-in-out, width .3s ease-in-out, min-width 0.3s ease-in-out, max-width .3s ease-in-out,
+    display 0.3s ease-in-out    /* overflow-x: visible;
     overflow-y: scroll; */
 }
 
@@ -115,10 +117,4 @@
 
 .divider--false{
     border: 0;
-}
-
-@media screen and (max-width: 768px) {
-    .nav-rail{
-        display: none;
-    }
 }

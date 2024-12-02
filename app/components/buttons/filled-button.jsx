@@ -27,7 +27,7 @@ export default function FilledButton(props) {
     }
     return(
         <button className={`text-btn flex border-[--md-sys-color-outline] items-center justify-stretch focus:ring ${props.className}`} role='button' onClick={props.onClick} disabled={props.disabled}>
-            <div className={`state-layer p-4 relative ${showIcon?"":"pr-6"} gap-3 rounded-full flex items-center justify-center bg-[--md-sys-color-primary] text-[--md-sys-color-on-primary] flex-grow`} >
+            <div className={`state-layer p-4 relative ${showIcon?"":"pr-6"} gap-3 rounded-full flex items-center justify-center bg-[--md-sys-color-primary] text-[--md-sys-color-on-primary] disabled:text-[--md-sys-color-surface-variant] flex-grow`} >
                 <md-ripple className="ripple"/>
                 {
                     props.showLeadingImg
