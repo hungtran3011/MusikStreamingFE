@@ -27,37 +27,6 @@ import { getCookie, getCookies, setCookie, deleteCookie, hasCookie } from 'cooki
  * }
  */
 export default function LoginPage() {
-    // const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    // password should be at least 10 characters and contain a letter
-    // const PASSWORD_REGEX = /^(?=.*[A-Za-z]).{10,}$/;
-    // const formReducer = (state, action) => {
-    //     switch (action.type) {
-    //         case "setFormData":
-    //             return { ...state, formData: action.payload };
-    //         case "setErrors":
-    //             return {...state, errors: action.payload};
-    //         case "setStatus":
-    //             return {...state, status: action.payload};
-    //     }
-    // }
-
-    // const initialValue = {
-    //     formData: {
-    //         email: "",
-    //         password: ""
-    //     },
-    //     errors: {
-    //         email: false,
-    //         password: false,
-    //         general: false
-    //     },
-    //     status: {
-    //         isLoading: false,
-    //         errorMessage: null
-    //     }
-    // }
-
-    // const [state, dispatch] = useReducer(formReducer, initialValue);
 
     /**
      * Handles changes to the email input field.
@@ -133,65 +102,7 @@ export default function LoginPage() {
                 <div className="text-[--md-sys-color-on-background] text-4xl font-bold">Đăng nhập</div>
             </div>
             <div className="py-4 flex-col justify-start items-center gap-9 flex">
-                {/* <form onSubmit={handleSubmit} className="flex-col justify-start items-center gap-6 flex self-stretch">
-                    <div className="flex-col justify-stretch items-start gap-3 flex">
-                        <md-outlined-text-field
-                            error={state.errors.email || state.errors.general}
-                            className='max-w-[560px] w-[80vw]'
-                            label="Email của bạn"
-                            value={state.formData.email}
-                            placeholder='youremail@example.com'
-                            type='email'
-                            onInput={handleEmailChange}
-                            pattern="^\S+@\S+\.\S+$"
-                        >
-                            <md-icon slot="leading-icon">email</md-icon>
-                        </md-outlined-text-field>
-                        <md-outlined-text-field 
-                            error={state.errors.password || state.errors.general} 
-                            label="Mật khẩu" 
-                            placeholder="Nhập mật khẩu" 
-                            value={state.formData.password} 
-                            type="password" 
-                            className="max-w-[560px] w-[80vw]"
-                            onInput={handlePasswordChange}
-                        >
-                            <md-icon slot="leading-icon">password</md-icon>
-                        </md-outlined-text-field>
-                        <Link className='text-center font-medium w-full block text-[--md-sys-color-primary]' href={"/forgot-password"}>Quên mật khẩu? Lấy lại mật khẩu tại đây</Link>
-                    </div>
-                    <div className="max-w-[560px] w-[80vw] flex flex-col gap-4 items-center justify-stretch">
-                        <FilledButton 
-                            disabled={state.status.isLoading}
-                            className='max-w-[560px] w-[80vw]'
-                            onClick={(event) => {
-                                handleSubmit(event);
-                            }}
-                        >
-                            {state.status.isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
-                        </FilledButton>
-                        {state.status.errorMessage && (
-                            <div className="text-[--md-sys-color-error] text-sm">
-                                {state.status.errorMessage}
-                            </div>
-                        )}
-                    </div>
-                </form> */}
                 <LoginForm onSubmit={handleSubmit}/>
-                {/* <div className="self-stretch h-[68px] flex-col justify-start items-center gap-3 flex">
-                    <div className="h-4 text-center text-[--md-sys-color-on-background] text-sm font-medium leading-tight tracking-tight">hoặc</div>
-                    <OutlinedButton
-                        onClick={() => { }}
-                        showLeadingImg={true}
-                        leadingImg={{
-                            src: "/assets/google-icon.png",
-                            alt: 'Đăng nhập với Google',
-                            width: 24
-                        }}
-                        className='max-w-[560px] w-[80vw]'>
-                        Đăng nhập với Google
-                    </OutlinedButton>
-                </div> */}
                 <GoogleLogin/>
                 <div className="text-center">
                     <span className="text-[--md-sys-color-on-background] text-sm font-medium leading-tight tracking-tight">

@@ -1,16 +1,16 @@
 'use client';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { verifyEmail, updateAvatar } from '@/app/services/auth.service';
 import { useDropzone } from 'react-dropzone';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
-export default function VerifyEmailPage() {
+function VerifyEmailContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const token = searchParams.get('token');
-    const [verificationStatus, setVerificationStatus] = useState('pending'); // 'pending', 'success', 'failed'
+    const [verificationStatus, setVerificationStatus] = useState('pending');
     const [avatar, setAvatar] = useState(null);
     const [avatarPreview, setAvatarPreview] = useState(null);
     const [isUploading, setIsUploading] = useState(false);
@@ -134,5 +134,13 @@ export default function VerifyEmailPage() {
                 )}
             </div>
         </div>
+    );
+}
+
+export default function VerifyEmailPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <VerifyEmailContent />
+        </Suspense>
     );
 } 

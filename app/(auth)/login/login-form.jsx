@@ -3,7 +3,7 @@ import React from 'react';
 import FilledButton from '@/app/components/buttons/filled-button';
 import Link from 'next/link';
 // import { useRouter } from 'next/navigation';
-import { useReducer } from 'react';
+import { useReducer, useState } from 'react';
 
 export default function LoginForm({
     onSubmit
@@ -21,6 +21,8 @@ export default function LoginForm({
                 return {...state, status: action.payload};
         }
     }
+    
+    const [revealedPassword, setRevealedPassword] = useState(false);
 
     const initialValue = {
         formData: {
@@ -127,11 +129,12 @@ export default function LoginForm({
                     label="Mật khẩu"
                     placeholder="Nhập mật khẩu"
                     value={state.formData.password}
-                    type="password"
+                    type={revealedPassword ? "text" : "password"}
                     className="max-w-[560px] w-[80vw]"
                     onInput={handlePasswordChange}
                 >
                     <md-icon slot="leading-icon">password</md-icon>
+                    <md-icon slot="trailing-icon" onClick={() => setRevealedPassword(!revealedPassword)}>{revealedPassword ? "visibility" : "visibility_off"}</md-icon>
                 </md-outlined-text-field>
                 <Link className='text-center font-medium w-full block text-[--md-sys-color-primary]' href={"/forgot-password"}>Quên mật khẩu? Lấy lại mật khẩu tại đây</Link>
             </div>
