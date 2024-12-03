@@ -4,9 +4,12 @@ import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import fetchSongById from '@/app/api-fetch/song-by-id';
 import ErrorComponent from '@/app/components/api-fetch-container/fetch-error';
-import { Song } from '@/app/model/song';
+import { SongDetails } from '@/app/model/song-details';
 import Skeleton from '@/app/components/loading/skeleton';
 import PlayButton from '@/app/components/buttons/play-button-main';
+import IconSmallButton from '@/app/components/buttons/icon-small-button';
+import ArtistLinks from './artist-link';
+import ToggleIconButton from '@/app/components/buttons/toggle-button';
 
 function processTime(time: number): string {
   const minutes = Math.floor(time / 60);
@@ -20,7 +23,7 @@ function processDatetime(ISODate: string): string {
 }
 
 export default function SongContent(params: { id: string }) {
-  const [song, setSong] = useState<Song>();
+  const [song, setSong] = useState<SongDetails>();
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
@@ -49,91 +52,93 @@ export default function SongContent(params: { id: string }) {
   }
 
   try {
-    // console.log(song);
-    console.log(song?.artists[0]);
-    console.log(typeof song?.artists[0].artist)
     return (
-      <div className='flex w-full'>
-        <div className="flex flex-col items-center w-full gap-12">
-          <div className='flex items-center w-full gap-4'>
-              {
-                song ? <Image
-                  src={song.thumbnailurl}
-                  alt={song.title}
-                  width={200}
-                  height={200}
-                  priority={true}
-                /> : <Skeleton className="w-[200px] h-[200px]" />
-              }
-            <div className="flex flex-col">
-              {song 
-              ? <h1 className='font-bold text-xl'>{song.title}</h1> 
-              : <Skeleton className='h-4 w-full' />}
-              {song?
-              song.artists[0]["artist"]
-              ?  <p>Artist: {song.artists[0]["artist"]["name"]}</p> 
-              : <Skeleton className='h-4 w-full' />
-              : <Skeleton className='h-4 w-full' />
+      <div className='flex flex-col w-full gap-8 p-4'>
+        {/* Hero Section */}
+        <div className='flex flex-col md:flex-row items-center gap-6'>
+          {song ? 
+            <Image
+              src={song.thumbnailurl}
+              alt={song.title}
+              width={200}
+              height={200}
+              priority={true}
+              className="rounded-lg shadow-lg"
+            /> : 
+            <Skeleton className="w-[200px] h-[200px] rounded-lg" />
+          }
+          <div className="flex flex-col gap-3 w-full">
+            {song ? 
+              <h1 className='font-bold text-2xl md:text-3xl'>{song.title}</h1> : 
+              <Skeleton className='h-8 w-full' />
             }
-              <PlayButton />
+            {song?.artists ?
+              <ArtistLinks artists={song.artists} /> :
+              <Skeleton className='h-10 w-2/3' />
+            }
+            <div className="mt-4 flex justify-start items-center gap-4">
+              <PlayButton className="bg-[--md-sys-color-primary] text-[--md-sys-color-on-primary] w-12 h-12"/>
+              <IconSmallButton>
+                <span className="material-symbols-outlined">share</span>
+              </IconSmallButton>
+              <ToggleIconButton>
+                favorite
+              </ToggleIconButton>
+              <IconSmallButton>
+                <span className="material-symbols-outlined">more_vert</span>
+              </IconSmallButton>
             </div>
-          </div>
-          <div className="w-full">
-            <table className="w-full">
-              <thead>
-                <tr>
-                  <th className="text-left">#</th>
-                  <th className="text-left">Title</th>
-                  <th className="text-left">Durations</th>
-                  <th className="text-left">Play</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="p-3">
-                  <td>1</td>
-                  
-                    <td className="py-3">
-                      {
-                        song
-                          ? <p>{song.title}</p>
-                          : <Skeleton className='h-4 w-full' />
-                      }
-                    </td>
-                  <td className="py-3">
-                    {
-                      song
-                        ? <p>{processTime(song ? song.duration : 0)}</p>
-                        : <Skeleton className='h-4 w-full' />
-                    }
-                  </td>
-                  <td className="py-3">
-                    {
-                      song
-                        ? <p>{song.views}</p>
-                        : <Skeleton className='h-4 w-full' />
-                    }
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div className="flex flex-col items-start w-full">
-            {
-              song?.artists[0].artist ? 
-              (song.artists.map((artist, index) => (
-                <p key={index}>Artist: {artist.artist.name}</p>
-              )))
-              : <Skeleton className='h-4 w-full' />
-            }
-            {
-              song
-                ? <p>Release Date: {processDatetime(song.releasedate)}</p>
-                : <Skeleton className='h-4 w-full' />
-            }
-            {song ? <p>Views: {song.views}</p> : <Skeleton className='h-4 w-4'/>}
           </div>
         </div>
 
+        {/* Song Details Table */}
+        <div className="w-full overflow-x-auto">
+          <table className="w-full">
+            <thead className="">
+              <tr>
+                <th className="text-left py-3 hidden md:table-cell">#</th>
+                <th className="text-left py-3">Title</th>
+                <th className="text-left py-3">Duration</th>
+                <th className="text-left py-3">Plays</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="hover:bg-[--md-sys-color-surface-container-highest]">
+                <td className="py-4 hidden md:table-cell">1</td>
+                <td className="py-4">
+                  {song ? 
+                    <p>{song.title}</p> :
+                    <Skeleton className='h-4 w-full' />
+                  }
+                </td>
+                <td className="py-4">
+                  {song ?
+                    <p>{processTime(song.duration)}</p> :
+                    <Skeleton className='h-4 w-full' />
+                  }
+                </td>
+                <td className="py-4">
+                  {song ?
+                    <p>{song.views.toLocaleString()}</p> :
+                    <Skeleton className='h-4 w-full' />
+                  }
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        {/* Additional Info */}
+        <div className="flex flex-col gap-3 w-full pt-6">
+          {song ?
+            <p className="">Release Date: {processDatetime(song.releasedate)}</p> :
+            <Skeleton className='h-4 w-48' />
+          }
+          {song ?
+            <p className="">Total Views: {song.views.toLocaleString()}</p> :
+            <Skeleton className='h-4 w-32' />
+          }
+        </div>
       </div>
     );
   } catch (e) {

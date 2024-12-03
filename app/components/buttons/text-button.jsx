@@ -1,3 +1,4 @@
+import { twMerge } from 'tailwind-merge';
 /**
  * TextButton component
  * 
@@ -9,7 +10,7 @@
  */
 export default function TextButton(props) {
     return(
-        <div className="text-btn" role='button' onClick={props.onClick}>
+        <div className={twMerge("text-btn", props.className)} role='button' onClick={props.onClick}>
             <div className="state-layer relative h-12 p-3 rounded-full flex items-center">
                 <md-ripple></md-ripple>
                 <div className="flex w-fit gap-3">

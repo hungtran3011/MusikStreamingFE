@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 /**
  * PlayButton component
  * 
@@ -29,7 +30,7 @@ export default function PlayButton({
         setPlaying(!playing);
         onClick()
       }} {...props}>
-          <div className={`state-layer relative h-8 w-8 md:p-3 md:h-12 md:w-12 rounded-full flex items-center justify-center ${className} md:bg-[--md-sys-color-primary] md:text-[--md-sys-color-on-primary]`}>
+          <div className={twMerge("state-layer rounded-full relative flex items-center justify-center", className)}>
               <md-ripple className={`${props.disabled ? "hidden" : ""}`}></md-ripple>
               <div className="flex w-fit gap-3 material-symbols-outlined-filled">
               {playing ? "pause" : "play_arrow"}

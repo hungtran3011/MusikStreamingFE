@@ -22,7 +22,7 @@ export default function SongControl() {
             <IconSmallButton>
               <span className="material-symbols-outlined-filled">skip_previous</span>
             </IconSmallButton>
-            <PlayButton disabled={true}/>
+            <PlayButton className="h-8 w-8 md:p-3 md:h-12 md:w-12 ${className} md:bg-[--md-sys-color-primary] md:text-[--md-sys-color-on-primary]" disabled={true}/>
             <IconSmallButton disabled={true}>
               <span className="material-symbols-outlined-filled">skip_next</span>
             </IconSmallButton>

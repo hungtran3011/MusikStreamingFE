@@ -1,18 +1,42 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { getCookie } from 'cookies-next';
+import UserMenu from '@/app/components/navs/user-menu';
 import IconSmallButton from '../buttons/icon-small-button';
 import FilledButton from '@/app/components/buttons/filled-button';
 import SearchBox from '@/app/components/inputs/search-box';
 import { useRouter, usePathname } from 'next/navigation';
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import Image from 'next/image';
 // import ToggleIconButton from './toggle-icon-button';
 
 export default function NavBar() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState('');
   const route = useRouter();
   const pathname = usePathname();
   const searchFocus = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const accessToken = getCookie("access_token");
+      setIsLoggedIn(!!accessToken);
+      if (accessToken) {
+        // Assuming the username is stored in a cookie named "user_name"
+        const name = getCookie("user_name");
+        setUserName(name ? String(name) : '');
+      }
+    };
+
+    checkAuth();
+    window.addEventListener('storage', checkAuth);
+    
+    return () => {
+      window.removeEventListener('storage', checkAuth);
+    };
+  }, []);
+
   useEffect(() => {
     if (pathname == "/search" && searchFocus.current && window.innerWidth > 768) {
       searchFocus.current.focus();
@@ -60,11 +84,16 @@ export default function NavBar() {
         </div>
       </div>
       <div className="nav-bar-button-container flex p-3 gap-3 items-center">
-        <FilledButton onClick={() => {
-          route.push("/login")
-        }}>
-          {"Đăng nhập/Đăng ký"}
-        </FilledButton>
+        {isLoggedIn ? (
+          <>
+            <span className="text-sm font-medium">{userName}</span>
+            <UserMenu onLogout={() => setIsLoggedIn(false)} />
+          </>
+        ) : (
+          <FilledButton onClick={() => route.push("/login")}>
+            {"Đăng nhập/Đăng ký"}
+          </FilledButton>
+        )}
       </div>
     </div>
   )

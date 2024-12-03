@@ -16,7 +16,7 @@ export default function BrowseCard({
   const backgroundColour = "bg[" + bgColour + "]";
   const text = "text=[" + textColour + "]";
   return (
-    <div className = { twJoin(clsx(`browse-card rounded-2xl flex flex-col items-center justify-center gap-4 overflow-hidden`, backgroundColour, text))}>
+    <div className={twJoin(clsx(`browse-card rounded-2xl flex flex-col items-center justify-center gap-4 overflow-hidden bg-${bgColour}`, text))}>
       <h2 className="browse-card-title text-xl font-bold p-3 max-w-[152px]">
         <Link href={url} className="text-wrap">{title}</Link>
       </h2>

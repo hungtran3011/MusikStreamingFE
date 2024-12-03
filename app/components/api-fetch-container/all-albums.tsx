@@ -1,4 +1,4 @@
-"use client"
+    "use client"
 
 import { useEffect, useState } from "react"
 import fetchAllAlbums from "@/app/api-fetch/all-albums"
@@ -7,33 +7,36 @@ import { processCloudinaryUrl } from "@/app/api-fetch/cloudinary-url-processing"
 import VerticalCard from "@/app/components/info-cards/vertical-card"
 import Skeleton from "../loading/skeleton"
 import ErrorComponent from "./fetch-error"
-// import ErrorComponent from "./fetch-error"
 
-export default function Songs() {
+export default function Albums() {
     const [cards, setCards] = useState<CardProps[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        async function loadSongs() {
+        async function loadAlbums() {
             try {
                 const albums = await fetchAllAlbums();
                 console.log(albums);
-                if (!albums) return;
-                const cardData: CardProps[] = albums.map((song) => {
-                    const url = processCloudinaryUrl(song.thumbnailurl, 200, 200, "songs");
+                if (!albums) {
+                    setError(true);
+                    return;
+                }
+                const cardData: CardProps[] = albums.map((album) => {
+                    const url = processCloudinaryUrl(album.thumbnailurl, 200, 200, "collections");
                     return {
                         img: {
                             src: url,
-                            alt: song.title,
+                            alt: album.title,
                             width: 200
                         },
-                        title: song.title,
-                        subtitle: song.type,
-                        href: `/song/${song.id}`
+                        title: album.title,
+                        subtitle: album.type,
+                        href: `/album/${album.id}`
                     };
                 });
                 setCards(cardData);
+                setError(false);
             } catch (e) {
                 console.log(e);
                 setError(true);
@@ -41,7 +44,7 @@ export default function Songs() {
                 setLoading(false);
             }
         }
-        loadSongs();
+        loadAlbums();
     }, []);
 
     if (loading) {
@@ -71,11 +74,15 @@ export default function Songs() {
         );
     }
 
-    if (error || !cards) {
+    if (error) {
         return <ErrorComponent onReloadClick={() => {
             setError(false);
             setLoading(true);
         }} />;
+    }
+
+    if (cards.length === 0) {
+        return <div>No albums found</div>;
     }
 
     return (

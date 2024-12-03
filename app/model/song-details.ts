@@ -1,6 +1,12 @@
-import { Song } from "./song";
 
-export type SongDetails = Song & {
+export type SongDetails = {
+  id: string;
+  title: string;
+  thumbnailurl: string;
+  duration: number;
+  releasedate: string;
+  genre: string;
+  views: number;
   albums: [
     {
       album: {

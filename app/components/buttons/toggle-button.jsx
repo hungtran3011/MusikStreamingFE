@@ -1,33 +1,38 @@
 'use client'
-// import 
+
+import { useState } from 'react';
+
 /**
- * ToggleIconButton component renders a button with optional icon and selected state.
+ * ToggleIconButton component - A button that toggles between filled and outlined icon states
  * 
- * @param {Object} props - The properties object.
- * @param {string} [props.className] - Additional class names for the button.
- * @param {Function} [props.onClick] - Click event handler.
- * @param {string} [props.icon] - Icon name to be displayed.
- * @param {boolean} [props.showIcon] - Flag to show or hide the icon.
- * @param {string} [props.children] - Button label.
- * @param {boolean} [props.selected] - Flag to indicate if the button is selected.
+ * @param {Object} props - Component properties
+ * @param {string} [props.className] - Optional class name for styling the button
+ * @param {Function} [props.onClick] - Optional click handler called when button is clicked
+ * @param {React.ReactNode} props.children - The icon name from Material Symbols font to display
+ * @returns {JSX.Element} The rendered ToggleIconButton component
+ * 
+ * @example
+ * <ToggleIconButton onClick={() => console.log('Toggled!')}>
+ *   favorite
+ * </ToggleIconButton>
  */
+
 export default function ToggleIconButton(props) {
-    let showIcon = props.showIcon;
-    if (props.icon === undefined || props.icon === '') {
-        showIcon = false;
-    } else if (props.showIcon === undefined) {
-        showIcon = false;
-    }
-    if (props.selected === undefined) {
-        props.selected = false;
-    }
-    return (
-        <div className={`toggle-btn flex items-center focus:ring ${props.selected ? 'selected' : ''}`} role='button' onClick={props.onClick}>
-            <div className={`state-layer relative p-4 ${showIcon ? "" : "pr-6"} gap-3 rounded-full flex items-center bg-[--md-sys-color-primary] text-[--md-sys-color-on-primary]`}>
-                <md-ripple className="ripple"></md-ripple>
-                <span className={`material-symbols-outlined ${showIcon ? "block" : "none"}`}>{props.icon}</span>
-                <p className='text-center font-medium'>{props.children}</p>
-            </div>
-        </div>
-    );
+  const [active, setActive] = useState(false)
+
+  return (
+    <div className="toggle-icon-btn" role="button" onClick={() => {
+      setActive(!active)
+      if (props.onClick) {
+        props.onClick()
+      }
+    }}>
+      <div className={`state-layer relative h-8 w-8 md:h-12 md:w-12 rounded-full m-auto flex items-center justify-center ${props.className || ''}`}>
+        <md-ripple></md-ripple>
+        <span className={`material-symbols-outlined${active ? '-filled' : ''} ${active ? 'text-[--md-sys-color-primary]' : ''}`}>
+          {props.children}
+        </span>
+      </div>
+    </div>
+  )
 }

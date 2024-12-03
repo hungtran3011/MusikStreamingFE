@@ -1,13 +1,11 @@
-'use client';
-import '@material/web/textfield/outlined-text-field'
-import '@material/web/icon/icon'
-import '@material/web/iconbutton/icon-button'
-import FilledButton from '@/app/components/buttons/filled-button';
-import OutlinedButton from '@/app/components/buttons/outlined-button';
+'use client'
+import GoogleLogin from '@/app/(auth)/login/google-login';
 import Link from 'next/link';
-import { useReducer } from 'react';
-import { useRouter } from 'next/navigation';
+// import { useReducer } from 'react';
+import { redirect } from 'next/navigation';
 import { login } from '@/app/services/auth.service';
+import LoginForm from '@/app/(auth)/login/login-form';
+import { getCookie, getCookies, setCookie, deleteCookie, hasCookie } from 'cookies-next/client';
 // import {useTranslation} from 'next/translation';
 
 /**
@@ -29,39 +27,37 @@ import { login } from '@/app/services/auth.service';
  * }
  */
 export default function LoginPage() {
-    const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     // password should be at least 10 characters and contain a letter
-    const PASSWORD_REGEX = /^(?=.*[A-Za-z]).{10,}$/;
-    const formReducer = (state, action) => {
-        switch (action.type) {
-            case "setFormData":
-                return { ...state, formData: action.payload };
-            case "setErrors":
-                return {...state, errors: action.payload};
-            case "setStatus":
-                return {...state, status: action.payload};
-        }
-    }
+    // const PASSWORD_REGEX = /^(?=.*[A-Za-z]).{10,}$/;
+    // const formReducer = (state, action) => {
+    //     switch (action.type) {
+    //         case "setFormData":
+    //             return { ...state, formData: action.payload };
+    //         case "setErrors":
+    //             return {...state, errors: action.payload};
+    //         case "setStatus":
+    //             return {...state, status: action.payload};
+    //     }
+    // }
 
-    const initialValue = {
-        formData: {
-            email: "",
-            password: ""
-        },
-        errors: {
-            email: false,
-            password: false,
-            general: false
-        },
-        status: {
-            isLoading: false,
-            errorMessage: null
-        }
-    }
+    // const initialValue = {
+    //     formData: {
+    //         email: "",
+    //         password: ""
+    //     },
+    //     errors: {
+    //         email: false,
+    //         password: false,
+    //         general: false
+    //     },
+    //     status: {
+    //         isLoading: false,
+    //         errorMessage: null
+    //     }
+    // }
 
-    const [state, dispatch] = useReducer(formReducer, initialValue);
-
-    const router = useRouter();
+    // const [state, dispatch] = useReducer(formReducer, initialValue);
 
     /**
      * Handles changes to the email input field.
@@ -71,35 +67,35 @@ export default function LoginPage() {
      * @example
      * <input type="email" onChange={handleEmailChange} />
      */
-    function handleEmailChange() {
-        dispatch({
-            type: "setFormData",
-            payload: { ...state.formData, email: event.target.value }
-        })
-        dispatch({
-            type: "setErrors",
-            payload: {...state.errors, email: !event.target.value.match(EMAIL_REGEX), general: false}
-        })
-    }
+    // function handleEmailChange() {
+    //     dispatch({
+    //         type: "setFormData",
+    //         payload: { ...state.formData, email: event.target.value }
+    //     })
+    //     dispatch({
+    //         type: "setErrors",
+    //         payload: {...state.errors, email: !event.target.value.match(EMAIL_REGEX), general: false}
+    //     })
+    // }
 
-    /**
-     * Handles changes to the password input field.
-     * @param {Object} event - The input change event.
-     * @return {void}
-     * 
-     * @example
-     * <input type="password" onChange={handlePasswordChange} />
-     */
-    function handlePasswordChange(event) {
-        dispatch({
-            type: "setErrors",
-            payload: { ...state.errors, password: !event.target.value.match(PASSWORD_REGEX), general: false }
-        })
-        dispatch({
-            type: "setFormData",
-            payload: { ...state.formData, password: event.target.value }
-        })
-    }
+    // /**
+    //  * Handles changes to the password input field.
+    //  * @param {Object} event - The input change event.
+    //  * @return {void}
+    //  * 
+    //  * @example
+    //  * <input type="password" onChange={handlePasswordChange} />
+    //  */
+    // function handlePasswordChange(event) {
+    //     dispatch({
+    //         type: "setErrors",
+    //         payload: { ...state.errors, password: !event.target.value.match(PASSWORD_REGEX), general: false }
+    //     })
+    //     dispatch({
+    //         type: "setFormData",
+    //         payload: { ...state.formData, password: event.target.value }
+    //     })
+    // }
 
     /**
      * Handles form submission.
@@ -113,50 +109,21 @@ export default function LoginPage() {
      *   <button type="submit">Login</button>
      * </form>
      */
-    async function handleSubmit(event) {
-        event.preventDefault();
-        dispatch({
-            type: "setStatus",
-            payload: { ...state.status, isLoading: true }
-        })
-
-        if (!state.formData.email.match(EMAIL_REGEX)) {
-            dispatch({
-                type: "setErrors",
-                payload: { ...state.errors, email: true }
-            })
-            dispatch({
-                type: "setStatus",
-                payload: { ...state.status, isLoading: false }
-            })
-            return;
-        }
-
+    async function handleSubmit(formData) {
         try {
-            const response = await login({
-                email: state.formData.email,
-                password: state.formData.password
-            });
-
-            if (response) {
-                dispatch({
-                    type: "setErrors",
-                    payload: { ...state.errors, general: false }
-                })
-
-                router.push('/home'); // Redirect to dashboard after successful login
-            } else {
-                throw new Error(response.message);
+            const { email, password } = formData;
+            const res = await login({ email, password });
+            
+            // Verify cookies were set
+            const accessToken = getCookie('access_token');
+            if (!accessToken) {
+                throw new Error('Failed to set authentication cookies');
             }
+            
+            return { success: true };
         } catch (error) {
-            dispatch({
-                type: "setErrors",
-                payload: { ...state.errors, general: true }
-            })
-            dispatch({
-                type: "setStatus",
-                payload: { ...state.status, errorMessage: error.message || "Login failed. Please try again." }
-            })
+            console.error('Login failed:', error);
+            return { error: error.message };
         }
     }
 
@@ -166,7 +133,7 @@ export default function LoginPage() {
                 <div className="text-[--md-sys-color-on-background] text-4xl font-bold">Đăng nhập</div>
             </div>
             <div className="py-4 flex-col justify-start items-center gap-9 flex">
-                <form onSubmit={handleSubmit} className="flex-col justify-start items-center gap-6 flex self-stretch">
+                {/* <form onSubmit={handleSubmit} className="flex-col justify-start items-center gap-6 flex self-stretch">
                     <div className="flex-col justify-stretch items-start gap-3 flex">
                         <md-outlined-text-field
                             error={state.errors.email || state.errors.general}
@@ -209,8 +176,9 @@ export default function LoginPage() {
                             </div>
                         )}
                     </div>
-                </form>
-                <div className="self-stretch h-[68px] flex-col justify-start items-center gap-3 flex">
+                </form> */}
+                <LoginForm onSubmit={handleSubmit}/>
+                {/* <div className="self-stretch h-[68px] flex-col justify-start items-center gap-3 flex">
                     <div className="h-4 text-center text-[--md-sys-color-on-background] text-sm font-medium leading-tight tracking-tight">hoặc</div>
                     <OutlinedButton
                         onClick={() => { }}
@@ -223,7 +191,8 @@ export default function LoginPage() {
                         className='max-w-[560px] w-[80vw]'>
                         Đăng nhập với Google
                     </OutlinedButton>
-                </div>
+                </div> */}
+                <GoogleLogin/>
                 <div className="text-center">
                     <span className="text-[--md-sys-color-on-background] text-sm font-medium leading-tight tracking-tight">
                         Chưa có tài khoản? Đăng ký tài khoản

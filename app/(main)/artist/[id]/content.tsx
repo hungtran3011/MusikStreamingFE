@@ -40,25 +40,26 @@ export default function ArtistContent({ params } : { params: Promise<{ id: strin
         return (
             // <Suspense fallback={<Loading/>}>
             <div className='flex w-full'>
-                <div className='flex flex-col items-center w-full'>
-                    {
-                        artist ?
-                        <Image
-                        src={artist.avatarurl}
-                        alt={artist.name}
-                        width={200}
-                        height={200}
-                        />
-                        : <Skeleton className="w-[200px] h-[200px]"/>
-                    }
-                    {
-                        artist ? <h1>{artist.name}</h1> : <Skeleton className="w-[200px] h-6"/>
-                    }
+                <div className='flex flex-col justify-start items-center w-full'>
+                    <div className='flex items-center gap-4 w-full'>
+                        {
+                            artist ?
+                            <Image
+                            src={artist.avatarurl}
+                            alt={artist.name}
+                            width={200}
+                            height={200}
+                            />
+                            : <Skeleton className="w-[200px] h-[200px]"/>
+                        }
+                        {
+                            artist ? <h1 className='text-2xl font-bold'>{artist.name}</h1> : <Skeleton className="w-[200px] h-6"/>
+                        }
+                    </div>
                     {
                         artist ? <p>{artist.description}</p> : <Skeleton className="w-[200px] h-6"/>
                     }
                 </div>
-
             </div>
         );
     } catch (e) {

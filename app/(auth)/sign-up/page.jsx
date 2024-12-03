@@ -4,10 +4,12 @@ import '@material/web/icon/icon'
 import '@material/web/iconbutton/icon-button'
 import FilledButton from '@/app/components/buttons/filled-button';
 import Link from 'next/link';
-import { useReducer } from 'react';
-import { signUp } from '@/app/services/auth.service';
+import { useReducer, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { signUp } from '@/app/services/auth.service';
+import Image from 'next/image';
 
 /**
  * SignUpPage component handles the user registration process.
@@ -17,6 +19,8 @@ export default function SignUpPage() {
     const router = useRouter();
     const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{10,}$/;
     const [revealPassword, setRevealPassword] = useState(false);
+    const [avatar, setAvatar] = useState(null);
+    const [avatarPreview, setAvatarPreview] = useState(null);
 
     const formReducer = (state, action) => {
         switch (action.type) {
@@ -50,6 +54,28 @@ export default function SignUpPage() {
         isLoading: false,
         errorMessage: null
     });
+
+    const onDrop = useCallback((acceptedFiles) => {
+        const file = acceptedFiles[0];
+        setAvatar(file);
+        
+        // Create preview URL
+        const previewUrl = URL.createObjectURL(file);
+        setAvatarPreview(previewUrl);
+        
+        // Clean up preview URL when component unmounts
+        return () => URL.revokeObjectURL(previewUrl);
+    }, []);
+
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop,
+        accept: {
+            'image/*': ['.jpeg', '.jpg', '.png', '.gif']
+        },
+        maxFiles: 1,
+        maxSize: 5242880, // 5MB
+    });
+
     /**
      * Handles input change and updates form data and errors state.
      * @param {string} field - The field name to update.
@@ -85,11 +111,12 @@ export default function SignUpPage() {
     }
 
     const validateForm = () => {
-        const { email, password, confirmPassword, name } = state.formData;
+        const { email, password, confirmPassword, name, file } = state.formData;
         const emailError = !validateField('email', { email });
         const passwordError = !validateField('password', { password });
         const confirmPasswordError = !validateField('confirmPassword', { confirmPassword });
         const nameError = !validateField('name', { name });
+        const fileError = !validateField('file', { file });
 
         dispatch({
             type: 'setErrors',
@@ -98,11 +125,12 @@ export default function SignUpPage() {
                 password: passwordError,
                 confirmPassword: confirmPasswordError,
                 name: nameError,
-                general: emailError || passwordError || confirmPasswordError || nameError
+                file: fileError,
+                general: emailError || passwordError || confirmPasswordError || nameError || fileError
             }
         });
 
-        return !(emailError || passwordError || confirmPasswordError || nameError);
+        return !(emailError || passwordError || confirmPasswordError || nameError || fileError);
     }
 
     /**
@@ -120,10 +148,15 @@ export default function SignUpPage() {
         }
 
         try {
-            await signUp(state.formData);
-            router.push('/home');
+            await signUp({
+                email: state.formData.email,
+                password: state.formData.password,
+                name: state.formData.name,
+                file: state.formData.file
+            });
+            router.push('/verify-email');
         } catch (error) {
-            console.log(error)
+            console.error(error);
             dispatch({ type: 'setError', payload: error.message || 'Sign up failed' });
             dispatch({ type: 'setErrors', payload: { ...state.errors, general: true } });
         } finally {
@@ -138,6 +171,28 @@ export default function SignUpPage() {
             </div>
             <form onSubmit={handleSubmit} className="flex-col justify-start items-center gap-6 flex self-stretch">
                 <div className="flex-col justify-stretch items-start gap-3 flex w-full">
+                    <div {...getRootProps()} className="cursor-pointer w-full flex flex-col items-center gap-2">
+                        <input {...getInputProps()} />
+                        <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-dashed border-[--md-sys-color-outline] hover:border-[--md-sys-color-primary] transition-colors">
+                            {avatarPreview ? (
+                                <Image 
+                                    src={avatarPreview} 
+                                    alt="Avatar preview" 
+                                    width={128} 
+                                    height={128}
+                                    className="object-cover w-full h-full"
+                                />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-[--md-sys-color-surface-variant]">
+                                    <md-icon>add_photo_alternate</md-icon>
+                                </div>
+                            )}
+                        </div>
+                        <span className="text-sm text-[--md-sys-color-on-surface-variant]">
+                            Click để tải lên ảnh đại diện
+                        </span>
+                    </div>
+
                     <md-outlined-text-field
                         error={state.errors.name}
                         required={true}

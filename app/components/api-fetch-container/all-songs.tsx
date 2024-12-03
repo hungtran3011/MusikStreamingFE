@@ -23,6 +23,7 @@ export default function Songs() {
                 if (!songs) return;
                 const cardData: CardProps[] = songs.map((song) => {
                     const url = processCloudinaryUrl(song.thumbnailurl, 200, 200, "songs");
+                    const isMultipleArtists = song.artists.length > 1;
                     return {
                         img: {
                             src: url,
@@ -30,8 +31,10 @@ export default function Songs() {
                             width: 200
                         },
                         title: song.title,
-                        subtitle: song.genre,
-                        href: `/song/${song.id}`
+                        subtitle: isMultipleArtists ? song.artists[0].artist.name + " và các nghệ sĩ khác" : song.artists[0].artist.name,
+                        href: `/song/${song.id}`,
+                        isMultipleItemSub: isMultipleArtists,
+                        subHrefItems: song.artists.map(artist => `/artist/${artist.artist.id}`)
                     };
                 });
                 setCards(cardData);
@@ -48,6 +51,7 @@ export default function Songs() {
     if (loading) {
         return (
             <div className="card-grid grid grid-flow-row">
+                <Skeleton className="w-[140px] h-[200px]"/>
                 <Skeleton className="w-[140px] h-[200px]"/>
                 <Skeleton className="w-[140px] h-[200px]"/>
                 <Skeleton className="w-[140px] h-[200px]"/>

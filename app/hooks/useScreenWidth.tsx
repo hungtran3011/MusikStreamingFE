@@ -11,12 +11,14 @@ const useScreenWidth = () => {
                 setScreenWidth(window.innerWidth);
         };
 
-        window.addEventListener('resize', handleResize);
+        if (typeof window !== 'undefined') {
+            window.addEventListener('resize', handleResize);
 
-        // Clean up event listener on component unmount
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
+            // Clean up event listener on component unmount
+            return () => {
+                window.removeEventListener('resize', handleResize);
+            };
+        }
     }, []);
 
     return screenWidth;

@@ -76,13 +76,12 @@ export default function Artists() {
       );
     }
     data.forEach((artist) => {
-      const url = processCloudinaryUrl(artist.avatarurl, 140, 140, "artists");
+      const url = processCloudinaryUrl(artist.avatarurl, 300, 300, "artists");
       console.log(url);
       cards.push({
         img: {
           src: url,
           alt: artist.name,
-          width: 140,
         },
         title: artist.name,
         subtitle: "",

@@ -4,9 +4,9 @@ import NavRailPinnedItem from './nav-rail-pinned-item';
 import { useState, useEffect, useCallback } from 'react';
 // import {useHistory}
 import { usePathname } from 'next/navigation';
-import useScreenWidth from '@/app/hooks/useScreenWidth';
 import "./nav-rail.css";
 import { NavItemType } from '@/app/model/nav-item-type';
+import { getCookie } from 'cookies-next';
 
 /**
  * Navigation items configuration.
@@ -46,30 +46,81 @@ const items = {
  * @param {number} [props.selected] - Index of the selected item.
  */
 export default function NavRail(props) {
-    // const [selected, setSelected] = useState(0);
     const [extended, setExtended] = useState(true);
+    const [windowWidth, setWindowWidth] = useState(0);
+    const [pinnedItems, setPinnedItems] = useState({});
     const pathname = usePathname();
-    const screenWidth = useScreenWidth();
 
-    // Handle window resize to toggle extended state
     const handleResize = useCallback(() => {
-        if (screenWidth < 1024) {
-            setExtended(false);
-        } else {
-            setExtended(true);
+        if (typeof window !== 'undefined') {
+            setWindowWidth(window.innerWidth);
+            if (window.innerWidth < 1024) {
+                setExtended(false);
+            } else {
+                setExtended(true);
+            }
         }
-    }, [screenWidth]);
+    }, []);
 
     useEffect(() => {
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => {
-            window.removeEventListener('resize', handleResize);
+        const checkAuth = () => {
+            const accessToken = getCookie("access_token");
+            
+            // If logged in, set up pinned items
+            if (accessToken) {
+                setPinnedItems({
+                    'favorite': {
+                        text: 'Yêu thích',
+                        href: '/favorites',
+                        img: {
+                            src: '/assets/favorite-icon.png',
+                            width: 24
+                        },
+                        type: NavItemType.DEFAULT
+                    },
+                    'playlist': {
+                        text: 'Playlist của bạn',
+                        href: '/playlists',
+                        img: {
+                            src: '/assets/playlist-icon.png',
+                            width: 24
+                        },
+                        type: NavItemType.DEFAULT
+                    }
+                });
+            } else {
+                setPinnedItems({});
+            }
         };
+
+        checkAuth();
+        window.addEventListener('storage', checkAuth);
+        
+        return () => {
+            window.removeEventListener('storage', checkAuth);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            // Initialize window width
+            setWindowWidth(window.innerWidth);
+            // Initialize 'extended' state from localStorage or window width
+            const storedExtended = localStorage.getItem('nav-rail-extended');
+            if (storedExtended !== null) {
+                setExtended(JSON.parse(storedExtended));
+            } else {
+                setExtended(window.innerWidth >= 1024);
+            }
+            window.addEventListener('resize', handleResize);
+            return () => {
+                window.removeEventListener('resize', handleResize);
+            };
+        }
     }, [handleResize]);
 
     return (
-        <div className={`${props.className} nav-rail ${screenWidth < 590 ? "hidden" : "flex"} w-full relative flex-col bg-[--md-sys-color-surface-container-low]  rounded-2xl nav-rail-${extended ? 'extended' : 'collapsed'}`}>
+        <div className={`${props.className} nav-rail ${windowWidth < 590 ? "hidden" : "flex"} w-full relative flex-col bg-[--md-sys-color-surface-container-low]  rounded-2xl nav-rail-${extended ? 'extended' : 'collapsed'}`}>
             <div className={`nav-rail-inner h-full nav-rail--padding-${extended ? 'extended' : 'collapsed'}`}>
                 <button className={`extend-button selected-false rounded-full w-full`} role="button" onClick={() => { 
                     localStorage.setItem('nav-rail-extended', JSON.stringify(!extended));
@@ -118,23 +169,20 @@ export default function NavRail(props) {
                 </div>
                 <div className="nav-rail-pinned flex-col">
                     {
-                        props.pinned !== undefined
-                        ? Object.keys(props.pinned).map((key) => {
-                            const pinned = props.pinned[key];
+                        Object.keys(pinnedItems).map((key) => {
+                            const pinned = pinnedItems[key];
                             const imgSrc = pinned.img?.src || "/favicon.ico";
 
                             return <NavRailPinnedItem
                                 key={key}
                                 imgSrc={imgSrc}
-                                text={props.pinned[key].text}
-                                width={props.pinned[key].img.width}
-                                href={props.pinned[key].href}
-                                // onClick={() => { setSelected(index) }}
+                                text={pinnedItems[key].text}
+                                width={pinnedItems[key].img.width}
+                                href={pinnedItems[key].href}
                                 extended={extended}
-                                selected={pathname === props.pinned[key].href}
+                                selected={pathname === pinnedItems[key].href}
                             />
                         })
-                        : <></>
                     }
                 </div>
             </div>
