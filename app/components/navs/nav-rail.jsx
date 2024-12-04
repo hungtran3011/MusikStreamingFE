@@ -1,8 +1,8 @@
 'use client';
+import PropTypes from 'prop-types';
 import NavRailCommonItem from './nav-rail-common-item';
 import NavRailPinnedItem from './nav-rail-pinned-item';
-import { useState, useEffect, useCallback } from 'react';
-// import {useHistory}
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import "./nav-rail.css";
 import { NavItemType } from '@/app/model/nav-item-type';
@@ -19,7 +19,7 @@ const items = {
       type: NavItemType.DEFAULT
     },
     'explore': {
-      text: "Khám phá",
+      text: "Khám phá", 
       badgevalue: 0,
       href: "/search",
       type: NavItemType.DEFAULT
@@ -45,11 +45,16 @@ const items = {
  * @param {Object} [props.pinned] - Pinned navigation items.
  * @param {number} [props.selected] - Index of the selected item.
  */
-export default function NavRail(props) {
+export default function NavRail({ className, items: customItems }) {
     const [extended, setExtended] = useState(true);
     const [windowWidth, setWindowWidth] = useState(0);
     const [pinnedItems, setPinnedItems] = useState({});
+    const [width, setWidth] = useState(280); // Default width
+    const [isResizing, setIsResizing] = useState(false);
+    const navRef = useRef(null);
     const pathname = usePathname();
+    const [prevPathname, setPrevPathname] = useState(pathname);
+    const [animationDirection, setAnimationDirection] = useState('slide-left');
 
     const handleResize = useCallback(() => {
         if (typeof window !== 'undefined') {
@@ -62,6 +67,23 @@ export default function NavRail(props) {
         }
     }, []);
 
+    // Handle tab transitions
+    useEffect(() => {
+        if (prevPathname !== pathname) {
+            // Determine animation direction based on navigation order
+            const prevIndex = Object.values(items).findIndex(item => item.href === prevPathname);
+            const currentIndex = Object.values(items).findIndex(item => item.href === pathname);
+            
+            if (prevIndex < currentIndex) {
+                setAnimationDirection('slide-left');
+            } else {
+                setAnimationDirection('slide-right');
+            }
+            
+            setPrevPathname(pathname);
+        }
+    }, [pathname, prevPathname]);
+
     useEffect(() => {
         const checkAuth = () => {
             const accessToken = getCookie("access_token");
@@ -73,8 +95,8 @@ export default function NavRail(props) {
                         text: 'Yêu thích',
                         href: '/favorites',
                         img: {
-                            src: '/assets/favorite-icon.png',
-                            width: 24
+                            src: '/assets/favorite.jpg',
+                            width: 48
                         },
                         type: NavItemType.DEFAULT
                     },
@@ -119,8 +141,90 @@ export default function NavRail(props) {
         }
     }, [handleResize]);
 
-    return (
-        <div className={`${props.className} nav-rail ${windowWidth < 590 ? "hidden" : "flex"} w-full relative flex-col bg-[--md-sys-color-surface-container-low]  rounded-2xl nav-rail-${extended ? 'extended' : 'collapsed'}`}>
+    // Add resize handler
+    const startResizing = useCallback((e) => {
+        e.preventDefault();
+        setIsResizing(true);
+    }, []);
+
+    const resize = useCallback((e) => {
+        if (isResizing && navRef.current) {
+            requestAnimationFrame(() => {
+                const rect = navRef.current.getBoundingClientRect();
+                const newWidth = e.clientX - rect.left;
+                
+                // If width is less than threshold, collapse the nav rail
+                if (newWidth < 200) {
+                    setExtended(false);
+                    localStorage.setItem('nav-rail-extended', 'false');
+                    navRef.current.style.width = '80px';
+                    setWidth(80);
+                    return;
+                }
+                
+                // If nav rail is collapsed and width exceeds threshold, expand it
+                if (!extended && newWidth >= 200) {
+                    setExtended(true);
+                    localStorage.setItem('nav-rail-extended', 'true');
+                    navRef.current.style.width = '280px';
+                    setWidth(280);
+                    return;
+                }
+                
+                // Only allow resizing when extended
+                if (extended) {
+                    const clampedWidth = Math.min(600, Math.max(280, newWidth));
+                    navRef.current.style.width = `${clampedWidth}px`;
+                    setWidth(clampedWidth);
+                }
+            });
+        }
+    }, [isResizing, extended]);
+
+    const stopResizing = useCallback(() => {
+        setIsResizing(false);
+        if (navRef.current) {
+            const finalWidth = navRef.current.offsetWidth;
+            if (extended) {
+                localStorage.setItem('nav-rail-width', finalWidth);
+                setWidth(finalWidth);
+            }
+        }
+    }, [extended]);
+
+    // Load saved width on mount
+    useEffect(() => {
+        const savedWidth = localStorage.getItem('nav-rail-width');
+        if (savedWidth) {
+            setWidth(Number(savedWidth));
+        }
+    }, []);
+
+    // Add event listeners for resize
+    useEffect(() => {
+        window.addEventListener('mousemove', resize);
+        window.addEventListener('mouseup', stopResizing);
+        return () => {
+            window.removeEventListener('mousemove', resize);
+            window.removeEventListener('mouseup', stopResizing);
+        };
+    }, [resize, stopResizing]);
+
+    // Use customItems if provided, otherwise use default items
+    const navigationItems = customItems || items;
+    
+    const showPinnedSection = !customItems; // Only show pinned section when using default items
+
+    return (                                                                 
+        <div 
+            ref={navRef}
+            style={extended ? { width: `${width}px` } : {}}
+            className={`${className} nav-rail ${windowWidth < 590 ? "hidden" : "flex"} w-full relative flex-col bg-[--md-sys-color-surface-container-low] rounded-2xl nav-rail-${extended ? 'extended' : 'collapsed'} ${animationDirection}`}
+        >
+            <div 
+                className="resize-handle" 
+                onMouseDown={startResizing}
+            />
             <div className={`nav-rail-inner h-full nav-rail--padding-${extended ? 'extended' : 'collapsed'}`}>
                 <button className={`extend-button selected-false rounded-full w-full`} role="button" onClick={() => { 
                     localStorage.setItem('nav-rail-extended', JSON.stringify(!extended));
@@ -129,63 +233,82 @@ export default function NavRail(props) {
                     <div className={`state-layer rounded-full flex gap-4 relative padding-${extended ? "extended" : "collapsed"}`}>
                         <md-ripple/>
                         <span className="material-symbols-outlined block w-6">menu</span>
-                        <p>{extended ? "Menu" : ""}</p>
+                        <span className={`extended-${extended}`}>Menu</span>
                     </div>
                 </button>
-                <div className="nav-rail-common flex-col">
+                <div className="nav-rail-common flex-col mb-4">
                     {
-                        Object.keys(items).map((key) => {
-                            const item = items[key];
+                        Object.keys(navigationItems).map((key) => {
+                            const item = navigationItems[key];
                             
                             const imgSrc = item.img?.src || "/favicon.ico";
-                            if (items[key].type === 0)
+                            if (navigationItems[key].type === 0)
                                 return <NavRailCommonItem
                                     key={key}
                                     icon={key}
-                                    text={items[key].text}
-                                    showBadge={items[key].badgevalue > 0}
-                                    badgevalue={items[key].badgevalue}
-                                    selected={pathname === items[key].href}
-                                    href={items[key].href}
-                                    // onClick={() => { setSelected(index) }}
+                                    text={navigationItems[key].text}
+                                    showBadge={navigationItems[key].badgevalue > 0}
+                                    badgevalue={navigationItems[key].badgevalue}
+                                    selected={pathname === navigationItems[key].href}
+                                    href={navigationItems[key].href}
                                     extended={extended}
                                 />
-                            else if (items[key].type === 1)
+                            else if (navigationItems[key].type === 1)
                                 return <NavRailPinnedItem
                                     key={key}
                                     imgSrc={imgSrc}
-                                    text={items[key].text}
-                                    width={items[key].img.width}
-                                    selected={pathname === items[key].href}
-                                    href={items[key].href}
-                                    // onClick={() => { setSelected(index) }}
+                                    text={navigationItems[key].text}
+                                    width={navigationItems[key].img.width}
+                                    selected={pathname === navigationItems[key].href}
+                                    href={navigationItems[key].href}
                                     extended={extended}
                                 />
                         })
                     }
                 </div>
-                <div className="px-4">
-                    <hr className='border-[--md-sys-color-outline-variant]'/>
-                </div>
-                <div className="nav-rail-pinned flex-col">
-                    {
-                        Object.keys(pinnedItems).map((key) => {
-                            const pinned = pinnedItems[key];
-                            const imgSrc = pinned.img?.src || "/favicon.ico";
+                
+                {showPinnedSection && (
+                    <>
+                        <div className="px-4">
+                            <hr className='border-[--md-sys-color-outline-variant]'/>
+                        </div>
+                        <div className="nav-rail-pinned flex-col">
+                            {
+                                Object.keys(pinnedItems).map((key) => {
+                                    const pinned = pinnedItems[key];
+                                    const imgSrc = pinned.img?.src || "/favicon.ico";
 
-                            return <NavRailPinnedItem
-                                key={key}
-                                imgSrc={imgSrc}
-                                text={pinnedItems[key].text}
-                                width={pinnedItems[key].img.width}
-                                href={pinnedItems[key].href}
-                                extended={extended}
-                                selected={pathname === pinnedItems[key].href}
-                            />
-                        })
-                    }
-                </div>
+                                    return <NavRailPinnedItem
+                                        key={key}
+                                        imgSrc={imgSrc}
+                                        text={pinnedItems[key].text}
+                                        width={pinnedItems[key].img.width}
+                                        href={pinnedItems[key].href}
+                                        extended={extended}
+                                        selected={pathname === pinnedItems[key].href}
+                                    />
+                                })
+                            }
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );
 }
+
+NavRail.propTypes = {
+    className: PropTypes.string,
+    items: PropTypes.objectOf(PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        badgevalue: PropTypes.number.isRequired,
+        href: PropTypes.string.isRequired,
+        type: PropTypes.number.isRequired,
+        img: PropTypes.shape({
+            src: PropTypes.string,
+            width: PropTypes.number
+        })
+    })),
+    pinned: PropTypes.object,
+    selected: PropTypes.number
+};

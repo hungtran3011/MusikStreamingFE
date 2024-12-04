@@ -21,6 +21,7 @@ interface AuthResponse {
         id: string;
         aud: string;
         role?: string;
+        username?: string;
     }
     session?: {
         access_token?: string;
@@ -33,7 +34,8 @@ const AuthResponse = z.object({
     user: z.object({
         id: z.string(),
         aud: z.string(),
-        role: z.string().optional(),
+        role: z.string().optional(), // User, Admin, Artist Manager
+        username: z.string().optional(),
     }),
     session: z.object({
         access_token: z.string().optional(),
@@ -132,7 +134,15 @@ export async function login(data: LoginData): Promise<AuthResponse> {
             maxAge: resData.session.expires_in
         });
 
-        setCookie('user_name', resData.user.id, {
+        setCookie('user_name', resData.user.username, {
+            expires,
+            path: '/',
+            sameSite: 'strict',
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: resData.session.expires_in
+        });
+
+        setCookie('role', resData.user.role, {
             expires,
             path: '/',
             sameSite: 'strict',

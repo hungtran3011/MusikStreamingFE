@@ -12,7 +12,7 @@ export default function SearchPage() {
     const searchFocus = useRef<HTMLInputElement>(null);
     const screenWidth = useScreenWidth();
     useEffect(() => {
-        if (pathname == "/search" && searchFocus.current && screenWidth > 768) {
+        if (pathname == "/search" && searchFocus.current) {
         searchFocus.current.focus();
         }
     }, [pathname, screenWidth]);

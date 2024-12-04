@@ -7,13 +7,21 @@
 } */
 
 .extended-true{
-    display: flex;
-    /* visibility: visible; */
-    transition: all 0.3s ease-in-out, width .3s ease-in-out, min-width 0.3s ease-in-out, max-width .3s ease-in-out;
+    opacity: 1;
+    width: auto;
+    white-space: nowrap;
+    pointer-events: auto;
+    transform: translateX(0);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .extended-false{
-    display: none;
+    opacity: 0;
+    width: 0;
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translateX(-20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .padding-extended{
@@ -58,37 +66,23 @@
     transition: all 0.3s ease-in-out, width .3s ease-in-out, min-width 0.3s ease-in-out, max-width .3s ease-in-out;
 }
 
-.nav-rail{
+.nav-rail {
     max-height: calc(100vh - 196px);
-    transition: all 0.3s ease-in-out, width .3s ease-in-out, min-width 0.3s ease-in-out, max-width .3s ease-in-out;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     overflow-y: auto;
-    /* position: fixed; */
-    /* top: 100px; */
 }
-
-/* .nav-rail-inner{
-    overflow: hidden;
-}
-
-.nav-rail-inner:hover{
-    overflow-y: auto;
-} */
 
 .nav-rail-extended {
-    transition: all 0.3s ease-in-out, width .3s ease-in-out, min-width 0.3s ease-in-out, max-width .3s ease-in-out,
-    display 0.3s ease-in-out;
-    width: 20vw;
+    transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     min-width: 280px;
-    max-width: 360px;
+    width: 20vw;
 }
 
 .nav-rail-collapsed {
+    width: 80px;
+    min-width: 80px;
     max-width: 80px;
-    padding: 0px;
-    width: fit-content;
-    transition: all 0.3s ease-in-out, width .3s ease-in-out, min-width 0.3s ease-in-out, max-width .3s ease-in-out,
-    display 0.3s ease-in-out    /* overflow-x: visible;
-    overflow-y: scroll; */
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* .nav-rail::-webkit-scrollbar{
@@ -98,7 +92,7 @@
 } */
 
 .nav-item{
-    transition: all 0.3s ease-in-out, width .3s ease-in-out, min-width 0.3s ease-in-out, max-width .3s ease-in-out;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-rail--padding-extended{
@@ -117,4 +111,26 @@
 
 .divider--false{
     border: 0;
+}
+
+.resize-handle {
+    position: absolute;
+    right: -4px;
+    top: 0;
+    bottom: 0;
+    width: 8px;
+    cursor: ew-resize;
+    background: transparent;
+    transition: background 0.15s ease;
+    z-index: 10;
+}
+
+.resize-handle:hover {
+    background: var(--md-sys-color-outline-variant);
+}
+
+.resize-handle:active {
+    background: var(--md-sys-color-outline);
+    width: 2px;
+    right: -1px;
 }

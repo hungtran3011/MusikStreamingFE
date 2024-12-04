@@ -4,26 +4,34 @@
 import { useEffect, useState } from "react";
 import { getCookie } from "cookies-next";
 import { Suspense, lazy } from "react";
+import { useRouter } from "next/navigation";
 import Loading from "./loading";
 
-const Artists = lazy(() => import("@/app/components/api-fetch-container/all-artists"));
-const Songs = lazy(() => import("@/app/components/api-fetch-container/all-songs"));
-const Albums = lazy(() => import("@/app/components/api-fetch-container/all-albums"));
+import Artists from "@/app/components/api-fetch-container/all-artists";
+import Songs from "@/app/components/api-fetch-container/all-songs";
+import Albums from "@/app/components/api-fetch-container/all-albums";
 
 export default function HomeContent() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    const checkAuth = () => {
-      const accessToken = getCookie("access_token");
-      setIsLoggedIn(!!accessToken);
+    const checkAuth = async () => {
+      try {
+        const accessToken = getCookie("access_token");
+        await new Promise(resolve => setTimeout(resolve, 100));
+        setIsLoggedIn(!!accessToken);
+      } catch (error) {
+        console.error("Auth check error:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    // Check immediately
     checkAuth();
     
-    // Check when the component mounts and when storage changes
-    const interval = setInterval(checkAuth, 1000); // Check every second
+    const interval = setInterval(checkAuth, 5000);
     window.addEventListener('storage', checkAuth);
     
     return () => {
@@ -31,6 +39,13 @@ export default function HomeContent() {
       window.removeEventListener('storage', checkAuth);
     };
   }, []);
+
+  console.log("isLoading:", isLoading);
+  console.log("isLoggedIn:", isLoggedIn);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   if (isLoggedIn) {
     return (

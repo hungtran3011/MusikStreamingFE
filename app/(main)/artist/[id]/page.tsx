@@ -17,7 +17,7 @@ export async function generateMetadata({ params } : { params: Promise<{ id: stri
     const artist = await fetchArtistByIdServer(id);
     if (artist) {
         return {
-            title: artist.name,
+            title: `${artist.name} on MusikStreaming`,
             description: artist.description,
         };
     }

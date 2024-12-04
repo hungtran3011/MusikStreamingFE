@@ -1,11 +1,14 @@
+'use client'
 import Image from 'next/image';
 // import TextButton from '../buttons/text-button';
 import IconSmallButton from '@/app/components/buttons/icon-small-button';
 import PassiveProgress from '@/app/components/audio/passive-progress';
 import PlayButton from '@/app/components/buttons/play-button-main';
 import ToggleIconButtonDotted from '@/app/components/buttons/toggle-icon-button-dotted';
+import { useState } from 'react';
 
 export default function SongControl() {
+  const [progress, setProgress] = useState(0);
   return (
     <div className='song-playing z-[1000] bg-[--md-sys-color-inverse-on-surface] flex-col'>
       <div className="p-4 gap-4 flex flex-wrap items-center justify-between">
@@ -28,11 +31,10 @@ export default function SongControl() {
             </IconSmallButton>
           </div>
           <div className="song-progress md:flex items-center gap-4 hidden">
-            {/* <p>{time}</p> */}
-            {/* <div className="song-progress-bar flex-grow bg-[--md-sys-color-on-surface] h-1 rounded-full overflow-clip">
-              <div className="song-progress-bar-inner bg-[--md-sys-color-primary] h-full rounded-full"></div>
-            </div> */}
-            <input type="range" aria-label="input" className="w-full" />
+            <p>{`${Math.floor(progress / 60)}:${progress % 60 < 10 ? '0' : ''}${progress % 60}`}</p>
+            <input className="w-full" aria-label="song-progress" type="range" value={progress} min={0} max={180} onChange={(e) => {
+              setProgress(parseInt(e.target.value));
+            }}/>
             <p>3:00</p>
           </div>
         </div>

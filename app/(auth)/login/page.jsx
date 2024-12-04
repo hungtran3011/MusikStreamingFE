@@ -2,10 +2,9 @@
 import GoogleLogin from '@/app/(auth)/login/google-login';
 import Link from 'next/link';
 // import { useReducer } from 'react';
-import { redirect } from 'next/navigation';
 import { login } from '@/app/services/auth.service';
 import LoginForm from '@/app/(auth)/login/login-form';
-import { getCookie, getCookies, setCookie, deleteCookie, hasCookie } from 'cookies-next/client';
+import { getCookie} from 'cookies-next/client';
 // import {useTranslation} from 'next/translation';
 
 /**
@@ -27,45 +26,6 @@ import { getCookie, getCookies, setCookie, deleteCookie, hasCookie } from 'cooki
  * }
  */
 export default function LoginPage() {
-
-    /**
-     * Handles changes to the email input field.
-     * @param {Object} event - The input change event.
-     * @return {void}
-     * 
-     * @example
-     * <input type="email" onChange={handleEmailChange} />
-     */
-    // function handleEmailChange() {
-    //     dispatch({
-    //         type: "setFormData",
-    //         payload: { ...state.formData, email: event.target.value }
-    //     })
-    //     dispatch({
-    //         type: "setErrors",
-    //         payload: {...state.errors, email: !event.target.value.match(EMAIL_REGEX), general: false}
-    //     })
-    // }
-
-    // /**
-    //  * Handles changes to the password input field.
-    //  * @param {Object} event - The input change event.
-    //  * @return {void}
-    //  * 
-    //  * @example
-    //  * <input type="password" onChange={handlePasswordChange} />
-    //  */
-    // function handlePasswordChange(event) {
-    //     dispatch({
-    //         type: "setErrors",
-    //         payload: { ...state.errors, password: !event.target.value.match(PASSWORD_REGEX), general: false }
-    //     })
-    //     dispatch({
-    //         type: "setFormData",
-    //         payload: { ...state.formData, password: event.target.value }
-    //     })
-    // }
-
     /**
      * Handles form submission.
      * @param {Object} event - The form submission event.

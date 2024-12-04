@@ -22,23 +22,24 @@ export default function NavRailPinnedItem({
     extended = false
 }) {
     return (
-        <div className={`nav-item rounded-full cursor-pointer font-medium selected-${selected}`} role='link' onClick={onClick}>
-            <Link className={`state-layer relative flex extended-gap-${extended} items-center justify-between rounded-full padding-${extended ? "extended" : "collapsed"}`} href={href}>
+        <div className={`nav-item ${extended ? "rounded-full" : "rounded-sm"} cursor-pointer font-medium w-full selected-${selected}`} role='link' onClick={onClick}>
+            <Link className={`state-layer relative flex ${extended ? "gap-4 justify-start" : "gap-0 justify-center"} items-center ${extended ? "rounded-full" : "rounded-sm"} ${extended? "p-4" : "p-0"} `} href={href}>
                 <md-ripple/>
-                <span className={`nav-item-content flex extended-gap-${extended} items-center`}>
-                    <span className="image flex items-center">
+                <div className={`nav-item-content flex extended-gap-${extended} items-center ${extended ? "justify-start" : "justify-center"}`}>
+                    <div className={`image flex items-center justify-center rounded-sm ${extended ? 'w-10 h-10' : 'w-12 h-12'}`}>
                     <Image 
+                        className='rounded-md'
                         src={imgSrc} 
                         alt={text} 
-                        width={width} 
-                        height={width} 
-                        unoptimized={true}
+                        width={extended ? 40 : 48} 
+                        height={extended ? 40 : 48} 
+                        // unoptimized={true}
                         />
-                    </span>
-                    <span className={`label-container flex items-center extended-${extended}`}>
+                    </div>
+                    <div className={`label-container flex items-center extended-${extended}`}>
                         <p className={`label text-center inline extended-${extended}`}>{text}</p>
-                    </span>
-                </span>
+                    </div>
+                </div>
             </Link>
         </div>
     );

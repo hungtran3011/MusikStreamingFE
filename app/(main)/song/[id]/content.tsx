@@ -22,8 +22,8 @@ function processDatetime(ISODate: string): string {
   return date.toLocaleDateString();
 }
 
-export default function SongContent(params: { id: string }) {
-  const [song, setSong] = useState<SongDetails>();
+export default function SongContent(params: { id: string; initialData: SongDetails | null }) {
+  const [song, setSong] = useState<SongDetails | undefined>(params.initialData || undefined);
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
@@ -44,8 +44,10 @@ export default function SongContent(params: { id: string }) {
   }, [params]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (!params.initialData) {
+      fetchData();
+    }
+  }, [fetchData, params.initialData]);
 
   if (error) {
     return <ErrorComponent onReloadClick={fetchData} />;
@@ -58,7 +60,7 @@ export default function SongContent(params: { id: string }) {
         <div className='flex flex-col md:flex-row items-center gap-6'>
           {song ? 
             <Image
-              src={song.thumbnailurl}
+              src={song.thumbnailurl!}
               alt={song.title}
               width={200}
               height={200}

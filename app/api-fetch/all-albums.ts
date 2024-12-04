@@ -12,13 +12,7 @@ const AlbumSchema = z.array(z.object({
 }));
 
 const AlternativeAlbumSchema = z.object({
-    data: z.array(z.object({
-        id: z.string(),
-        title: z.string(),
-        type: z.string(),
-        thumbnailurl: z.string(),
-        owner: z.string().optional(),
-    }))
+    data: AlbumSchema
 });
 
 export default async function fetchAllAlbums() {

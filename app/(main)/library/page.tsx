@@ -1,22 +1,15 @@
-import type { Metadata } from "next";
-import { redirect } from "next/navigation";
-import {cookies} from "next/headers";
+'use client';
 
-export const metadata: Metadata = {
-    title: "MusikStreaming | Library",
-    description: "New music streaming app, using Material Design",
-};
+import { useRouter } from "next/navigation";
+import { getCookie } from "cookies-next/client";
 
-export default async function Library(){
-    const cookieStore = await cookies();
-    if (cookieStore.has("accessToken")) {
-        return (
-            <div className="library-page">
-                <h1 className="library-title">Library</h1>
-            </div>
-        )
+export default function Library(){
+    const router = useRouter();
+    const accessToken = getCookie("access_token");
+    if (!accessToken) {
+        router.replace("/login");   
     }
-    else {
-        redirect("/login");
-    }
+    return (
+        <h1>Library</h1>
+    )
 }

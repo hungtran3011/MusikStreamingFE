@@ -55,10 +55,10 @@ export default function Artists() {
 
   if (isLoading) {
     <div className="card-scroll-inner flex gap-4 flex-wrap">
-      <Skeleton className="w-[140px] h-[200px]"/>
-      <Skeleton className="w-[140px] h-[200px]"/>
-      <Skeleton className="w-[140px] h-[200px]"/>
-      <Skeleton className="w-[140px] h-[200px]"/>
+      <Skeleton className="w-[100px] h-[140px]"/>
+      <Skeleton className="w-[100px] h-[140px]"/>
+      <Skeleton className="w-[100px] h-[140px]"/>
+      <Skeleton className="w-[100px] h-[140px]"/>
     </div>
   }
 
@@ -76,7 +76,7 @@ export default function Artists() {
       );
     }
     data.forEach((artist) => {
-      const url = processCloudinaryUrl(artist.avatarurl, 300, 300, "artists");
+      const url = processCloudinaryUrl(artist.avatarurl, 200, 200, "artists");
       console.log(url);
       cards.push({
         img: {
@@ -89,10 +89,10 @@ export default function Artists() {
       });
     });
     return (
-      <div className="card-scroll-inner flex gap-4 flex-wrap">
+      <div className="card-scroll-inner grid grid-cols-2 gap-3 md:grid-cols-3 lg:flex lg:gap-3">
         {cards.map((card, index) => {
           return (
-          // <Suspense key={index} fallback={<Skeleton className="w-[140px] h-[200px]"/>}>
+          // <Suspense key={index} fallback={<Skeleton className="w-[100px] h-[140px]"/>}>
             <VerticalCard key={index} {...card} />
           // </Suspense>
           );

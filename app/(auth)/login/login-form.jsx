@@ -4,10 +4,16 @@ import FilledButton from '@/app/components/buttons/filled-button';
 import Link from 'next/link';
 // import { useRouter } from 'next/navigation';
 import { useReducer, useState } from 'react';
+import { getCookie } from 'cookies-next';
+import { useRouter } from 'next/navigation';
 
 export default function LoginForm({
     onSubmit
 }) {
+    const router = useRouter()
+    if (getCookie("access_token")) {
+        router.push("/")
+    }
     const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     // password should be at least 10 characters and contain a letter
     const PASSWORD_REGEX = /^(?=.*[A-Za-z]).{10,}$/;
@@ -95,10 +101,15 @@ export default function LoginForm({
                     type: "setStatus", 
                     payload: { isLoading: false, errorMessage: result.error } 
                 });
-            } else {
+            } else if (result?.success) {
                 // Small delay to ensure cookies are set before redirect
                 setTimeout(() => {
-                    window.location.href = '/';
+                    const role = getCookie('role');
+                    if (role === 'Artist Manager') {
+                        window.location.href = '/manager';
+                    } else {
+                        window.location.href = '/';
+                    }
                 }, 100);
             }
         } catch (error) {
