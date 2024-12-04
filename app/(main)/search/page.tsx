@@ -10,12 +10,11 @@ export default function SearchPage() {
     const pathname = usePathname();
     // Mỗi khi chuyển sang trang search, focus vào ô search
     const searchFocus = useRef<HTMLInputElement>(null);
-    const screenWidth = useScreenWidth();
     useEffect(() => {
         if (pathname == "/search" && searchFocus.current) {
         searchFocus.current.focus();
         }
-    }, [pathname, screenWidth]);
+    }, [pathname]);
     return (
        <div className='flex flex-col w-full'>
         <ScalableSearchBox 

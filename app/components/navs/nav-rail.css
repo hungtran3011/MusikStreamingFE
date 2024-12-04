@@ -121,7 +121,7 @@
     width: 8px;
     cursor: ew-resize;
     background: transparent;
-    transition: background 0.15s ease;
+    transition: all 0.15s ease;
     z-index: 10;
 }
 

@@ -1,16 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getCookie } from 'cookies-next/client';
 import { useRouter } from 'next/navigation';
 import TabButton from '@/app/components/buttons/tab-button';
 
 export default function Settings() {
     const router = useRouter();
-    const accessToken = getCookie("access_token");
-    if (!accessToken) {
-        router.replace("/login");
-    }
+    useEffect(() => {
+        const accessToken = getCookie("access_token");
+        if (!accessToken) {
+            router.replace("/login");
+        }
+    }, [router]);
 
     const [activeTab, setActiveTab] = useState('general');
 
@@ -32,5 +34,5 @@ export default function Settings() {
                 {activeTab === 'privacy' && <div>Privacy Settings Content</div>}
             </div>
         </div>
-    )
+    );
 }

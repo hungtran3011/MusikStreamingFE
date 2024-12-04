@@ -1,19 +1,18 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getCookie } from 'cookies-next';
 import UserMenu from '@/app/components/navs/user-menu';
 import IconSmallButton from '../buttons/icon-small-button';
 import FilledButton from '@/app/components/buttons/filled-button';
 import SearchBox from '@/app/components/inputs/search-box';
 import { useRouter, usePathname } from 'next/navigation';
-import { useRef } from 'react';
 import Image from 'next/image';
-// import ToggleIconButton from './toggle-icon-button';
 
 export default function NavBar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
+  const [isManagerMode, setIsManagerMode] = useState(false);
   const route = useRouter();
   const pathname = usePathname();
   const searchFocus = useRef<HTMLInputElement>(null);
@@ -23,9 +22,10 @@ export default function NavBar() {
       const accessToken = getCookie("access_token");
       setIsLoggedIn(!!accessToken);
       if (accessToken) {
-        // Assuming the username is stored in a cookie named "user_name"
         const name = getCookie("user_name");
         setUserName(name ? String(name) : '');
+        const role = getCookie("role");
+        setIsManagerMode(role === 'manager');
       }
     };
 
@@ -38,10 +38,18 @@ export default function NavBar() {
   }, []);
 
   useEffect(() => {
-    if (pathname == "/search" && searchFocus.current && window.innerWidth > 768) {
+    if ((pathname == "/search" || pathname == "/manager/discography") && searchFocus.current && window.innerWidth > 768) {
       searchFocus.current.focus();
     }
   }, [pathname]);
+
+  const handleSearch = () => {
+    if (isManagerMode) {
+      route.push('/manager/discography');
+    } else {
+      route.push('/search');
+    }
+  };
 
   return (
     <div className="nav-bar flex flex-grow-0 pl-4 md:pl-0 pt-3 items-center justify-between w-full top-0 max-h-24 sticky bg-inherit z-[1000]" autoFocus={true}>
@@ -75,11 +83,6 @@ export default function NavBar() {
 
       <div className="search-and-browse-container flex justify-center gap-4 flex-grow">
         <div className="search-and-browse-inner flex-grow flex items-center sm:justify-center">
-          {/* <ToggleIconButton>
-              <span className="material-symbols-outlined">
-                browse
-              </span>
-            </ToggleIconButton> */}
           <SearchBox className='hidden md:flex' placeholder="Search" ref={searchFocus} />
         </div>
       </div>

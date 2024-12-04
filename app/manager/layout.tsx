@@ -5,6 +5,7 @@ import NavRail from '@/app/components/navs/nav-rail';
 import { useEffect, useState } from 'react';
 import { getCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
+import './global.css';
 
 const managerItems = {
     'dashboard': {

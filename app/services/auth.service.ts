@@ -1,3 +1,4 @@
+'use client';
 import axios from 'axios';
 import z from 'zod';
 import { setCookie } from 'cookies-next/client';
@@ -56,12 +57,31 @@ async function countryFromCoords(coords: GeolocationCoordinates): Promise<string
 }
 
 async function getCountryCode(): Promise<string> {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-            return countryFromCoords(position.coords);
-        });
+    if (typeof window === 'undefined') {
+        return '';
     }
-    return '';
+
+    return new Promise((resolve) => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    try {
+                        const country = await countryFromCoords(position.coords);
+                        resolve(country);
+                    } catch (error) {
+                        console.error('Error getting country from coords:', error);
+                        resolve('');
+                    }
+                },
+                (error) => {
+                    console.error('Geolocation error:', error);
+                    resolve('');
+                }
+            );
+        } else {
+            resolve('');
+        }
+    });
 }
 
 export async function signUp(data: SignUpData): Promise<AuthResponse> {
@@ -116,36 +136,23 @@ export async function login(data: LoginData): Promise<AuthResponse> {
 
         // Calculate expiration date with default 1 hour expiration
         const expires = new Date(Date.now() + (resData.session.expires_in ?? 3600) * 1000);
+
+        const cookiesOptions = {
+            expires,
+            path: '/',
+            sameSite: 'strict' as const,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: resData.session.expires_in
+        }
         
         // Set client-side cookies with proper attributes
-        setCookie('access_token', resData.session.access_token, {
-            expires,
-            path: '/',
-            sameSite: 'strict',
-            secure: process.env.NODE_ENV === 'production',
-            maxAge: resData.session.expires_in
-        });
-        
-        setCookie('refresh_token', resData.session.refresh_token, {
-            expires,
-            path: '/',
-            sameSite: 'strict',
-            secure: process.env.NODE_ENV === 'production',
-            maxAge: resData.session.expires_in
-        });
-
-        setCookie('user_name', resData.user.username, {
-            expires,
-            path: '/',
-            sameSite: 'strict',
-            secure: process.env.NODE_ENV === 'production',
-            maxAge: resData.session.expires_in
-        });
-
+        setCookie('access_token', resData.session.access_token, cookiesOptions);
+        setCookie('refresh_token', resData.session.refresh_token, cookiesOptions);
+        setCookie('user_name', resData.user.username, cookiesOptions);
         setCookie('role', resData.user.role, {
             expires,
             path: '/',
-            sameSite: 'strict',
+            sameSite: 'strict' as const,
             secure: process.env.NODE_ENV === 'production',
             maxAge: resData.session.expires_in
         });

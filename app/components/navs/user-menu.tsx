@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { deleteCookie, getCookie } from 'cookies-next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface UserMenuProps {
   onLogout: () => void;
@@ -12,23 +12,46 @@ interface UserMenuProps {
 
 export default function UserMenu({ onLogout }: UserMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isManagerPath, setIsManagerPath] = useState(false);
   const [isManager, setIsManager] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
-    const role = getCookie('role');
-    const isManagerPath = pathname?.startsWith('/manager');
-    setIsManager(
-      (role === 'Artist Manager' || role === 'Artist%20Manager') && isManagerPath
-    );
+    const checkManagerStatus = () => {
+      const role = getCookie('role');
+      const isManagerRole = decodeURIComponent(String(role)) === 'Artist Manager';
+      setIsManager(isManagerRole);
+    };
+
+    const checkManagerPath = () => {
+      setIsManagerPath(pathname?.startsWith('/manager'));
+    };
+
+    checkManagerStatus();
+    checkManagerPath();
+
+    window.addEventListener('popstate', checkManagerStatus);
+    
+    return () => {
+      window.removeEventListener('popstate', checkManagerStatus);
+    };
   }, [pathname]);
 
-  const handleLogout = () => {
-    deleteCookie('access_token');
-    deleteCookie('refresh_token');
-    deleteCookie('role');
-    onLogout();
-    window.location.href = '/';
+  const handleLogout = async () => {
+    try {
+      setIsOpen(false);
+      
+      deleteCookie('access_token');
+      deleteCookie('refresh_token');
+      deleteCookie('role');
+      
+      onLogout();
+      
+      await router.push('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   return (
@@ -52,12 +75,12 @@ export default function UserMenu({ onLogout }: UserMenuProps) {
           <div className="py-1 rounded-xl" role="menu">
             {isManager && (
               <Link
-                href="/manager"
+                href={isManagerPath ? "/" : "/manager"}
                 className="px-4 py-2 text-sm hover:bg-[--md-sys-color-surface-variant] rounded-md flex items-center gap-2"
                 role="menuitem"
               >
-                <span className="material-symbols-outlined">dashboard</span>
-                <span className="text-sm font-medium">Manager Dashboard</span>
+                <span className="material-symbols-outlined">{isManagerPath ? "exit_to_app" : "dashboard"}</span>
+                <span className="text-sm font-medium">{isManagerPath ? "Exit Manager Dashboard" : "Manager Dashboard"}</span>
               </Link>
             )}
             <Link

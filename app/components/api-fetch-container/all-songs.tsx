@@ -24,17 +24,29 @@ export default function Songs() {
                 const cardData: CardProps[] = songs.map((song) => {
                     const url = processCloudinaryUrl(song.thumbnailurl, 200, 200, "songs");
                     const isMultipleArtists = song.artists.length > 1;
-                    return {
+                    return isMultipleArtists ? {
                         img: {
                             src: url,
                             alt: song.title,
                             width: 200
                         },
                         title: song.title,
-                        subtitle: isMultipleArtists ? song.artists[0].artist.name + " và các nghệ sĩ khác" : song.artists[0].artist.name,
+                        subtitle: song.artists.map(artist => artist.artist.name).join(", "),
+                        subHrefItems: song.artists.map(artist => `/artist/${artist.artist.id}`),
+                        subItems: song.artists.map(artist => artist.artist.name),
                         href: `/song/${song.id}`,
-                        isMultipleItemSub: isMultipleArtists,
-                        subHrefItems: song.artists.map(artist => `/artist/${artist.artist.id}`)
+                        isMultipleItemSub: true
+                    } : {
+                        img: {
+                            src: url,
+                            alt: song.title,
+                            width: 200
+                        },
+                        title: song.title,
+                        subtitle: song.artists[0].artist.name,
+                        href: `/song/${song.id}`,
+                        isMultipleItemSub: false,
+                        subHref: `/artist/${song.artists[0].artist.id}`
                     };
                 });
                 setCards(cardData);

@@ -11,6 +11,7 @@ import NavBar from "@/app/components/navs/nav-bar";
 import NavRail from "@/app/components/navs/nav-rail";
 import SongControl from "@/app/components/audio/song-control";
 import BottomNavBar from "@/app/components/navs/bottom-nav-bar";
+import type { Metadata } from "next";
 
 const inter = Inter({
   weight: ["400", "500", "600", "700"],
@@ -18,6 +19,17 @@ const inter = Inter({
   style: ['normal', 'italic'],
   display: 'swap'
 });
+
+export const metadata: Metadata = {
+  title: "MusikStreaming | Home",
+  keywords: "music, streaming, material design, songs, artists",
+  description: "New music streaming app, using Material Design",
+  openGraph: {
+    title: "MusikStreaming | Home",
+    description: "New music streaming app, using Material Design",
+    type: "website"
+  }
+};
 
 interface RootLayoutProps {
   children: React.ReactNode;

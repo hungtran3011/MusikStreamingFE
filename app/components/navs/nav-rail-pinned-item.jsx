@@ -22,8 +22,8 @@ export default function NavRailPinnedItem({
     extended = false
 }) {
     return (
-        <div className={`nav-item ${extended ? "rounded-full" : "rounded-sm"} cursor-pointer font-medium w-full selected-${selected}`} role='link' onClick={onClick}>
-            <Link className={`state-layer relative flex ${extended ? "gap-4 justify-start" : "gap-0 justify-center"} items-center ${extended ? "rounded-full" : "rounded-sm"} ${extended? "p-4" : "p-0"} `} href={href}>
+        <div className={`nav-item ${extended ? "rounded-full" : "rounded-sm w-fit"} flex cursor-pointer font-medium selected-${selected}`} role='link' onClick={onClick}>
+            <Link className={`state-layer relative flex ${extended ? "gap-4 justify-start" : "gap-0 justify-center"} items-center ${extended ? "rounded-full" : "rounded-sm"} ${extended? "p-3 pl-4" : "p-0"} w-full`} href={href}>
                 <md-ripple/>
                 <div className={`nav-item-content flex extended-gap-${extended} items-center ${extended ? "justify-start" : "justify-center"}`}>
                     <div className={`image flex items-center justify-center rounded-sm ${extended ? 'w-10 h-10' : 'w-12 h-12'}`}>
@@ -36,7 +36,7 @@ export default function NavRailPinnedItem({
                         // unoptimized={true}
                         />
                     </div>
-                    <div className={`label-container flex items-center extended-${extended}`}>
+                    <div className={`label-container flex items-center extended-${extended} ${!extended ? "hidden" : ""}`}>
                         <p className={`label text-center inline extended-${extended}`}>{text}</p>
                     </div>
                 </div>

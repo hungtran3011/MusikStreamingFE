@@ -105,11 +105,13 @@ export default function LoginForm({
                 // Small delay to ensure cookies are set before redirect
                 setTimeout(() => {
                     const role = getCookie('role');
-                    if (role === 'Artist Manager') {
-                        window.location.href = '/manager';
-                    } else {
-                        window.location.href = '/';
-                    }
+                    // if (typeof window !== 'undefined') {
+                        if (role === 'Artist Manager') {
+                            router.push('/manager');
+                        } else {
+                            router.push('/');
+                        }
+                    // }
                 }, 100);
             }
         } catch (error) {

@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clean": "if exist .next rd /s /q .next && if exist out rd /s /q out"
   },
   "dependencies": {
     "@emotion/cache": "^11.13.1",

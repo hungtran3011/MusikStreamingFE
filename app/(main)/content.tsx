@@ -3,19 +3,16 @@
 
 import { useEffect, useState } from "react";
 import { getCookie } from "cookies-next";
-import { Suspense, lazy } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 import Loading from "./loading";
 
 import Artists from "@/app/components/api-fetch-container/all-artists";
 import Songs from "@/app/components/api-fetch-container/all-songs";
 import Albums from "@/app/components/api-fetch-container/all-albums";
 
-export default function HomeContent() {
+export default function Content() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
-
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -32,11 +29,15 @@ export default function HomeContent() {
     checkAuth();
     
     const interval = setInterval(checkAuth, 5000);
-    window.addEventListener('storage', checkAuth);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('storage', checkAuth);
+    }
     
     return () => {
       clearInterval(interval);
-      window.removeEventListener('storage', checkAuth);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('storage', checkAuth);
+      }
     };
   }, []);
 

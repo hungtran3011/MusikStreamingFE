@@ -86,20 +86,20 @@ export default function VerticalCard({
       </div>
       <div className="px-2 w-full py-3 flex flex-col justify-between min-h-[4rem]">
         <div className="title mb-1">
-          <Link href={href} className="line-clamp-1 text-md font-medium text-center hover:underline">
+          <Link href={href} className="line-clamp-1 text-md font-medium text-left hover:underline">
             {title}
           </Link>
         </div>
-        <div className="subtitle">
+        <div className="subtitle line-clamp-2 flex flex-wrap">
           {
-            isMultipleItemSub ? (
-              <div className="flex flex-wrap gap-1">
-                {subItems?.map((item, index) => (
-                  <div key={index} className="line-clamp-1 text-sm text-center hover:underline">{item}</div>
+            (isMultipleItemSub && subItems) ? (
+              <div className="block">
+                {subItems.map((item, index) => (
+                  <Link key={index} onClick={(e) => e.stopPropagation()} href={subHrefItems?.[index] || '#'} className="line-clamp-2 text-sm text-left hover:underline inline mr-1">{item}{index === subItems.length - 1 ? '' : ','}</Link>
                 ))}
               </div>
             ) : (
-              <Link href={subHref} onClick={(e) => e.stopPropagation()} className="line-clamp-1 text-sm text-center hover:underline">{subtitle}</Link>
+              <Link href={subHref} onClick={(e) => e.stopPropagation()} className="line-clamp-2 text-sm text-left hover:underline">{subtitle}</Link>
             )
           }
         </div>

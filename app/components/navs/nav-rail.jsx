@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import "./nav-rail.css";
 import { NavItemType } from '@/app/model/nav-item-type';
 import { getCookie } from 'cookies-next';
+import { hasCookie } from 'cookies-next/client';
 
 /**
  * Navigation items configuration.
@@ -104,7 +105,7 @@ export default function NavRail({ className, items: customItems }) {
                         text: 'Playlist của bạn',
                         href: '/playlists',
                         img: {
-                            src: '/assets/playlist-icon.png',
+                            src: '/assets/playlist.jpg',
                             width: 24
                         },
                         type: NavItemType.DEFAULT
@@ -272,8 +273,9 @@ export default function NavRail({ className, items: customItems }) {
                         <div className="px-4">
                             <hr className='border-[--md-sys-color-outline-variant]'/>
                         </div>
-                        <div className="nav-rail-pinned flex-col">
+                        <div className={`nav-rail-pinned flex-col ${extended ? "gap-0" : "gap-2"} h-fit flex`}>
                             {
+                                (hasCookie('access_token')) &&
                                 Object.keys(pinnedItems).map((key) => {
                                     const pinned = pinnedItems[key];
                                     const imgSrc = pinned.img?.src || "/favicon.ico";

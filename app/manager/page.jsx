@@ -13,9 +13,9 @@ export default function ManagerDashboard() {
     });
 
     const handleExitManager = () => {
-        setTimeout(() => {
+        // setTimeout(() => {
             router.push('/');
-        }, 100);
+        // }, 100);
     };
 
     useEffect(() => {
@@ -31,12 +31,9 @@ export default function ManagerDashboard() {
         <div className="p-6">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold">Artist Dashboard</h1>
-                <button 
-                    onClick={handleExitManager}
-                    className="text-[--md-sys-color-primary] hover:underline"
-                >
-                    Exit Manager Mode
-                </button>
+                <Link href="/">
+                    Exit Manager
+                </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
