@@ -7,14 +7,27 @@
  * @requires react
  * @requires @/app/api-fetch/artist-by-id
  */
-"use client";
-import type { Artist } from '@/app/model/artist';
-import { useState, useEffect, useCallback } from 'react';
-import fetchArtistById from '@/app/api-fetch/artist-by-id';
-import Image from 'next/image';
-import { Suspense } from 'react';
-import ErrorComponent from '@/app/app-components/api-fetch-container/fetch-error';
-import Skeleton from '@/app/app-components/loading/skeleton';
+import React from 'react'
+import ArtistContent from './content';
+import fetchArtistByIdServer from '@/app/api-fetch/artist-id-server';
+
+
+export async function generateMetadata({ params } : { params: Promise<{ id: string }> }) {
+    const id = (await params).id;
+    const artist = await fetchArtistByIdServer(id);
+    if (artist) {
+        return {
+            title: `${artist.name} on MusikStreaming`,
+            description: artist.description,
+        };
+    }
+    else {
+        return {
+            title: 'Artist not found',
+            description: 'The artist you are looking for is not found',
+        }
+    }
+}
 
 /**
  * ArtistPage component fetches and displays artist data.
@@ -25,63 +38,6 @@ import Skeleton from '@/app/app-components/loading/skeleton';
  * @returns {JSX.Element} The rendered component.
  * @throws {Error} Any error thrown by the fetchArtistById function.
  */
-export default function ArtistPage({ params }: { params: Promise<{ id: string }> }) {
-    const [artist, setArtist] = useState<Artist | null>(null);
-    const [error, setError] = useState<string | null>(null);
-
-    const fetchData = useCallback(async () => {
-        try {
-            const data = await params;
-            const artist = await fetchArtistById(data.id);
-            if (!artist) return;
-            setArtist(artist);
-        } catch (e) {
-            console.error(e);
-            if (e instanceof Error) {
-                setError(e.message);
-            } else {
-                setError(String(e));
-            }
-        }
-    }, [params]);
-
-    useEffect(() => {
-        fetchData();
-    }, [fetchData]);
-
-    // const data = use(fetchData());
-
-    if (error) {
-        return <ErrorComponent onReloadClick={fetchData} />;
-    }
-
-    try {
-        return (
-            // <Suspense fallback={<Loading/>}>
-            <div className='flex w-full'>
-                <div className='flex flex-col items-center w-full'>
-                    {
-                        artist ?
-                        <Image
-                        src={artist.avatarurl}
-                        alt={artist.name}
-                        width={200}
-                        height={200}
-                        />
-                        : <Skeleton className="w-[200px] h-[200px]"/>
-                    }
-                    {
-                        artist ? <h1>{artist.name}</h1> : <Skeleton className="w-[200px] h-6"/>
-                    }
-                    {
-                        artist ? <p>{artist.description}</p> : <Skeleton className="w-[200px] h-6"/>
-                    }
-                </div>
-
-            </div>
-        );
-    } catch (e) {
-        console.error(e);
-        return <ErrorComponent onReloadClick={fetchData} />;
-    }
+export default async function ArtistPage({ params }: { params: Promise<{ id: string }> }) {
+    return <ArtistContent params={params} />;
 }

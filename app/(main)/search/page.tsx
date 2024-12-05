@@ -1,8 +1,9 @@
 'use client';
-import BrowseCard from '@/app/app-components/browse/browse-card';
-import ScalableSearchBox from '@/app/app-components/inputs/scalable-search-box';
+import BrowseCard from '@/app/components/browse/browse-card';
+import ScalableSearchBox from '@/app/components/inputs/scalable-search-box';
 import { useRef, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import useScreenWidth from '@/app/hooks/useScreenWidth';
 
 export default function SearchPage() {
     // categories
@@ -12,7 +13,6 @@ export default function SearchPage() {
     useEffect(() => {
         if (pathname == "/search" && searchFocus.current) {
         searchFocus.current.focus();
-        searchFocus.current.click();
         }
     }, [pathname]);
     return (

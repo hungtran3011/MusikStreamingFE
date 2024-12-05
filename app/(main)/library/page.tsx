@@ -1,14 +1,20 @@
-import type { Metadata } from "next";
+'use client';
 
-export const metadata: Metadata = {
-    title: "MusikStreaming | Library",
-    description: "New music streaming app, using Material Design",
-};
+import { useRouter } from "next/navigation";
+import { getCookie } from "cookies-next/client";
+import { useEffect } from "react";
 
 export default function Library(){
+    const router = useRouter();
+
+    useEffect(() => {
+    const accessToken = getCookie("access_token");
+    if (!accessToken) {
+        router.replace("/login");   
+    }
+    }, [router]);
+
     return (
-        <div className="library-page">
-            <h1 className="library-title">Library</h1>
-        </div>
-    )
+        <h1>Library</h1>
+    );
 }
