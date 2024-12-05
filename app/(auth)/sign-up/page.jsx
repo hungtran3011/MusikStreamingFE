@@ -1,11 +1,15 @@
 'use client';
 import '@material/web/textfield/outlined-text-field'
 import '@material/web/icon/icon'
-import FilledButton from '@/app/app-components/buttons/filled-button';
+import '@material/web/iconbutton/icon-button'
+import FilledButton from '@/app/components/buttons/filled-button';
 import Link from 'next/link';
-import { useReducer } from 'react';
-import { signUp } from '@/app/services/auth.service';
+import { useReducer, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { signUp } from '@/app/services/auth.service';
+import Image from 'next/image';
 
 /**
  * SignUpPage component handles the user registration process.
@@ -13,6 +17,10 @@ import { useRouter } from 'next/navigation';
  */
 export default function SignUpPage() {
     const router = useRouter();
+    const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{10,}$/;
+    const [revealPassword, setRevealPassword] = useState(false);
+    const [avatar, setAvatar] = useState(null);
+    const [avatarPreview, setAvatarPreview] = useState(null);
 
     const formReducer = (state, action) => {
         switch (action.type) {
@@ -47,6 +55,27 @@ export default function SignUpPage() {
         errorMessage: null
     });
 
+    const onDrop = useCallback((acceptedFiles) => {
+        const file = acceptedFiles[0];
+        setAvatar(file);
+        
+        // Create preview URL
+        const previewUrl = URL.createObjectURL(file);
+        setAvatarPreview(previewUrl);
+        
+        // Clean up preview URL when component unmounts
+        return () => URL.revokeObjectURL(previewUrl);
+    }, []);
+
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop,
+        accept: {
+            'image/*': ['.jpeg', '.jpg', '.png', '.gif']
+        },
+        maxFiles: 1,
+        maxSize: 5242880, // 5MB
+    });
+
     /**
      * Handles input change and updates form data and errors state.
      * @param {string} field - The field name to update.
@@ -60,7 +89,7 @@ export default function SignUpPage() {
         });
         dispatch({
             type: 'setErrors',
-            payload: { ...state.errors, [field]: validateField(field, newFormData) }
+            payload: { ...state.errors, [field]: !validateField(field, newFormData) }
         });
     }
 
@@ -68,46 +97,41 @@ export default function SignUpPage() {
         switch (field) {
             case "email":
                 // return (event) => !event.target.value.match(/^\S+@\S+\.\S+$/);
-                return !formData.email.match(/^\S+@\S+\.\S+$/)
+                return formData.email.match(/^\S+@\S+\.\S+$/);
             case "password":
-                return formData.password.length < 8;
+                console.log(PASSWORD_REGEX.test(formData.password));
+                return PASSWORD_REGEX.test(formData.password);
             case "confirmPassword":
-                return formData.confirmPassword !== state.formData.password;
+                return formData.confirmPassword === state.formData.password;
             case "name":
-                return !formData.name.trim();
+                return formData.name.trim() !== "";
             default:
                 return true;
         }
     }
 
-    /**
-     * Validates the form data.
-     * @returns {boolean} - Returns true if the form is valid, otherwise false.
-     */
     const validateForm = () => {
-        const newErrors = { ...state.errors };
-        let isValid = true;
+        const { email, password, confirmPassword, name, file } = state.formData;
+        const emailError = !validateField('email', { email });
+        const passwordError = !validateField('password', { password });
+        const confirmPasswordError = !validateField('confirmPassword', { confirmPassword });
+        const nameError = !validateField('name', { name });
+        const fileError = !validateField('file', { file });
 
-        if (!state.formData.email.match(/^\S+@\S+\.\S+$/)) {
-            newErrors.email = true;
-            isValid = false;
-        }
-        if (state.formData.password.length < 8) {
-            newErrors.password = true;
-            isValid = false;
-        }
-        if (state.formData.password !== state.formData.confirmPassword) {
-            newErrors.confirmPassword = true;
-            isValid = false;
-        }
-        if (!state.formData.name.trim()) {
-            newErrors.name = true;
-            isValid = false;
-        }
+        dispatch({
+            type: 'setErrors',
+            payload: {
+                email: emailError,
+                password: passwordError,
+                confirmPassword: confirmPasswordError,
+                name: nameError,
+                file: fileError,
+                general: emailError || passwordError || confirmPasswordError || nameError || fileError
+            }
+        });
 
-        dispatch({ type: 'setErrors', payload: newErrors });
-        return isValid;
-    };
+        return !(emailError || passwordError || confirmPasswordError || nameError || fileError);
+    }
 
     /**
      * Handles form submission.
@@ -124,10 +148,15 @@ export default function SignUpPage() {
         }
 
         try {
-            await signUp(state.formData);
-            router.push('/home');
+            await signUp({
+                email: state.formData.email,
+                password: state.formData.password,
+                name: state.formData.name,
+                file: state.formData.file
+            });
+            router.push('/verify-email');
         } catch (error) {
-            console.log(error)
+            console.error(error);
             dispatch({ type: 'setError', payload: error.message || 'Sign up failed' });
             dispatch({ type: 'setErrors', payload: { ...state.errors, general: true } });
         } finally {
@@ -142,6 +171,28 @@ export default function SignUpPage() {
             </div>
             <form onSubmit={handleSubmit} className="flex-col justify-start items-center gap-6 flex self-stretch">
                 <div className="flex-col justify-stretch items-start gap-3 flex w-full">
+                    <div {...getRootProps()} className="cursor-pointer w-full flex flex-col items-center gap-2">
+                        <input {...getInputProps()} />
+                        <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-dashed border-[--md-sys-color-outline] hover:border-[--md-sys-color-primary] transition-colors">
+                            {avatarPreview ? (
+                                <Image 
+                                    src={avatarPreview} 
+                                    alt="Avatar preview" 
+                                    width={128} 
+                                    height={128}
+                                    className="object-cover w-full h-full"
+                                />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-[--md-sys-color-surface-variant]">
+                                    <md-icon>add_photo_alternate</md-icon>
+                                </div>
+                            )}
+                        </div>
+                        <span className="text-sm text-[--md-sys-color-on-surface-variant]">
+                            Click để tải lên ảnh đại diện
+                        </span>
+                    </div>
+
                     <md-outlined-text-field
                         error={state.errors.name}
                         required={true}
@@ -169,10 +220,10 @@ export default function SignUpPage() {
                         error={state.errors.password}
                         className='max-w-[560px] w-[80vw]'
                         label="Mật khẩu"
-                        type="password"
+                        type={!revealPassword ? "password" : ""}
                         value={state.formData.password}
                         onInput={handleInputChange('password')}
-                        supportingText={(state.errors.password ? "Mật khẩu phải dài hơn 8 ký tự" : "")}
+                        supportingText={(state.errors.password ? "Mật khẩu phải dài hơn 10 ký tự và chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số" : "")}
                     >
                         <md-icon slot="leading-icon">password</md-icon>
                     </md-outlined-text-field>
@@ -181,13 +232,21 @@ export default function SignUpPage() {
                         error={state.errors.confirmPassword}
                         className='max-w-[560px] w-[80vw]'
                         label="Xác nhận mật khẩu"
-                        type="password"
+                        type={!revealPassword ? "password" : ""}
                         value={state.formData.confirmPassword}
                         onInput={handleInputChange('confirmPassword')}
                         supportingText={(state.errors.confirmPassword && !state.errors.password) ? "Mật khẩu nhập lại không trùng với mật khẩu ban đầu" : ""}
                     >
                         <md-icon slot="leading-icon">password</md-icon>
                     </md-outlined-text-field>
+                    <div className='flex gap-3'>
+                        <input type="checkbox" name="Hiện mật khẩu" id="reveal_pwd" label="Hiện mật khẩu" onClick={
+                            () => {
+                                setRevealPassword(!revealPassword)
+                            }
+                        }/>
+                        <label htmlFor="reveal_pwd">Hiện mật khẩu</label>
+                    </div>
                 </div>
 
                 {state.errorMessage && (
